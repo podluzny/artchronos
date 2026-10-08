@@ -8,7 +8,7 @@
 | Business rules | BR-036, BR-037 |
 | Domain entities | Attempt, Response, ResponseEvaluation, Result, ItemStatistics, TestStatistics |
 | Permissions | будущие: `attempt.start`, `attempt.submit`, `response.evaluate`, `result.read` |
-| Статус | Draft (только модель, без UI) |
+| Статус | Ready (только модель, без UI) |
 
 ## Purpose
 Гарантировать, что модель контента MVP позволит построить Student Runner и аналитику без миграции существующих данных.

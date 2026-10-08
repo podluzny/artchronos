@@ -8,7 +8,7 @@
 | Business rules | BR-039, BR-042, BR-035 |
 | Domain entities | Subject, Course, Topic, LearningObjective |
 | Permissions | `taxonomy.read`, `taxonomy.manage` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Учебная структура, к которой привязываются задания, вопросы и правила отбора.

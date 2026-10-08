@@ -8,7 +8,7 @@
 | Business rules | BR-034, BR-035 |
 | Domain entities | AuditLog |
 | Permissions | `audit.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Обеспечить ответ на вопрос «кто, когда, что и почему изменил» для всех значимых действий.

@@ -8,7 +8,7 @@
 | Business rules | BR-039 |
 | Domain entities | Item, ItemVersion, Topic, LearningObjective, Tag, QuestionType |
 | Permissions | `item.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Быстро находить вопросы для проверки и для включения в тесты.

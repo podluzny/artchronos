@@ -9,7 +9,7 @@
 | Domain entities | TestVersion, ItemVersion, Test, Item, Review |
 | Permissions | по переходам (lifecycle-state-machine §3) |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Единая, исполняемая state machine для версий, которую не может обойти ни UI, ни администратор.

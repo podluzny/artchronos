@@ -9,7 +9,7 @@
 | Domain entities | MediaAsset, MediaDerivative, Tag, Topic |
 | Permissions | `media.upload`, `media.update`, `media.read` |
 | ADR | ADR-007 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Единая медиатека изображений и видео произведений искусства с метаданными, достаточными для корректной атрибуции и доступности.

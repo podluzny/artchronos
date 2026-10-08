@@ -8,7 +8,7 @@
 | Business rules | BR-007 |
 | Domain entities | TestVersion, Section, SelectionRule |
 | Permissions | `test.update`, `test.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Определить, как тест будет проходиться (время, навигация, попытки, обратная связь, оценивание), и дать возможность увидеть результат.

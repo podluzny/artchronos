@@ -9,7 +9,7 @@
 | Domain entities | User, Role, Permission, UserRole, RolePermission |
 | Permissions | каталог — docs/permission-model.md §3 |
 | ADR | ADR-003, ADR-004 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Единая точка принятия решений о доступе для всех use cases и для UI, исключающая обход через прямые запросы.

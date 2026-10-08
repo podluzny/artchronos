@@ -9,7 +9,7 @@
 | Domain entities | Test, TestVersion, Section, Assignment |
 | Permissions | `test.create` |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Создать тест как результат учебного задания (студент) или как учебный инструмент (преподаватель).

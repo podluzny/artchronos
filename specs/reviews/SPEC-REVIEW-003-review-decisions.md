@@ -9,7 +9,7 @@
 | Domain entities | Review, TestVersion, ItemVersion, SelectionPoolEntry, ContentIssue |
 | Permissions | `review.perform` |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Принять решение по версии и применить его атомарно ко всему пакету.

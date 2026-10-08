@@ -9,7 +9,7 @@
 | Domain entities | Role, Permission, RolePermission, UserRole, AuditLog |
 | Permissions | `role.read`, `role.manage`, `user.role.assign` |
 | ADR | ADR-003 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Управлять составом прав без изменения кода и с полной прозрачностью изменений.

@@ -9,7 +9,7 @@
 | Domain entities | Item, ItemVersion, ItemOption, Review |
 | Permissions | `item.update`, `item.submit`, `item.archive` |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Обеспечить управляемое изменение вопросов: правки только в черновике, неизменность отправленных и утвержденных версий, прослеживаемую историю.

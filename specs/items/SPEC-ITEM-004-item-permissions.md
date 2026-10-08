@@ -9,7 +9,7 @@
 | Domain entities | Item, ItemVersion, Assignment, Review, ReviewAssignment, Course |
 | Permissions | `item.read`, `item.create`, `item.update`, `item.submit`, `item.archive` |
 | ADR | ADR-003 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Конкретизировать SPEC-AUTH-003 для вопросов: кто какие вопросы видит и меняет.

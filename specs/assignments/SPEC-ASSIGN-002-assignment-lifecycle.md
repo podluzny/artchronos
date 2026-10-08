@@ -8,7 +8,7 @@
 | Business rules | BR-017, BR-031, BR-035 |
 | Domain entities | Assignment, DeadlineExtension, Test, TestVersion |
 | Permissions | `assignment.update`, `assignment.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Управлять временными рамками работы студентов и давать преподавателю обзор выполнения.

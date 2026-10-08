@@ -3,7 +3,7 @@
 | Поле | Значение |
 |---|---|
 | Задачи | T-006 (реестр), T-028 (E2E reference scenario) |
-| Статус | Draft — ожидает review (T-030) |
+| Статус | Baseline — утверждено в T-030 (2026-10-08) |
 
 Сценарии описывают **действия пользователей**, а не экраны. Формат каждого сценария:
 Actor · Preconditions · Trigger · Main flow · Alternative flows · Business rules · Expected result.

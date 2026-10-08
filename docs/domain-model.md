@@ -3,7 +3,7 @@
 | Поле | Значение |
 |---|---|
 | Задача | T-002 |
-| Статус | Draft — ожидает domain review (T-030) |
+| Статус | Baseline — утверждено в T-030 (2026-10-08) |
 | Связанные | business-rules.md, versioning-model.md, lifecycle-state-machine.md, ADR-002, ADR-005 |
 
 > Схема БД **не создается** до завершения domain review (раздел 19 плана):

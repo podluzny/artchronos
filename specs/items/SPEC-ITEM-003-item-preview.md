@@ -9,7 +9,7 @@
 | Domain entities | ItemVersion, QuestionTypeVersion |
 | Permissions | `item.read` |
 | ADR | ADR-001 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Дать автору и эксперту увидеть вопрос так, как его увидит студент, и проверить работу оценивания до экспертизы.

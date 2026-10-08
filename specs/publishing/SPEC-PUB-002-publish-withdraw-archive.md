@@ -8,7 +8,7 @@
 | Business rules | BR-005, BR-008, BR-009, BR-036, BR-039 |
 | Domain entities | Test, TestVersion, Attempt (ссылочно), AuditLog |
 | Permissions | `test.publish`, `test.withdraw`, `test.archive` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Сделать утвержденную версию доступной для прохождения (в будущем Runner), управлять отзывом и архивом без потери данных.

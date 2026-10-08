@@ -8,7 +8,7 @@
 | Business rules | BR-035 |
 | Domain entities | StudentGroup, GroupMembership |
 | Permissions | `group.read`, `group.manage` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Адресовать задания группам и определять, какие курсы видит студент.

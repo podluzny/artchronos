@@ -9,7 +9,7 @@
 | Domain entities | QuestionTypeVersion, ItemVersion, ItemOption, Response |
 | Permissions | — (кодовый контракт) |
 | ADR | ADR-001, ADR-005 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Зафиксировать границу между ядром и плагинами, чтобы новые interaction добавлялись без изменения ядра и модели.

@@ -9,7 +9,7 @@
 | Domain entities | MediaAsset, ItemOption, ItemMedia, ItemVersion, TestVersion |
 | Permissions | `media.rights.manage`, `media.archive` |
 | ADR | ADR-005, ADR-007 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Гарантировать, что утвержденный и опубликованный контент использует только медиа с подтвержденными правами, и что используемые файлы не исчезают.

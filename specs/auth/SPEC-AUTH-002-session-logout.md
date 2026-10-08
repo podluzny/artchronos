@@ -9,7 +9,7 @@
 | Domain entities | Session, AuditLog |
 | Permissions | — (собственная сессия) |
 | ADR | ADR-006 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Обеспечить ограниченное время жизни сессий и их немедленный отзыв.

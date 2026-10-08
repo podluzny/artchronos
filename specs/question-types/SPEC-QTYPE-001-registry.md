@@ -9,7 +9,7 @@
 | Domain entities | QuestionType, QuestionTypeVersion, Assignment |
 | Permissions | `qtype.read`, `qtype.manage` |
 | ADR | ADR-001, ADR-005 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Позволить администраторам создавать и настраивать типы вопросов без разработки, в пределах возможностей зарегистрированных interaction plugins.

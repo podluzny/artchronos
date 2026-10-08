@@ -9,7 +9,7 @@
 | Domain entities | TestVersion, Section, TestSectionItem, SelectionRule, ItemVersion |
 | Permissions | `test.update`, `test.random_selection`, `item.read` |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Собрать тест из конкретных версий вопросов и (для преподавателей) правил случайного отбора.

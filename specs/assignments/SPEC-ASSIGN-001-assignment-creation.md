@@ -8,7 +8,7 @@
 | Business rules | BR-018, BR-021, BR-027, BR-039, BR-043 |
 | Domain entities | Assignment, AssignmentTarget, Topic, LearningObjective, QuestionType, StudentGroup |
 | Permissions | `assignment.create`, `assignment.update`, `assignment.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Формализовать правило «студент может создавать тесты на определенную тему»: задание задает рамки контента студента.

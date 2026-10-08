@@ -9,7 +9,7 @@
 | Domain entities | Item, ItemVersion, ItemOption, ItemMedia, ItemTag, QuestionType, QuestionTypeVersion, Assignment, MediaAsset |
 | Permissions | `item.create` |
 | ADR | ADR-001, ADR-002, ADR-005 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Позволить автору (студенту в рамках задания или преподавателю для банка) создать вопрос, структура которого

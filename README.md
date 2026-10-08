@@ -3,10 +3,9 @@
 Административная система для подготовки, экспертизы, публикации и управления тестами по искусству.
 Административный интерфейс — **AdminJS**. Разработка ведется по методологии **SDD (Specification-Driven Development)**.
 
-> Текущий этап: **M0 — Domain & Specification Baseline**. Кода нет намеренно.
-> Переход к реализации возможен только после закрытия задачи `T-030 Review SDD baseline`
-> (см. [`tasks/task-registry.md`](tasks/task-registry.md)) и подтверждения решений в
-> [`docs/open-questions.md`](docs/open-questions.md).
+> M0 (Domain & Specification Baseline) закрыт 2026-10-08: решения в [`docs/open-questions.md`](docs/open-questions.md)
+> подтверждены, ADR-001…008 приняты. Текущий этап — **M1 Identity & Governance**,
+> первая задача — `T-031` (см. [`tasks/task-registry.md`](tasks/task-registry.md)).
 
 ## Порядок SDD
 

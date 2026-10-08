@@ -9,7 +9,7 @@
 | Domain entities | Test, TestVersion, ItemVersion, Review, ReviewAssignment, ContentIssue |
 | Permissions | `test.submit`, `test.update` |
 | ADR | ADR-002 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Перевести тест на экспертизу в проверенном, замороженном виде и обеспечить цикл доработки через новые версии.

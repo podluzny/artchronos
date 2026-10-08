@@ -8,7 +8,7 @@
 | Business rules | BR-001, BR-027, BR-030, BR-035 |
 | Domain entities | Review, ReviewAssignment, Assignment, User |
 | Permissions | `review.assign`, `review.perform`, `review.read` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Каждая отправленная версия должна получить ответственного эксперта, не являющегося автором, и попасть в его очередь.

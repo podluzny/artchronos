@@ -8,7 +8,7 @@
 | Business rules | BR-028, BR-030, BR-040 |
 | Domain entities | Review, ReviewChecklist, ReviewChecklistAnswer, ReviewComment, ContentIssue |
 | Permissions | `review.perform`, `review.comment`, `review.read`, `checklist.manage` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Структурированная экспертиза с прослеживаемыми замечаниями, которые переходят между версиями до их закрытия.

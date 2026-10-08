@@ -8,7 +8,7 @@
 | Business rules | BR-005, BR-014, BR-015, BR-016, BR-035 |
 | Domain entities | User, UserRole, GroupMembership, Session, AuditLog |
 | Permissions | `user.read`, `user.create`, `user.update`, `user.status.manage` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Ведение учетных записей всех участников без потери истории и без возможности оставить систему без администратора.

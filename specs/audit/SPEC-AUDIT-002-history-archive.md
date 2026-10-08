@@ -8,7 +8,7 @@
 | Business rules | BR-005, BR-039, BR-042, BR-044 |
 | Domain entities | AuditLog; все архивируемые сущности |
 | Permissions | право чтения объекта; `*.archive` |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Единообразная модель soft delete и прозрачная история для пользователей, работающих с объектом.

@@ -9,7 +9,7 @@
 | Domain entities | User, Session, PasswordToken (служебная), AuditLog |
 | Permissions | собственный пароль — без permission; `user.password.reset` |
 | ADR | ADR-006 |
-| Статус | Draft |
+| Статус | Ready |
 
 ## Purpose
 Безопасное управление паролями: активация приглашенных, смена собственного, сброс администратором.

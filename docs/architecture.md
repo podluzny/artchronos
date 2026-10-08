@@ -3,7 +3,7 @@
 | Поле | Значение |
 |---|---|
 | Задача | T-010…T-016 |
-| Статус | Draft — ожидает review (T-030) |
+| Статус | Baseline — утверждено в T-030 (2026-10-08) |
 | Связанные | ADR-001…ADR-008 |
 
 ## 1. Контекст
@@ -82,11 +82,11 @@ read-only доступ к PUBLISHED TestVersion и запись Attempt/Response
 
 | ADR | Тема | Статус |
 |---|---|---|
-| [ADR-001](../decisions/ADR-001-question-type-registry.md) | Хранение QuestionType и schema | Accepted (proposed by plan) |
-| [ADR-002](../decisions/ADR-002-versioning.md) | Versioning | Accepted (proposed by plan) |
-| [ADR-003](../decisions/ADR-003-authorization.md) | Authorization | Accepted (proposed by plan) |
-| [ADR-004](../decisions/ADR-004-business-logic-placement.md) | Расположение бизнес-логики | Accepted (proposed by plan) |
-| [ADR-005](../decisions/ADR-005-dynamic-item-data.md) | Динамическая структура вопроса | Proposed |
-| [ADR-006](../decisions/ADR-006-authentication.md) | Authentication | Proposed |
-| [ADR-007](../decisions/ADR-007-media-storage.md) | Media storage | Proposed |
-| [ADR-008](../decisions/ADR-008-technology-stack.md) | Технологический стек | Proposed |
+| [ADR-001](../decisions/ADR-001-question-type-registry.md) | Хранение QuestionType и schema | Accepted |
+| [ADR-002](../decisions/ADR-002-versioning.md) | Versioning | Accepted |
+| [ADR-003](../decisions/ADR-003-authorization.md) | Authorization | Accepted |
+| [ADR-004](../decisions/ADR-004-business-logic-placement.md) | Расположение бизнес-логики | Accepted |
+| [ADR-005](../decisions/ADR-005-dynamic-item-data.md) | Динамическая структура вопроса | Accepted |
+| [ADR-006](../decisions/ADR-006-authentication.md) | Authentication | Accepted |
+| [ADR-007](../decisions/ADR-007-media-storage.md) | Media storage | Accepted |
+| [ADR-008](../decisions/ADR-008-technology-stack.md) | Технологический стек | Accepted |
