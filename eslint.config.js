@@ -6,6 +6,8 @@ export default tseslint.config(
     ignores: [
       '.dependency-cruiser.cjs',
       'dist/**',
+      '.vercel/**',
+      'test-results/**',
       'public/**',
       'node_modules/**',
       'assets/**',
