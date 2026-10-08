@@ -2,14 +2,5 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm ci",
-  "buildCommand": "npx tsx scripts/vercel-build.ts",
-  "outputDirectory": "public",
-  "functions": {
-    "api/index.js": {
-      "maxDuration": 30,
-      "includeFiles": "{dist/**,src/adminjs/components/**}"
-    }
-  },
-  "redirects": [{ "source": "/sdd", "destination": "/sdd/", "permanent": false }],
-  "rewrites": [{ "source": "/((?!sdd/|admin-assets/|api/).*)", "destination": "/api/index" }]
+  "buildCommand": "npx tsx scripts/vercel-build.ts"
 }

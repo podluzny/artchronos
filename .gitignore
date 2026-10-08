@@ -8,3 +8,4 @@ public/
 *.log
 test-results/
 playwright-report/
+.vercel/

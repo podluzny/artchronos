@@ -35,8 +35,9 @@ npm run test:report && python3 tools/build_traceability.py   # обновить 
 | `SESSION_SECRET` | случайная строка ≥ 32 символов |
 | `ADMIN_EMAIL`, `ADMIN_PASSWORD` | первый администратор (создается при сборке, если администраторов нет; пароль ≥ 12 символов) |
 
-Сборка (`vercel.json` → `scripts/vercel-build.ts`): компиляция TypeScript, предсборка фронтенда AdminJS
-(`/admin-assets/`), сайт документации (`/sdd/`), миграции и seed. Приложение — `/admin`.
+Сборка (`vercel.json` → `scripts/vercel-build.ts`, Build Output API): компиляция TypeScript, предсборка фронтенда
+AdminJS (`/admin-assets/`), сайт документации (`/sdd/`), функция с трассированными зависимостями, миграции и seed.
+Приложение — `/admin`.
 
 ## Порядок SDD
 

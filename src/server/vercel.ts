@@ -30,3 +30,5 @@ export async function handler(req: IncomingMessage, res: ServerResponse): Promis
     res.end('Сервис не инициализирован: проверьте переменные окружения (DATABASE_URL, SESSION_SECRET) и логи.')
   }
 }
+
+export default handler
