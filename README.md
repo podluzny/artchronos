@@ -28,6 +28,7 @@ Product Intent → Domain Model → Business Rules → Requirements → Scenario
 | [`tasks/`](tasks) | Реестр задач (`T-NNN`), Definition of Ready / Done |
 | [`decisions/`](decisions) | Architecture Decision Records (`ADR-NNN`) |
 | [`validation/`](validation) | Acceptance matrix (по блокам) и traceability matrix |
+| `index.html`, `_sidebar.md`, `assets/docsify/`, `vercel.json` | Статический сайт документации (docsify 4.13.1, встроен локально) для деплоя на Vercel |
 | [`tools/`](tools) | `build_traceability.py` — генерирует матрицы в `validation/` и проверяет целостность ссылок (инструмент документации, не код продукта) |
 
 ## Идентификаторы
