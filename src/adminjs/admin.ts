@@ -2,15 +2,24 @@ import AdminJS, { type AdminJSOptions } from 'adminjs'
 import type { AuditUseCases } from '../application/audit/use-cases.js'
 import type { EducationUseCases } from '../application/education/use-cases.js'
 import type { IdentityUseCases } from '../application/identity/use-cases.js'
+import type { ItemUseCases } from '../application/itembank/item-use-cases.js'
+import type { QtypeUseCases } from '../application/itembank/qtype-use-cases.js'
+import type { MediaUseCases } from '../application/media/use-cases.js'
 import { componentLoader, Components } from './component-loader.js'
 import { ru } from './locale-ru.js'
 import { educationResources } from './resources/education.js'
 import { identityResources } from './resources/identity.js'
+import { itemResources } from './resources/items.js'
+import { mediaResources } from './resources/media.js'
+import { qtypeResources } from './resources/qtypes.js'
 
 export interface AdminServices {
   identity: IdentityUseCases
   audit: AuditUseCases
   education: EducationUseCases
+  media: MediaUseCases
+  qtypes: QtypeUseCases
+  items: ItemUseCases
 }
 
 export const ADMIN_ROOT = '/admin'
@@ -22,7 +31,13 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
     logoutPath: `${ADMIN_ROOT}/logout`,
     componentLoader,
     ...(opts.assetsCDN ? { assetsCDN: opts.assetsCDN } : {}),
-    resources: [...educationResources(services.education), ...identityResources(services)],
+    resources: [
+      ...itemResources(services.items, services.media),
+      ...qtypeResources(services.qtypes),
+      ...mediaResources(services.media),
+      ...educationResources(services.education),
+      ...identityResources(services),
+    ],
     dashboard: { component: Components.Dashboard },
     branding: {
       companyName: 'ArtChronos',
@@ -91,8 +106,89 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
               },
               actions: { members: 'Изменить состав' },
             },
+            Item: {
+              properties: {
+                stem: 'Формулировка',
+                questionType: 'Тип',
+                questionTypeId: 'Тип вопроса',
+                state: 'Состояние версии',
+                versionNo: 'Версия',
+                owner: 'Автор',
+                assignment: 'Задание',
+                assignmentId: 'Задание',
+                courseId: 'Курс',
+                course: 'Курс',
+                topicId: 'Тема',
+                difficulty: 'Сложность',
+                points: 'Баллы',
+                topics: 'Темы',
+                tags: 'Теги',
+                tag: 'Тег',
+                status: 'Статус',
+                archiveReason: 'Причина архивации',
+                versions: 'Версии',
+                issues: 'Проверка',
+                contentHash: 'Хэш содержимого',
+                updatedAt: 'Изменен',
+              },
+              actions: {
+                new: 'Создать вопрос',
+                editDraft: 'Редактировать черновик',
+                preview: 'Предпросмотр',
+                newVersion: 'Новая версия',
+                submit: 'Отправить на экспертизу',
+                recall: 'Отозвать отправку',
+                discard: 'Удалить черновик',
+                compare: 'Сравнить версии',
+              },
+            },
+            MediaAsset: {
+              properties: {
+                thumb: 'Превью',
+                kind: 'Тип',
+                title: 'Название',
+                altText: 'Альтернативный текст',
+                caption: 'Подпись',
+                transcript: 'Расшифровка (видео)',
+                depictsArtwork: 'Изображено произведение',
+                artist: 'Автор произведения',
+                workTitle: 'Произведение',
+                dateText: 'Датировка',
+                technique: 'Техника',
+                collection: 'Собрание',
+                inventoryNo: 'Инв. номер',
+                sourceUrl: 'Источник (URL)',
+                sourceDescription: 'Источник (описание)',
+                license: 'Лицензия',
+                rightsHolder: 'Правообладатель',
+                creditLine: 'Атрибуция (credit line)',
+                rightsNote: 'Основание прав',
+                rightsStatus: 'Права',
+                tags: 'Теги',
+                tag: 'Тег',
+                size: 'Файл',
+                owner: 'Загрузил',
+                status: 'Статус',
+                archiveReason: 'Причина архивации',
+                usage: 'Где используется',
+              },
+              actions: { new: 'Загрузить', rights: 'Права' },
+            },
             QuestionType: {
-              properties: { code: 'Код', name: 'Название', interactionKey: 'Interaction', status: 'Статус' },
+              properties: {
+                code: 'Код',
+                name: 'Название',
+                description: 'Описание',
+                interactionKey: 'Interaction',
+                status: 'Статус',
+                version: 'Версия',
+                config: 'Конфигурация',
+                evaluation: 'Оценивание',
+                versions: 'История версий',
+                itemCount: 'Вопросов',
+                activeAssignmentCount: 'В активных заданиях',
+              },
+              actions: { configure: 'Изменить конфигурацию', activate: 'Активировать', deactivate: 'Деактивировать' },
             },
             Assignment: {
               properties: {
@@ -180,6 +276,8 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
             LearningObjective: 'Учебные цели',
             StudentGroup: 'Группы',
             QuestionType: 'Типы вопросов',
+            Item: 'Вопросы',
+            MediaAsset: 'Медиатека',
             Assignment: 'Задания',
             Администрирование: 'Администрирование',
           },

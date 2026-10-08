@@ -13,4 +13,9 @@ export const componentLoader = new ComponentLoader()
 export const Components = {
   ActionForm: componentLoader.add('ActionForm', path.join(dir, 'ActionForm')),
   Dashboard: componentLoader.add('Dashboard', path.join(dir, 'Dashboard')),
+  MediaThumb: componentLoader.add('MediaThumb', path.join(dir, 'MediaThumb')),
+  MediaUpload: componentLoader.add('MediaUpload', path.join(dir, 'MediaUpload')),
+  ItemEditor: componentLoader.add('ItemEditor', path.join(dir, 'ItemEditor')),
+  ItemPreview: componentLoader.add('ItemPreview', path.join(dir, 'ItemPreview')),
+  JsonView: componentLoader.add('JsonView', path.join(dir, 'JsonView')),
 }

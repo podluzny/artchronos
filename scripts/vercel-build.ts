@@ -43,7 +43,12 @@ for (const f of files) {
   cpSync(f, dest, { dereference: true })
 }
 // Пакеты, загружаемые динамически по имени платформы (nft их не видит). Сборка идет на linux-x64, как и рантайм Vercel.
-for (const dir of ['node_modules/@rollup/rollup-linux-x64-gnu', 'node_modules/@esbuild/linux-x64']) {
+for (const dir of [
+  'node_modules/@rollup/rollup-linux-x64-gnu',
+  'node_modules/@esbuild/linux-x64',
+  'node_modules/@img/sharp-linux-x64',
+  'node_modules/@img/sharp-libvips-linux-x64',
+]) {
   try {
     cpSync(dir, path.join(FUNC, dir), { recursive: true, dereference: true })
   } catch {

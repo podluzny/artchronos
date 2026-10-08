@@ -154,6 +154,7 @@ export interface QuestionTypesTable {
   description: string | null
   interaction_key: string
   status: Generated<'ACTIVE' | 'INACTIVE'>
+  current_version_id: string | null
   created_at: Generated<Date>
   updated_at: Generated<Date>
   revision: Generated<number>
@@ -202,6 +203,154 @@ export interface DeadlineExtensionsTable {
   granted_at: Generated<Date>
 }
 
+export interface TagsTable {
+  id: Generated<string>
+  name: string
+  normalized: string
+  status: Generated<'ACTIVE' | 'ARCHIVED'>
+  created_at: Generated<Date>
+}
+
+export interface MediaAssetsTable extends Archivable {
+  id: Generated<string>
+  kind: 'IMAGE' | 'VIDEO'
+  storage_key: string
+  mime_type: string
+  size_bytes: ColumnType<string, number, number>
+  sha256: string
+  width: number | null
+  height: number | null
+  duration_sec: number | null
+  title: string
+  alt_text: string | null
+  caption: string | null
+  transcript: string | null
+  depicts_artwork: Generated<boolean>
+  artist: string | null
+  work_title: string | null
+  date_text: string | null
+  technique: string | null
+  collection: string | null
+  inventory_no: string | null
+  source_url: string | null
+  source_description: string | null
+  license: Generated<string>
+  rights_holder: string | null
+  credit_line: string | null
+  rights_status: Generated<'PENDING' | 'CLEARED' | 'RESTRICTED'>
+  rights_note: string | null
+  rights_verified_by: string | null
+  rights_verified_at: Date | null
+  owner_id: string
+  derivatives_status: Generated<'PENDING' | 'READY' | 'FAILED' | 'SKIPPED'>
+}
+
+export interface MediaDerivativesTable {
+  media_id: string
+  variant: 'THUMB' | 'PREVIEW' | 'POSTER'
+  storage_key: string
+  mime_type: string
+  width: number | null
+  height: number | null
+}
+
+export interface MediaBlobsTable {
+  storage_key: string
+  data: Buffer
+  created_at: Generated<Date>
+}
+
+export interface MediaTagsTable {
+  media_id: string
+  tag_id: string
+}
+export interface MediaTopicsTable {
+  media_id: string
+  topic_id: string
+}
+
+export interface QuestionTypeVersionsTable {
+  id: Generated<string>
+  question_type_id: string
+  version_no: number
+  interaction_config: Json<Record<string, unknown>>
+  content_schema: Json<Record<string, unknown>>
+  response_schema: Json<Record<string, unknown>>
+  answer_key_schema: Json<Record<string, unknown>>
+  evaluation: Json<{ method: string; params?: Record<string, unknown> }>
+  created_by: string | null
+  created_at: Generated<Date>
+}
+
+export interface ItemsTable extends Archivable {
+  id: Generated<string>
+  question_type_id: string
+  owner_id: string
+  assignment_id: string | null
+  course_id: string
+  current_draft_version_id: string | null
+  latest_approved_version_id: string | null
+}
+
+export type VersionStateCol = 'DRAFT' | 'READY_FOR_REVIEW' | 'IN_REVIEW' | 'CHANGES_REQUESTED' | 'APPROVED' | 'ARCHIVED'
+
+export interface ItemVersionsTable {
+  id: Generated<string>
+  item_id: string
+  version_no: number
+  based_on_version_id: string | null
+  question_type_version_id: string
+  state: Generated<VersionStateCol>
+  stem: Generated<string>
+  content: Json<Record<string, unknown>>
+  answer_key: Json<Record<string, unknown>>
+  default_points: ColumnType<number, number | undefined, number>
+  difficulty: Generated<number>
+  feedback: string | null
+  author_ids: string[]
+  ever_submitted: Generated<boolean>
+  submitted_at: Date | null
+  approved_at: Date | null
+  approved_by: string | null
+  content_hash: string | null
+  archive_reason: string | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+  revision: Generated<number>
+}
+
+export interface ItemOptionsTable {
+  id: Generated<string>
+  item_version_id: string
+  key: string
+  role: 'OPTION' | 'PREMISE' | 'RESPONSE' | 'SEQUENCE_ELEMENT'
+  text: string | null
+  media_asset_id: string | null
+  alt_text_override: string | null
+  ordinal: number
+}
+
+export interface ItemMediaTable {
+  item_version_id: string
+  media_asset_id: string
+  role: 'STIMULUS' | 'ILLUSTRATION'
+  alt_text_override: string | null
+  ordinal: Generated<number>
+}
+
+export interface ItemVersionTopicsTable {
+  item_version_id: string
+  topic_id: string
+}
+export interface ItemVersionObjectivesTable {
+  item_version_id: string
+  objective_id: string
+}
+export interface ItemVersionTagsTable {
+  item_version_id: string
+  tag_id: string
+}
+
 export interface Database {
   users: UsersTable
   roles: RolesTable
@@ -225,6 +374,20 @@ export interface Database {
   assignment_question_types: AssignmentQuestionTypesTable
   assignment_targets: AssignmentTargetsTable
   deadline_extensions: DeadlineExtensionsTable
+  tags: TagsTable
+  media_assets: MediaAssetsTable
+  media_derivatives: MediaDerivativesTable
+  media_blobs: MediaBlobsTable
+  media_tags: MediaTagsTable
+  media_topics: MediaTopicsTable
+  question_type_versions: QuestionTypeVersionsTable
+  items: ItemsTable
+  item_versions: ItemVersionsTable
+  item_options: ItemOptionsTable
+  item_media: ItemMediaTable
+  item_version_topics: ItemVersionTopicsTable
+  item_version_objectives: ItemVersionObjectivesTable
+  item_version_tags: ItemVersionTagsTable
 }
 
 export type UserRow = Selectable<UsersTable>

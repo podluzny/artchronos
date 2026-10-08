@@ -184,42 +184,42 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-MEDIA-001 | SC-MEDIA-001 | AT-MEDIA-001.* | ⏳ |
-| FR-MEDIA-002 | SC-MEDIA-001 | AT-MEDIA-001.* | ⏳ |
-| FR-MEDIA-004 | SC-MEDIA-001 | AT-MEDIA-001.* | ⏳ |
-| FR-MEDIA-005 | SC-MEDIA-003 | AT-MEDIA-001.* | ⏳ |
-| FR-MEDIA-008 | SC-MEDIA-001 | AT-MEDIA-001.* | ⏳ |
-| NFR-SEC-006 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ⏳ |
-| NFR-PERF-004 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ⏳ |
-| BR-025 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ⏳ |
-| BR-045 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ⏳ |
-| BR-035 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ⏳ |
-| FR-MEDIA-003 | SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| FR-MEDIA-006 | SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| FR-MEDIA-007 | SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| BR-005 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| BR-024 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| BR-026 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
-| BR-039 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ⏳ |
+| FR-MEDIA-001 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
+| FR-MEDIA-002 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
+| FR-MEDIA-004 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
+| FR-MEDIA-005 | SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
+| FR-MEDIA-008 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
+| NFR-SEC-006 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
+| NFR-PERF-004 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
+| BR-025 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
+| BR-045 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ◐ |
+| BR-035 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ◐ |
+| FR-MEDIA-003 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| FR-MEDIA-006 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| FR-MEDIA-007 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| BR-005 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| BR-024 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| BR-026 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| BR-039 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-MEDIA-001.1 | Загрузка JPEG/PNG/WebP/MP4 создает MediaAsset с PENDING и превью | positive | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-001.2 | Файл с подмененным расширением (например, HTML как .jpg) отклоняется | security | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-001.3 | Превышение лимита размера отклоняется | negative | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-001.4 | Клиентское значение rightsStatus при загрузке игнорируется | security | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-001.5 | GPS-метаданные удаляются из изображения | security | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-001.6 | Поиск по artist/workTitle/тегу находит медиа | positive | SPEC-MEDIA-001 | ⏳ |
+| AT-MEDIA-001.1 | Загрузка JPEG/PNG/WebP/MP4 создает MediaAsset с PENDING и превью | positive | SPEC-MEDIA-001 | ✓ |
+| AT-MEDIA-001.2 | Файл с подмененным расширением (например, HTML как .jpg) отклоняется | security | SPEC-MEDIA-001 | ✓ |
+| AT-MEDIA-001.3 | Превышение лимита размера отклоняется | negative | SPEC-MEDIA-001 | ✓ |
+| AT-MEDIA-001.4 | Клиентское значение rightsStatus при загрузке игнорируется | security | SPEC-MEDIA-001 | ✓ |
+| AT-MEDIA-001.5 | GPS-метаданные удаляются из изображения | security | SPEC-MEDIA-001 | ✓ |
+| AT-MEDIA-001.6 | Поиск по artist/workTitle/тегу находит медиа | positive | SPEC-MEDIA-001 | ✓ |
 | AT-MEDIA-001.7 | Файл недоступен без аутентификации; прямой URL storage недоступен | security | SPEC-MEDIA-001 | ⏳ |
-| AT-MEDIA-002.1 | Teacher устанавливает CLEARED при заполненных обязательных полях; аудит | positive | SPEC-MEDIA-002 | ⏳ |
-| AT-MEDIA-002.2 | Student не может установить CLEARED (прямой запрос) | permission | SPEC-MEDIA-002 | ⏳ |
-| AT-MEDIA-002.3 | Изменение лицензии студентом у CLEARED медиа возвращает PENDING | positive | SPEC-MEDIA-002 | ⏳ |
+| AT-MEDIA-002.1 | Teacher устанавливает CLEARED при заполненных обязательных полях; аудит | positive | SPEC-MEDIA-002 | ✓ |
+| AT-MEDIA-002.2 | Student не может установить CLEARED (прямой запрос) | permission | SPEC-MEDIA-002 | ✓ |
+| AT-MEDIA-002.3 | Изменение лицензии студентом у CLEARED медиа возвращает PENDING | positive | SPEC-MEDIA-002 | ✓ |
 | AT-MEDIA-002.4 | Удаление медиа, используемого не-DRAFT версией, отклоняется | negative | SPEC-MEDIA-002 | ⏳ |
 | AT-MEDIA-002.5 | Архивированное медиа нельзя выбрать в новом вопросе | negative | SPEC-MEDIA-002 | ⏳ |
 | AT-MEDIA-002.6 | «Где используется» показывает ссылки через ItemOption и ItemMedia | positive | SPEC-MEDIA-002 | ⏳ |
-| AT-MEDIA-002.7 | RESTRICTED показывает затронутые опубликованные тесты | positive | SPEC-MEDIA-002 | ⏳ |
+| AT-MEDIA-002.7 | RESTRICTED показывает затронутые опубликованные тесты | positive | SPEC-MEDIA-002 | ✓ |
 
 ## BL-06
 
@@ -227,37 +227,37 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-QTYPE-001 | SC-QTYPE-001 | AT-QTYPE-001.* | ⏳ |
-| FR-QTYPE-002 | SC-QTYPE-001 | AT-QTYPE-001.* | ⏳ |
-| FR-QTYPE-003 | SC-QTYPE-002 | AT-QTYPE-001.* | ⏳ |
-| FR-QTYPE-004 | SC-QTYPE-002 | AT-QTYPE-001.* | ⏳ |
-| NFR-EXT-001 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ⏳ |
-| BR-021 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ⏳ |
-| BR-022 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ⏳ |
-| BR-023 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ⏳ |
-| BR-035 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ⏳ |
-| FR-QTYPE-005 | SC-ITEM-001 | AT-QTYPE-002.* | ⏳ |
-| FR-QTYPE-006 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
-| FR-DELIV-002 | SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
-| NFR-EXT-002 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
-| NFR-SEC-007 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
-| BR-020 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
-| INV-015 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ⏳ |
+| FR-QTYPE-001 | SC-QTYPE-001 | AT-QTYPE-001.* | ✓ |
+| FR-QTYPE-002 | SC-QTYPE-001 | AT-QTYPE-001.* | ✓ |
+| FR-QTYPE-003 | SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
+| FR-QTYPE-004 | SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
+| NFR-EXT-001 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ◐ |
+| BR-021 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
+| BR-022 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
+| BR-023 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ◐ |
+| BR-035 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
+| FR-QTYPE-005 | SC-ITEM-001 | AT-QTYPE-002.* | ◐ |
+| FR-QTYPE-006 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| FR-DELIV-002 | SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| NFR-EXT-002 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| NFR-SEC-007 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| BR-020 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| INV-015 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-QTYPE-001.1 | Admin создает тип на основе `choice` с обязательным стимулом; создается v1 | positive | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-001.2 | Тип с несуществующим interactionKey не создается | negative | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-001.3 | Изменение конфигурации создает v2; существующие ItemVersion остаются на v1 | positive | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-001.4 | Деактивированный тип недоступен для новых Item; существующие работают | positive | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-001.5 | Teacher/Student/Expert не могут управлять типами | permission | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-001.6 | QuestionTypeVersion неизменна (прямой UPDATE отклоняется) | negative | SPEC-QTYPE-001 | ⏳ |
-| AT-QTYPE-002.1 | Contract test suite проходит для каждого MVP-плагина (`choice`, `match`, `order`, `text_entry`, `extended_text`) | contract | SPEC-QTYPE-002 | ⏳ |
-| AT-QTYPE-002.2 | Регистрация плагина-фикстуры добавляет тип без миграции БД | extensibility | SPEC-QTYPE-002 | ⏳ |
+| AT-QTYPE-001.1 | Admin создает тип на основе `choice` с обязательным стимулом; создается v1 | positive | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-001.2 | Тип с несуществующим interactionKey не создается | negative | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-001.3 | Изменение конфигурации создает v2; существующие ItemVersion остаются на v1 | positive | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-001.4 | Деактивированный тип недоступен для новых Item; существующие работают | positive | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-001.5 | Teacher/Student/Expert не могут управлять типами | permission | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-001.6 | QuestionTypeVersion неизменна (прямой UPDATE отклоняется) | negative | SPEC-QTYPE-001 | ✓ |
+| AT-QTYPE-002.1 | Contract test suite проходит для каждого MVP-плагина (`choice`, `match`, `order`, `text_entry`, `extended_text`) | contract | SPEC-QTYPE-002 | ✓ |
+| AT-QTYPE-002.2 | Регистрация плагина-фикстуры добавляет тип без миграции БД | extensibility | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.3 | Отсутствующий плагин для существующего типа → ошибка старта | negative | SPEC-QTYPE-002 | ⏳ |
-| AT-QTYPE-002.4 | Evaluators MVP вычисляют ожидаемые баллы на эталонном наборе ответов | positive | SPEC-QTYPE-002 | ⏳ |
+| AT-QTYPE-002.4 | Evaluators MVP вычисляют ожидаемые баллы на эталонном наборе ответов | positive | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.5 | Компоненты плагинов проходят axe-core без нарушений уровня AA | a11y | SPEC-QTYPE-002 | ⏳ |
 
 ## BL-07
@@ -266,80 +266,80 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-ITEM-001 | SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ⏳ |
-| FR-ITEM-002 | SC-ITEM-002 | AT-ITEM-001.* | ⏳ |
-| FR-ITEM-005 | SC-ITEM-001 | AT-ITEM-001.* | ⏳ |
-| BR-017 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ⏳ |
-| BR-018 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ⏳ |
-| BR-019 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ⏳ |
-| BR-020 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ⏳ |
-| BR-021 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ⏳ |
-| BR-024 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ⏳ |
-| BR-025 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ⏳ |
-| BR-039 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-005.* | ⏳ |
-| BR-004 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-004.* | ⏳ |
-| FR-ITEM-003 | SC-ITEM-003 | AT-ITEM-002.* | ⏳ |
-| FR-ITEM-004 | SC-VERSION-002 | AT-ITEM-002.* | ⏳ |
-| FR-ITEM-008 | SC-VERSION-002 | AT-ITEM-002.* | ⏳ |
-| FR-ITEM-009 | SC-ITEM-006 | AT-ITEM-002.* | ⏳ |
-| FR-ITEM-010 | SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| NFR-DATA-001 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| NFR-DATA-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| BR-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| BR-005 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| BR-006 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ⏳ |
-| BR-007 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ⏳ |
-| BR-038 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| BR-041 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| BR-044 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ⏳ |
-| FR-ITEM-006 | SC-ITEM-004 | AT-ITEM-003.* | ⏳ |
-| FR-DELIV-002 | SC-ITEM-004 | AT-ITEM-003.* | ⏳ |
-| NFR-SEC-008 | SC-ITEM-004 | AT-ITEM-003.* | ⏳ |
-| FR-ITEM-011 | SC-ITEM-005 | AT-ITEM-004.* | ⏳ |
-| FR-PERM-002 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ⏳ |
-| FR-PERM-003 | SC-ITEM-005 | AT-ITEM-004.*, AT-ITEM-005.* | ⏳ |
-| NFR-SEC-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ⏳ |
-| BR-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ⏳ |
-| FR-ITEM-007 | SC-ITEM-005 | AT-ITEM-005.* | ⏳ |
-| NFR-PERF-001 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ⏳ |
-| NFR-PERF-003 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ⏳ |
+| FR-ITEM-001 | SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
+| FR-ITEM-002 | SC-ITEM-002 | AT-ITEM-001.* | ✓ |
+| FR-ITEM-005 | SC-ITEM-001 | AT-ITEM-001.* | ✓ |
+| BR-017 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
+| BR-018 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
+| BR-019 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-020 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-021 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
+| BR-024 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-025 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-039 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-005.* | ◐ |
+| BR-004 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
+| FR-ITEM-003 | SC-ITEM-003 | AT-ITEM-002.* | ◐ |
+| FR-ITEM-004 | SC-VERSION-002 | AT-ITEM-002.* | ◐ |
+| FR-ITEM-008 | SC-VERSION-002 | AT-ITEM-002.* | ◐ |
+| FR-ITEM-009 | SC-ITEM-006 | AT-ITEM-002.* | ◐ |
+| FR-ITEM-010 | SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| NFR-DATA-001 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| NFR-DATA-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-005 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-006 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
+| BR-007 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
+| BR-038 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-041 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-044 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| FR-ITEM-006 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
+| FR-DELIV-002 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
+| NFR-SEC-008 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
+| FR-ITEM-011 | SC-ITEM-005 | AT-ITEM-004.* | ✓ |
+| FR-PERM-002 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
+| FR-PERM-003 | SC-ITEM-005 | AT-ITEM-004.*, AT-ITEM-005.* | ◐ |
+| NFR-SEC-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
+| BR-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
+| FR-ITEM-007 | SC-ITEM-005 | AT-ITEM-005.* | ◐ |
+| NFR-PERF-001 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ◐ |
+| NFR-PERF-003 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ◐ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-ITEM-001.1 | После выбора single_choice отображаются варианты ответа | UI | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.2 | Для image_choice отображается выбор MediaAsset | UI | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.3 | Невалидная конфигурация не может быть сохранена (структурно) и не может быть отправлена (по schema) | negative | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.4 | После сохранения создается Draft version v1, owner = автор | positive | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.5 | Пользователь без item.create не может вызвать action создания (403 при прямом вызове) | permission | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.6 | Студент не может создать вопрос типа, не разрешенного заданием (прямой запрос) | negative | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.7 | Студент не может создать вопрос вне активного адресованного задания | negative | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.8 | Переданные в payload ownerId/state игнорируются | security | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-001.9 | Архивированное или RESTRICTED медиа нельзя выбрать | negative | SPEC-ITEM-001 | ⏳ |
-| AT-ITEM-002.1 | Владелец редактирует свой DRAFT; аудит с diff | positive | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.2 | Студент не может редактировать чужой DRAFT (404) | permission | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.3 | Никто (включая Admin) не может редактировать READY_FOR_REVIEW/IN_REVIEW/APPROVED версию | negative | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.4 | Новая версия: v(N+1) DRAFT, basedOn, option keys сохранены, исходная версия не изменилась (contentHash) | positive | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.5 | Второй DRAFT создать нельзя | negative | SPEC-ITEM-002 | ⏳ |
+| AT-ITEM-001.1 | После выбора single_choice отображаются варианты ответа | UI | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.2 | Для image_choice отображается выбор MediaAsset | UI | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.3 | Невалидная конфигурация не может быть сохранена (структурно) и не может быть отправлена (по schema) | negative | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.4 | После сохранения создается Draft version v1, owner = автор | positive | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.5 | Пользователь без item.create не может вызвать action создания (403 при прямом вызове) | permission | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.6 | Студент не может создать вопрос типа, не разрешенного заданием (прямой запрос) | negative | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.7 | Студент не может создать вопрос вне активного адресованного задания | negative | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.8 | Переданные в payload ownerId/state игнорируются | security | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-001.9 | Архивированное или RESTRICTED медиа нельзя выбрать | negative | SPEC-ITEM-001 | ✓ |
+| AT-ITEM-002.1 | Владелец редактирует свой DRAFT; аудит с diff | positive | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.2 | Студент не может редактировать чужой DRAFT (404) | permission | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.3 | Никто (включая Admin) не может редактировать READY_FOR_REVIEW/IN_REVIEW/APPROVED версию | negative | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.4 | Новая версия: v(N+1) DRAFT, basedOn, option keys сохранены, исходная версия не изменилась (contentHash) | positive | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.5 | Второй DRAFT создать нельзя | negative | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.6 | Auto-rebind обновляет ссылку в DRAFT тесте автора и не трогает не-DRAFT тесты | positive | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.7 | Конфликт revision возвращает 409 без потери данных | concurrency | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.8 | Recall возможен до начала review и невозможен после | positive/negative | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.9 | Архивированный Item не добавляется в новые тесты; существующие тесты не затронуты | negative | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-002.10 | Hard delete возможен только для неотправлявшегося DRAFT без ссылок | negative | SPEC-ITEM-002 | ⏳ |
-| AT-ITEM-003.1 | Preview отображает вопрос через компонент плагина | positive | SPEC-ITEM-003 | ⏳ |
-| AT-ITEM-003.2 | Ответ оценивается evaluator'ом; результат совпадает с эталоном | positive | SPEC-ITEM-003 | ⏳ |
-| AT-ITEM-003.3 | Preview не создает записей Attempt/Response и не меняет версию | negative | SPEC-ITEM-003 | ⏳ |
-| AT-ITEM-003.4 | Preview недоступен без `item.read` (404) | permission | SPEC-ITEM-003 | ⏳ |
-| AT-ITEM-004.1 | Студент A не видит в списке и не открывает по id вопросы студента B (любое состояние) | permission | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-004.2 | Teacher видит DRAFT студентов своего задания и не видит DRAFT в чужих курсах | permission | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-004.3 | Expert видит только вопросы назначенных ему review | permission | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-004.4 | Teacher курса видит APPROVED вопросы банка курса других авторов | positive | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-004.5 | Студент не может approve вопрос (нет `review.perform`) | permission | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-004.6 | count() списка соответствует видимым записям | permission | SPEC-ITEM-004 | ⏳ |
-| AT-ITEM-005.1 | Фильтр по теме включает подтемы | positive | SPEC-ITEM-005 | ⏳ |
-| AT-ITEM-005.2 | Комбинация фильтров возвращает корректное пересечение | positive | SPEC-ITEM-005 | ⏳ |
-| AT-ITEM-005.3 | Архивированные скрыты по умолчанию | positive | SPEC-ITEM-005 | ⏳ |
+| AT-ITEM-002.7 | Конфликт revision возвращает 409 без потери данных | concurrency | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.8 | Recall возможен до начала review и невозможен после | positive/negative | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.9 | Архивированный Item не добавляется в новые тесты; существующие тесты не затронуты | negative | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-002.10 | Hard delete возможен только для неотправлявшегося DRAFT без ссылок | negative | SPEC-ITEM-002 | ✓ |
+| AT-ITEM-003.1 | Preview отображает вопрос через компонент плагина | positive | SPEC-ITEM-003 | ✓ |
+| AT-ITEM-003.2 | Ответ оценивается evaluator'ом; результат совпадает с эталоном | positive | SPEC-ITEM-003 | ✓ |
+| AT-ITEM-003.3 | Preview не создает записей Attempt/Response и не меняет версию | negative | SPEC-ITEM-003 | ✓ |
+| AT-ITEM-003.4 | Preview недоступен без `item.read` (404) | permission | SPEC-ITEM-003 | ✓ |
+| AT-ITEM-004.1 | Студент A не видит в списке и не открывает по id вопросы студента B (любое состояние) | permission | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-004.2 | Teacher видит DRAFT студентов своего задания и не видит DRAFT в чужих курсах | permission | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-004.3 | Expert видит только вопросы назначенных ему review | permission | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-004.4 | Teacher курса видит APPROVED вопросы банка курса других авторов | positive | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-004.5 | Студент не может approve вопрос (нет `review.perform`) | permission | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-004.6 | count() списка соответствует видимым записям | permission | SPEC-ITEM-004 | ✓ |
+| AT-ITEM-005.1 | Фильтр по теме включает подтемы | positive | SPEC-ITEM-005 | ✓ |
+| AT-ITEM-005.2 | Комбинация фильтров возвращает корректное пересечение | positive | SPEC-ITEM-005 | ✓ |
+| AT-ITEM-005.3 | Архивированные скрыты по умолчанию | positive | SPEC-ITEM-005 | ✓ |
 | AT-ITEM-005.4 | Список на 50 000 вопросов открывается ≤ 1.5 с p95 | performance | SPEC-ITEM-005 | ⏳ |
 | AT-ITEM-005.5 | Drawer показывает preview и историю версий | UI | SPEC-ITEM-005 | ⏳ |
 
@@ -582,7 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 70 / 192 |
+| Проходящих AT | 120 / 192 |
 | Падающих AT | 0 |
-| Требований (FR/NFR/BR) с ≥1 проходящим AT | 66 / 157 (42%) |
+| Требований (FR/NFR/BR) с ≥1 проходящим AT | 115 / 157 (73%) |
 | Ошибок целостности ссылок | 0 |

@@ -4,6 +4,8 @@ import { SYSTEM_ROLES, type SystemRoleCode } from '../../domain/identity/system-
 import { validatePassword } from '../../domain/identity/password-policy.js'
 import { normalizeEmail } from '../../domain/shared/text.js'
 import { MVP_QUESTION_TYPES } from '../../domain/itembank/mvp-question-types.js'
+import { buildTypeVersion } from '../../application/itembank/qtype-use-cases.js'
+import { createInteractionRegistry } from '../../plugins/interactions/index.js'
 import type { PasswordHasher } from '../../application/identity/ports.js'
 import type { Db } from './kysely.js'
 
@@ -45,13 +47,46 @@ export async function seedCatalog(db: Db): Promise<void> {
         if (rows.length) await trx.insertInto('role_permissions').values(rows).execute()
       }
     }
-    // MVP-типы вопросов (question-type-system §3): создаются активными, если их нет; существующие не трогаем.
+    // MVP-типы вопросов (question-type-system §3): создаются активными с версией v1, если их нет; существующие не трогаем.
+    const registry = createInteractionRegistry()
     for (const t of MVP_QUESTION_TYPES) {
       await trx
         .insertInto('question_types')
-        .values({ code: t.code, name: t.name, interaction_key: t.interactionKey, status: 'ACTIVE' })
+        .values({
+          code: t.code,
+          name: t.name,
+          description: t.description,
+          interaction_key: t.interactionKey,
+          status: 'ACTIVE',
+        })
         .onConflict((oc) => oc.column('code').doNothing())
         .execute()
+      const row = await trx
+        .selectFrom('question_types')
+        .select(['id', 'current_version_id'])
+        .where('code', '=', t.code)
+        .executeTakeFirstOrThrow()
+      if (!row.current_version_id) {
+        const built = buildTypeVersion(registry, t.interactionKey, t.config, t.evaluation)
+        const v = await trx
+          .insertInto('question_type_versions')
+          .values({
+            question_type_id: row.id,
+            version_no: 1,
+            interaction_config: JSON.stringify(built.interactionConfig),
+            content_schema: JSON.stringify(built.contentSchema),
+            response_schema: JSON.stringify(built.responseSchema),
+            answer_key_schema: JSON.stringify(built.answerKeySchema),
+            evaluation: JSON.stringify(built.evaluation),
+          })
+          .returning('id')
+          .executeTakeFirstOrThrow()
+        await trx
+          .updateTable('question_types')
+          .set({ current_version_id: v.id, description: t.description })
+          .where('id', '=', row.id)
+          .execute()
+      }
     }
   })
 }

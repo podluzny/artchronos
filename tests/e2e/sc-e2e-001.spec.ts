@@ -1,4 +1,6 @@
 import { expect, test } from '@playwright/test'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import {
   activate,
   ADMIN,
@@ -13,7 +15,7 @@ import {
 
 /**
  * AT-E2E-001 — SC-E2E-001 (scenarios/scenario-registry.md). Сценарий наращивается по мере готовности блоков:
- * M1: шаги 1–2. M2: шаг 3 (учебная структура и задание через UI).
+ * M1: шаги 1–2. M2: шаг 3 (учебная структура и задание через UI). M3: шаги 4–6 (вопросы студента).
  */
 test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
   const teacher = {
@@ -77,6 +79,7 @@ test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
     await recordAction(page, 'Назначить преподавателей')
     await page.locator(`label:has-text("${teacher.name}")`).click()
     await page.getByRole('button', { name: 'Сохранить преподавателей' }).click()
+    await page.waitForURL(/\/show$/)
     await expect(page.getByText(teacher.name).first()).toBeVisible()
   })
 
@@ -95,6 +98,7 @@ test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
     await recordAction(page, 'Изменить состав')
     await page.locator(`label:has-text("${student.name}")`).click()
     await page.getByRole('button', { name: 'Сохранить состав' }).click()
+    await page.waitForURL(/\/show$/)
     await expect(page.getByText(student.name).first()).toBeVisible()
 
     await page.goto('/admin/resources/Assignment/actions/new')
@@ -129,5 +133,94 @@ test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
     await login(page, student.email, student.password)
     await page.goto('/admin/resources/Assignment/actions/list')
     await expect(page.getByText(assignment)).toBeVisible()
+  })
+
+  test('шаг 4: студент создает вопрос single_choice в редакторе', async ({ page }) => {
+    await login(page, student.email, student.password)
+    await page.goto('/admin/resources/Item/actions/new')
+    await pickSelect(page, 'Задание', assignment)
+    await page.locator('[data-type=single_choice]').click()
+    await page.fill('#stem', 'Кто автор картины «Грачи прилетели»?')
+    const texts = page.locator('input[placeholder="Текст"]')
+    await texts.nth(0).fill('А. К. Саврасов')
+    await texts.nth(1).fill('И. И. Шишкин')
+    await texts.nth(2).fill('И. И. Левитан')
+    await page.locator('input[aria-label="Вариант 1 верный"]').check()
+    await page.getByLabel('Пейзаж', { exact: true }).check({ force: true })
+    await page.getByRole('button', { name: 'Создать вопрос' }).click()
+    await page.waitForURL(/\/show$/)
+    await expect(page.getByText('Ошибок нет — вопрос готов к экспертизе')).toBeVisible()
+    await expect(page.getByText('Черновик').first()).toBeVisible()
+    // предпросмотр и проверка ответа
+    await recordAction(page, 'Предпросмотр')
+    await page.locator('label', { hasText: 'А. К. Саврасов' }).click()
+    await page.getByRole('button', { name: 'Проверить ответ' }).click()
+    await expect(page.getByTestId('preview-result')).toContainText('Баллы: 1 из 1')
+  })
+
+  test('шаг 5: студент загружает изображения и создает вопрос image_choice', async ({ page }) => {
+    await login(page, student.email, student.password)
+    const sharp = (await import('sharp')).default
+    const files: string[] = []
+    for (const [i, color] of ['#7a5230', '#30507a'].entries()) {
+      // путь без кириллицы: Chromium не принимает файлы из outputPath с кириллицей в имени каталога
+      const f = join(tmpdir(), `art-${stamp}-${i}.png`)
+      await sharp({ create: { width: 200, height: 150, channels: 3, background: color } })
+        .png()
+        .toFile(f)
+      files.push(f)
+      await page.goto('/admin/resources/MediaAsset/actions/new')
+      await page.locator('#title').waitFor()
+      await page.setInputFiles('input[type=file]', f)
+      await expect(page.getByText(`art-${stamp}-${i}.png`)).toBeVisible()
+      await page.fill('#title', i === 0 ? `Куинджи ${stamp}` : `Шишкин ${stamp}`)
+      await page.fill('#altText', i === 0 ? 'Лунная ночь на Днепре' : 'Утро в сосновом лесу')
+      await page.locator('button[type=submit]').click()
+      await page.waitForURL(/\/show$/)
+    }
+    await page.goto('/admin/resources/Item/actions/new')
+    await pickSelect(page, 'Задание', assignment)
+    await page.locator('[data-type=image_choice]').click()
+    await page.fill('#stem', 'Какая из работ принадлежит А. И. Куинджи?')
+    for (const [i, title] of [`Куинджи ${stamp}`, `Шишкин ${stamp}`].entries()) {
+      await page.getByRole('button', { name: 'Выбрать изображение' }).nth(0).click()
+      await page.locator('button', { hasText: title }).click()
+      expect(i).toBeGreaterThanOrEqual(0)
+    }
+    // третий вариант шаблона удаляем
+    await page.locator('button[title="Удалить"]').nth(2).click()
+    await page.locator('input[aria-label="Вариант 1 верный"]').check()
+    await page.getByLabel('Пейзаж', { exact: true }).check({ force: true })
+    await page.getByRole('button', { name: 'Создать вопрос' }).click()
+    await page.waitForURL(/\/show$/)
+    // права на изображения еще не подтверждены — вопрос сохранен, но не готов (BR-024)
+    await expect(page.getByText(/BR-024/).first()).toBeVisible()
+  })
+
+  test('шаг 6: прямой запрос на создание вопроса неразрешенного типа отклоняется (BR-018)', async ({ page }) => {
+    await login(page, student.email, student.password)
+    const types = await page.request.post('/admin/api/resources/Item/actions/new', {
+      headers: { Origin: 'http://localhost:3300' },
+      data: { op: 'context' },
+    })
+    expect(types.ok()).toBe(true)
+    const assignmentsCtx = await types.json()
+    const a = assignmentsCtx.assignments.find((x: { label: string }) => x.label.startsWith(assignment))
+    const ctxRes = await (
+      await page.request.post('/admin/api/resources/Item/actions/new', {
+        headers: { Origin: 'http://localhost:3300' },
+        data: { op: 'context', assignmentId: a.value },
+      })
+    ).json()
+    expect(ctxRes.types.map((t: { code: string }) => t.code).sort()).toEqual(['image_choice', 'single_choice'])
+    const all = await (await page.request.get('/admin/api/resources/QuestionType/actions/list?perPage=50')).json()
+    const matching = all.records.find((r: { params: { code: string } }) => r.params.code === 'matching')
+    const res = await page.request.post('/admin/api/resources/Item/actions/new', {
+      headers: { Origin: 'http://localhost:3300' },
+      data: { op: 'create', assignmentId: a.value, questionTypeId: matching.id },
+    })
+    const body = await res.json()
+    expect(body.ok).toBe(false)
+    expect(body.message).toMatch(/BR-018/)
   })
 })

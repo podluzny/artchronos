@@ -278,6 +278,25 @@ export async function createApp(db: Db, config: AppConfig) {
       next(e)
     }
   })
+  // Файлы медиа: только через авторизованный endpoint (NFR-SEC-006, ADR-007 п.4).
+  app.get(`${ADMIN_ROOT}/media-file/:id/:variant?`, async (req, res, next) => {
+    try {
+      const actor = requestStore.getStore()?.actor
+      if (!actor) return res.status(401).end()
+      const f = await services.media.readMediaFile.run(
+        actor,
+        { id: req.params.id!, variant: req.params.variant ?? 'original' },
+        requestContext(req),
+      )
+      res.setHeader('Content-Type', f.mime)
+      res.setHeader('Cache-Control', 'private, max-age=3600')
+      res.setHeader('Content-Disposition', 'inline')
+      res.send(f.data)
+    } catch (e) {
+      if (isDomainError(e) && (e.code === 'NOT_FOUND' || e.code === 'FORBIDDEN')) return res.status(404).end()
+      next(e)
+    }
+  })
   app.use(ADMIN_ROOT, AdminJSExpress.buildRouter(admin))
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {

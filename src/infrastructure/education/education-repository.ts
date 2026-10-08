@@ -598,11 +598,13 @@ export class KyselyEducationRepository implements EducationRepository {
       courses: sql<{
         n: number
       }>`select ((select count(*) from topics where course_id = ${id}) + (select count(*) from student_groups where course_id = ${id})
-        + (select count(*) from assignments where course_id = ${id}) + (select count(*) from learning_objectives where course_id = ${id}))::int as n`,
+        + (select count(*) from assignments where course_id = ${id}) + (select count(*) from learning_objectives where course_id = ${id})
+        + (select count(*) from items where course_id = ${id}))::int as n`,
       topics: sql<{
         n: number
       }>`select ((select count(*) from topics where parent_id = ${id}) + (select count(*) from learning_objectives where topic_id = ${id})
-        + (select count(*) from assignment_topics where topic_id = ${id}))::int as n`,
+        + (select count(*) from assignment_topics where topic_id = ${id}) + (select count(*) from item_version_topics where topic_id = ${id})
+        + (select count(*) from media_topics where topic_id = ${id}))::int as n`,
       learning_objectives: sql<{
         n: number
       }>`select (select count(*) from assignment_objectives where objective_id = ${id})::int as n`,
@@ -884,14 +886,12 @@ export class KyselyEducationRepository implements EducationRepository {
         granted_by: d.grantedBy,
       })
       .onConflict((oc) =>
-        oc
-          .columns(['assignment_id', 'user_id'])
-          .doUpdateSet({
-            new_deadline_at: d.newDeadlineAt,
-            reason: d.reason,
-            granted_by: d.grantedBy,
-            granted_at: new Date(),
-          }),
+        oc.columns(['assignment_id', 'user_id']).doUpdateSet({
+          new_deadline_at: d.newDeadlineAt,
+          reason: d.reason,
+          granted_by: d.grantedBy,
+          granted_at: new Date(),
+        }),
       )
       .execute()
   }

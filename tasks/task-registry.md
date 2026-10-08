@@ -129,23 +129,29 @@ SC-E2E-001 шаг 3 автоматизирован. Таблица `question_typ
 
 | ID | Title | Type | Block | Spec / ADR | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-049 | MediaStorage port, S3 и LocalFs драйверы, выдача файлов через авторизованный endpoint | infra, security | BL-05 | ADR-007, SPEC-MEDIA-001 | AC-MEDIA-001.7, NFR-EXT-004 | T-042 | ready |
-| T-050 | Upload pipeline: сигнатуры, sharp, EXIF, sha256, очередь производных | implementation | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.1…5 | T-049 | planned |
-| T-051 | Медиатека: ресурс, сетка, фильтры, медиа-пикер | ui | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.6 | T-050 | planned |
-| T-052 | Права медиа, «где используется», архив | implementation | BL-05 | SPEC-MEDIA-002 | AC-MEDIA-002.1…7 | T-051, T-058 | planned |
-| T-053 | InteractionPlugin contract, реестр, contract test suite | implementation | BL-06 | SPEC-QTYPE-002, ADR-001 | AC-QTYPE-002.1…3 | T-031 | ready |
-| T-054 | Plugin `choice` (editor, preview, evaluators) | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
-| T-055 | Plugins `match`, `order` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
-| T-056 | Plugins `text_entry`, `extended_text` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
-| T-057 | QuestionType registry: модель, версии, seed MVP-типов, ресурс | implementation | BL-06 | SPEC-QTYPE-001 | AC-QTYPE-001.1…6 | T-053 | planned |
-| T-058 | Item domain: Item/ItemVersion/ItemOption/ItemMedia, version state machine, data model | domain, db | BL-07 | SPEC-ITEM-002, SPEC-PUB-001, ADR-002, ADR-005 | AC-PUB-001.1, .2 (Item) | T-057 | planned |
-| T-059 | Implement ownership policy for Item | security | BL-07 | SPEC-ITEM-004 | AC-ITEM-004.1…6 | T-058, T-034 | planned |
-| T-060 | Implement Item creation workflow | implementation, ui | BL-07 | SPEC-ITEM-001 | AC-ITEM-001.1…9 | T-059, T-054, T-051, T-047 | planned |
-| T-061 | Item editing, new version (+auto-rebind), recall, discard, archive, diff | implementation | BL-07 | SPEC-ITEM-002 | AC-ITEM-002.1…10 | T-060 | planned |
-| T-062 | Item preview | ui | BL-07 | SPEC-ITEM-003 | AC-ITEM-003.1…4 | T-060 | planned |
-| T-063 | Item bank list, filters, drawer | ui | BL-07 | SPEC-ITEM-005 | AC-ITEM-005.1…5 | T-062 | planned |
-| T-064 | DB immutability triggers и contentHash | db, security | BL-07/08 | ADR-002, SPEC-PUB-001 | AC-PUB-001.3, AC-QTYPE-001.6 | T-058 | planned |
-| T-065 | Acceptance BL-05/06/07, matrix §4.3–4.4, E2E шаги 4–6 | test | BL-05…07 | SPEC-MEDIA-*, SPEC-QTYPE-*, SPEC-ITEM-* | AT-MEDIA-*, AT-QTYPE-*, AT-ITEM-* | T-063, T-064, T-052 | planned |
+| T-049 | MediaStorage port, S3\*\* и LocalFs драйверы, выдача файлов через авторизованный endpoint | infra, security | BL-05 | ADR-007, SPEC-MEDIA-001 | AC-MEDIA-001.7, NFR-EXT-004 | T-042 | done |
+| T-050 | Upload pipeline: сигнатуры, sharp, EXIF, sha256, очередь производных | implementation | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.1…5 | T-049 | done |
+| T-051 | Медиатека: ресурс, сетка, фильтры, медиа-пикер | ui | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.6 | T-050 | done |
+| T-052 | Права медиа, «где используется», архив | implementation | BL-05 | SPEC-MEDIA-002 | AC-MEDIA-002.1…7 | T-051, T-058 | done |
+| T-053 | InteractionPlugin contract, реестр, contract test suite | implementation | BL-06 | SPEC-QTYPE-002, ADR-001 | AC-QTYPE-002.1…3 | T-031 | done |
+| T-054 | Plugin `choice` (editor, preview, evaluators) | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | done |
+| T-055 | Plugins `match`, `order` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | done |
+| T-056 | Plugins `text_entry`, `extended_text` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | done |
+| T-057 | QuestionType registry: модель, версии, seed MVP-типов, ресурс | implementation | BL-06 | SPEC-QTYPE-001 | AC-QTYPE-001.1…6 | T-053 | done |
+| T-058 | Item domain: Item/ItemVersion/ItemOption/ItemMedia, version state machine, data model | domain, db | BL-07 | SPEC-ITEM-002, SPEC-PUB-001, ADR-002, ADR-005 | AC-PUB-001.1, .2 (Item) | T-057 | done |
+| T-059 | Implement ownership policy for Item | security | BL-07 | SPEC-ITEM-004 | AC-ITEM-004.1…6 | T-058, T-034 | done |
+| T-060 | Implement Item creation workflow | implementation, ui | BL-07 | SPEC-ITEM-001 | AC-ITEM-001.1…9 | T-059, T-054, T-051, T-047 | done |
+| T-061 | Item editing, new version (+auto-rebind), recall, discard, archive, diff | implementation | BL-07 | SPEC-ITEM-002 | AC-ITEM-002.1…10 | T-060 | done |
+| T-062 | Item preview | ui | BL-07 | SPEC-ITEM-003 | AC-ITEM-003.1…4 | T-060 | done |
+| T-063 | Item bank list, filters, drawer | ui | BL-07 | SPEC-ITEM-005 | AC-ITEM-005.1…5 | T-062 | done |
+| T-064 | DB immutability triggers и contentHash | db, security | BL-07/08 | ADR-002, SPEC-PUB-001 | AC-PUB-001.3, AC-QTYPE-001.6 | T-058 | done |
+| T-065 | Acceptance BL-05/06/07, matrix §4.3–4.4, E2E шаги 4–6 | test | BL-05…07 | SPEC-MEDIA-*, SPEC-QTYPE-*, SPEC-ITEM-* | AT-MEDIA-*, AT-QTYPE-*, AT-ITEM-* | T-063, T-064, T-052 | done |
+
+Примечания M3:
+- \*\* Драйвер S3 отложен до выбора production-хостинга; реализованы LocalFs (dev/тесты) и Db-blob (тестовый стенд Vercel + Neon) за тем же портом `MediaStorage`.
+- Производные изображения (thumb/preview) генерируются синхронно при загрузке; постеры видео не создаются.
+- Создание review при отправке вопроса — M5 (хук `onSubmitted`); auto-rebind тестов при новой версии вопроса — M4.
+- Матрица §4.4 «Question / approve» проверяется в M5 (экспертиза).
 
 ### M4 — Test Authoring (BL-08)
 

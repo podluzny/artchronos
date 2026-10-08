@@ -5,3 +5,5 @@ dist
 .adminjs
 package-lock.json
 .vercel
+validation/test-results.json
+test-results

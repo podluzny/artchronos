@@ -24,11 +24,6 @@ const ASSIGNMENT_STATUS = [
   { value: 'ARCHIVED', label: 'В архиве' },
 ]
 
-const QT_STATUS = [
-  { value: 'ACTIVE', label: 'Активен' },
-  { value: 'INACTIVE', label: 'Неактивен' },
-]
-
 /** AdminJS search по title-свойству приходит как фильтр этого свойства; переводим в фильтр use case. */
 function renameFilter(q: { filters: Record<string, string> }, from: string, to: string) {
   if (q.filters[from] !== undefined) {
@@ -280,19 +275,6 @@ export function educationResources(edu: EducationUseCases): ResourceWithOptions[
         c,
       )
       return assignmentRecord(await edu.getAssignment.run(a, { id }, c))
-    },
-  }
-
-  const qtGateway: ResourceGateway = {
-    list: async (a, q, c) => {
-      const r = await edu.listQuestionTypes.run(a, q, c)
-      return { records: r.records.map((t) => ({ ...t })), total: r.total }
-    },
-    get: async (a, id, c) => {
-      const r = await edu.listQuestionTypes.run(a, { filters: {}, limit: 200, offset: 0 }, c)
-      const t = r.records.find((x) => x.id === id)
-      if (!t) throw new (await import('../../domain/shared/errors.js')).DomainError('NOT_FOUND', 'Тип не найден')
-      return { ...t }
     },
   }
 
@@ -550,36 +532,6 @@ export function educationResources(edu: EducationUseCases): ResourceWithOptions[
               return { redirectUrl: goShow(h, 'StudentGroup', id!), notice: 'Состав группы сохранен' }
             },
           }),
-        },
-      },
-    },
-    {
-      resource: new DomainResource({
-        id: 'QuestionType',
-        gateway: qtGateway,
-        properties: [
-          { path: 'id', isId: true, type: 'uuid' },
-          { path: 'code' },
-          { path: 'name' },
-          { path: 'interactionKey' },
-          { path: 'status', availableValues: QT_STATUS },
-        ],
-      }),
-      options: {
-        id: 'QuestionType',
-        navigation: { name: 'Банк вопросов', icon: 'Database' },
-        titleProperty: 'name',
-        listProperties: ['name', 'code', 'interactionKey', 'status'],
-        filterProperties: ['name', 'status'],
-        properties: { status: { availableValues: QT_STATUS } },
-        actions: {
-          list: { isAccessible: visibleIf((a) => a.has('qtype.read')) },
-          search: { isAccessible: visibleIf((a) => a.has('qtype.read')) },
-          show: { isAccessible: visibleIf((a) => a.has('qtype.read')) },
-          new: { isAccessible: false, isVisible: false },
-          edit: { isAccessible: false, isVisible: false },
-          delete: { isAccessible: false, isVisible: false },
-          bulkDelete: { isAccessible: false, isVisible: false },
         },
       },
     },
