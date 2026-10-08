@@ -18,4 +18,7 @@ export const Components = {
   ItemEditor: componentLoader.add('ItemEditor', path.join(dir, 'ItemEditor')),
   ItemPreview: componentLoader.add('ItemPreview', path.join(dir, 'ItemPreview')),
   JsonView: componentLoader.add('JsonView', path.join(dir, 'JsonView')),
+  TestBuilder: componentLoader.add('TestBuilder', path.join(dir, 'TestBuilder')),
+  TestPreview: componentLoader.add('TestPreview', path.join(dir, 'TestPreview')),
+  AssignmentSummary: componentLoader.add('AssignmentSummary', path.join(dir, 'AssignmentSummary')),
 }

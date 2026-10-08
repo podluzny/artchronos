@@ -153,13 +153,13 @@
 | BR-027 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
 | BR-039 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
 | BR-043 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
-| FR-ASSIGN-004 | SC-ASSIGN-003 | AT-ASSIGN-002.* | ◐ |
-| FR-ASSIGN-005 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ◐ |
-| FR-ASSIGN-007 | SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
-| FR-ASSIGN-008 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ◐ |
-| BR-017 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
-| BR-031 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
-| BR-035 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
+| FR-ASSIGN-004 | SC-ASSIGN-003 | AT-ASSIGN-002.* | ✓ |
+| FR-ASSIGN-005 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ✓ |
+| FR-ASSIGN-007 | SC-TEST-001 | AT-ASSIGN-002.* | ✓ |
+| FR-ASSIGN-008 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ✓ |
+| BR-017 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ✓ |
+| BR-031 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ✓ |
+| BR-035 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ✓ |
 
 ### Acceptance tests
 
@@ -176,7 +176,7 @@
 | AT-ASSIGN-002.3 | Первая отправка после дедлайна отклоняется; с продлением — принимается | negative/positive | SPEC-ASSIGN-002 | ✓ |
 | AT-ASSIGN-002.4 | Повторная отправка после CHANGES_REQUESTED после дедлайна, при ACTIVE задании, принимается | positive | SPEC-ASSIGN-002 | ✓ |
 | AT-ASSIGN-002.5 | Активация без адресатов отклоняется | negative | SPEC-ASSIGN-002 | ✓ |
-| AT-ASSIGN-002.6 | Сводка показывает состояние последней версии теста каждого адресата | positive | SPEC-ASSIGN-002 | ⏳ |
+| AT-ASSIGN-002.6 | Сводка показывает состояние последней версии теста каждого адресата | positive | SPEC-ASSIGN-002 | ✓ |
 
 ## BL-05
 
@@ -271,27 +271,27 @@
 | FR-ITEM-005 | SC-ITEM-001 | AT-ITEM-001.* | ✓ |
 | BR-017 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
 | BR-018 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
-| BR-019 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
-| BR-020 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-019 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
+| BR-020 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
 | BR-021 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
-| BR-024 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
-| BR-025 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ◐ |
+| BR-024 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
+| BR-025 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
 | BR-039 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-005.* | ◐ |
-| BR-004 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
-| FR-ITEM-003 | SC-ITEM-003 | AT-ITEM-002.* | ◐ |
-| FR-ITEM-004 | SC-VERSION-002 | AT-ITEM-002.* | ◐ |
-| FR-ITEM-008 | SC-VERSION-002 | AT-ITEM-002.* | ◐ |
-| FR-ITEM-009 | SC-ITEM-006 | AT-ITEM-002.* | ◐ |
-| FR-ITEM-010 | SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| NFR-DATA-001 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| NFR-DATA-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| BR-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| BR-005 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| BR-006 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
-| BR-007 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ◐ |
-| BR-038 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| BR-041 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
-| BR-044 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ◐ |
+| BR-004 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-004.* | ✓ |
+| FR-ITEM-003 | SC-ITEM-003 | AT-ITEM-002.* | ✓ |
+| FR-ITEM-004 | SC-VERSION-002 | AT-ITEM-002.* | ✓ |
+| FR-ITEM-008 | SC-VERSION-002 | AT-ITEM-002.* | ✓ |
+| FR-ITEM-009 | SC-ITEM-006 | AT-ITEM-002.* | ✓ |
+| FR-ITEM-010 | SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| NFR-DATA-001 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| NFR-DATA-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| BR-003 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| BR-005 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| BR-006 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ✓ |
+| BR-007 | SC-E2E-001, SC-ITEM-003, SC-ITEM-005 | AT-ITEM-002.*, AT-ITEM-004.* | ✓ |
+| BR-038 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| BR-041 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
+| BR-044 | SC-ITEM-003, SC-ITEM-006, SC-ITEM-007 | AT-ITEM-002.* | ✓ |
 | FR-ITEM-006 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
 | FR-DELIV-002 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
 | NFR-SEC-008 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
@@ -322,7 +322,7 @@
 | AT-ITEM-002.3 | Никто (включая Admin) не может редактировать READY_FOR_REVIEW/IN_REVIEW/APPROVED версию | negative | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.4 | Новая версия: v(N+1) DRAFT, basedOn, option keys сохранены, исходная версия не изменилась (contentHash) | positive | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.5 | Второй DRAFT создать нельзя | negative | SPEC-ITEM-002 | ✓ |
-| AT-ITEM-002.6 | Auto-rebind обновляет ссылку в DRAFT тесте автора и не трогает не-DRAFT тесты | positive | SPEC-ITEM-002 | ⏳ |
+| AT-ITEM-002.6 | Auto-rebind обновляет ссылку в DRAFT тесте автора и не трогает не-DRAFT тесты | positive | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.7 | Конфликт revision возвращает 409 без потери данных | concurrency | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.8 | Recall возможен до начала review и невозможен после | positive/negative | SPEC-ITEM-002 | ✓ |
 | AT-ITEM-002.9 | Архивированный Item не добавляется в новые тесты; существующие тесты не затронуты | negative | SPEC-ITEM-002 | ✓ |
@@ -349,63 +349,63 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-TEST-001 | SC-TEST-001 | AT-TEST-001.* | ⏳ |
-| BR-017 | SC-E2E-001, SC-TEST-001, SC-TEST-005 | AT-TEST-001.*, AT-TEST-004.* | ⏳ |
-| BR-033 | SC-E2E-001, SC-TEST-001 | AT-TEST-001.* | ⏳ |
-| BR-043 | SC-E2E-001, SC-TEST-001 | AT-TEST-001.* | ⏳ |
-| FR-TEST-002 | SC-TEST-002 | AT-TEST-002.* | ⏳ |
-| FR-TEST-003 | SC-TEST-002 | AT-TEST-002.* | ⏳ |
-| FR-TEST-004 | SC-TEST-003 | AT-TEST-002.* | ⏳ |
-| BR-004 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ⏳ |
-| BR-007 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-003.*, AT-TEST-004.* | ⏳ |
-| BR-010 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ⏳ |
-| BR-011 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-004.* | ⏳ |
-| BR-012 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-004.* | ⏳ |
-| BR-039 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ⏳ |
-| FR-TEST-005 | SC-TEST-004 | AT-TEST-003.* | ⏳ |
-| FR-TEST-008 | SC-TEST-006 | AT-TEST-003.* | ⏳ |
-| FR-TEST-006 | SC-TEST-005 | AT-TEST-004.* | ⏳ |
-| FR-TEST-007 | SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| FR-TEST-009 | SC-TEST-005 | AT-TEST-004.* | ⏳ |
-| NFR-DATA-004 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| NFR-DATA-005 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-002 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-003 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-020 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-024 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-025 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-031 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-032 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-038 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
-| BR-041 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ⏳ |
+| FR-TEST-001 | SC-TEST-001 | AT-TEST-001.* | ✓ |
+| BR-017 | SC-E2E-001, SC-TEST-001, SC-TEST-005 | AT-TEST-001.*, AT-TEST-004.* | ✓ |
+| BR-033 | SC-E2E-001, SC-TEST-001 | AT-TEST-001.* | ✓ |
+| BR-043 | SC-E2E-001, SC-TEST-001 | AT-TEST-001.* | ✓ |
+| FR-TEST-002 | SC-TEST-002 | AT-TEST-002.* | ✓ |
+| FR-TEST-003 | SC-TEST-002 | AT-TEST-002.* | ✓ |
+| FR-TEST-004 | SC-TEST-003 | AT-TEST-002.* | ✓ |
+| BR-004 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ✓ |
+| BR-007 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-003.*, AT-TEST-004.* | ✓ |
+| BR-010 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ✓ |
+| BR-011 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-004.* | ✓ |
+| BR-012 | SC-E2E-001, SC-TEST-002, SC-TEST-003 | AT-TEST-002.*, AT-TEST-004.* | ✓ |
+| BR-039 | SC-TEST-002, SC-TEST-003 | AT-TEST-002.* | ✓ |
+| FR-TEST-005 | SC-TEST-004 | AT-TEST-003.* | ✓ |
+| FR-TEST-008 | SC-TEST-006 | AT-TEST-003.* | ✓ |
+| FR-TEST-006 | SC-TEST-005 | AT-TEST-004.* | ✓ |
+| FR-TEST-007 | SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| FR-TEST-009 | SC-TEST-005 | AT-TEST-004.* | ✓ |
+| NFR-DATA-004 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| NFR-DATA-005 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-002 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-003 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-020 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-024 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-025 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-031 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-032 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-038 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
+| BR-041 | SC-E2E-001, SC-TEST-005, SC-VERSION-001 | AT-TEST-004.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-TEST-001.1 | Студент создает тест из задания: Test + v1 DRAFT + раздел по умолчанию | positive | SPEC-TEST-001 | ⏳ |
-| AT-TEST-001.2 | Второй тест при maxTestsPerStudent = 1 отклоняется | negative | SPEC-TEST-001 | ⏳ |
-| AT-TEST-001.3 | Создание теста в неадресованном/закрытом задании отклоняется | negative | SPEC-TEST-001 | ⏳ |
-| AT-TEST-001.4 | Expert не может создать тест | permission | SPEC-TEST-001 | ⏳ |
-| AT-TEST-002.1 | Добавленный вопрос хранится как ссылка на конкретную ItemVersion | positive | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.2 | Один Item нельзя добавить дважды | negative | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.3 | Студент не может добавить чужой вопрос (любого состояния) | permission | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.4 | Студент не может создать SelectionRule | permission | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.5 | Размер пула считается только по APPROVED активным вопросам курса | positive | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.6 | Структуру не-DRAFT версии изменить нельзя | negative | SPEC-TEST-002 | ⏳ |
-| AT-TEST-002.7 | Архивированный Item нельзя добавить | negative | SPEC-TEST-002 | ⏳ |
-| AT-TEST-003.1 | Настройки сохраняются в DRAFT и неизменны после submit | positive/negative | SPEC-TEST-003 | ⏳ |
-| AT-TEST-003.2 | Невалидные значения отклоняются | negative | SPEC-TEST-003 | ⏳ |
-| AT-TEST-003.3 | Preview с одинаковым seed дает одинаковую выборку и порядок | positive | SPEC-TEST-003 | ⏳ |
-| AT-TEST-003.4 | Preview APPROVED версии использует замороженный пул | positive | SPEC-TEST-003 | ⏳ |
-| AT-TEST-004.1 | Submit замораживает TestVersion и собственные DRAFT ItemVersion; создается Review с назначением | positive | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.2 | После submit изменить версию нельзя никому (прямой запрос) | negative | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.3 | Submit с невалидным вопросом/без alt/с PENDING медиа отклоняется со списком причин | negative | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.4 | Число вопросов вне [min,max] или неразрешенный тип → отказ (BR-032) | negative | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.5 | Первая отправка после дедлайна → отказ (BR-031) | negative | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.6 | Recall до начала review возвращает DRAFT; после — невозможен | positive/negative | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.7 | Новая версия после CHANGES_REQUESTED: v2 DRAFT, вопросы автора в CHANGES_REQUESTED получили новые DRAFT-версии, v1 неизменна | positive | SPEC-TEST-004 | ⏳ |
-| AT-TEST-004.8 | Все изменения submit атомарны: сбой на любом шаге не оставляет частичных изменений | data | SPEC-TEST-004 | ⏳ |
+| AT-TEST-001.1 | Студент создает тест из задания: Test + v1 DRAFT + раздел по умолчанию | positive | SPEC-TEST-001 | ✓ |
+| AT-TEST-001.2 | Второй тест при maxTestsPerStudent = 1 отклоняется | negative | SPEC-TEST-001 | ✓ |
+| AT-TEST-001.3 | Создание теста в неадресованном/закрытом задании отклоняется | negative | SPEC-TEST-001 | ✓ |
+| AT-TEST-001.4 | Expert не может создать тест | permission | SPEC-TEST-001 | ✓ |
+| AT-TEST-002.1 | Добавленный вопрос хранится как ссылка на конкретную ItemVersion | positive | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.2 | Один Item нельзя добавить дважды | negative | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.3 | Студент не может добавить чужой вопрос (любого состояния) | permission | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.4 | Студент не может создать SelectionRule | permission | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.5 | Размер пула считается только по APPROVED активным вопросам курса | positive | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.6 | Структуру не-DRAFT версии изменить нельзя | negative | SPEC-TEST-002 | ✓ |
+| AT-TEST-002.7 | Архивированный Item нельзя добавить | negative | SPEC-TEST-002 | ✓ |
+| AT-TEST-003.1 | Настройки сохраняются в DRAFT и неизменны после submit | positive/negative | SPEC-TEST-003 | ✓ |
+| AT-TEST-003.2 | Невалидные значения отклоняются | negative | SPEC-TEST-003 | ✓ |
+| AT-TEST-003.3 | Preview с одинаковым seed дает одинаковую выборку и порядок | positive | SPEC-TEST-003 | ✓ |
+| AT-TEST-003.4 | Preview APPROVED версии использует замороженный пул | positive | SPEC-TEST-003 | ✓ |
+| AT-TEST-004.1 | Submit замораживает TestVersion и собственные DRAFT ItemVersion; создается Review с назначением | positive | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.2 | После submit изменить версию нельзя никому (прямой запрос) | negative | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.3 | Submit с невалидным вопросом/без alt/с PENDING медиа отклоняется со списком причин | negative | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.4 | Число вопросов вне [min,max] или неразрешенный тип → отказ (BR-032) | negative | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.5 | Первая отправка после дедлайна → отказ (BR-031) | negative | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.6 | Recall до начала review возвращает DRAFT; после — невозможен | positive/negative | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.7 | Новая версия после CHANGES_REQUESTED: v2 DRAFT, вопросы автора в CHANGES_REQUESTED получили новые DRAFT-версии, v1 неизменна | positive | SPEC-TEST-004 | ✓ |
+| AT-TEST-004.8 | Все изменения submit атомарны: сбой на любом шаге не оставляет частичных изменений | data | SPEC-TEST-004 | ✓ |
 
 ## BL-09
 
@@ -582,7 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 120 / 192 |
+| Проходящих AT | 145 / 192 |
 | Падающих AT | 0 |
-| Требований (FR/NFR/BR) с ≥1 проходящим AT | 115 / 157 (73%) |
+| Требований (FR/NFR/BR) с ≥1 проходящим AT | 132 / 157 (84%) |
 | Ошибок целостности ссылок | 0 |

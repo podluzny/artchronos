@@ -351,6 +351,79 @@ export interface ItemVersionTagsTable {
   tag_id: string
 }
 
+export type TestVersionStateCol = VersionStateCol | 'PUBLISHED'
+
+export interface TestsTable extends Archivable {
+  id: Generated<string>
+  title: string
+  owner_id: string
+  assignment_id: string | null
+  course_id: string
+  current_draft_version_id: string | null
+  published_version_id: string | null
+}
+
+export interface TestVersionsTable {
+  id: Generated<string>
+  test_id: string
+  version_no: number
+  based_on_version_id: string | null
+  state: Generated<TestVersionStateCol>
+  title: string
+  description: string | null
+  instructions: string | null
+  settings: Json<Record<string, unknown>>
+  author_ids: string[]
+  package_item_version_ids: Generated<string[]>
+  ever_submitted: Generated<boolean>
+  submitted_at: Date | null
+  approved_at: Date | null
+  approved_by: string | null
+  published_at: Date | null
+  published_by: string | null
+  archived_at: Date | null
+  archive_reason: string | null
+  content_hash: string | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+  revision: Generated<number>
+}
+
+export interface TestSectionsTable {
+  id: Generated<string>
+  test_version_id: string
+  title: string
+  instructions: string | null
+  ordinal: number
+  time_limit_sec: number | null
+  shuffle_items: boolean | null
+}
+
+export interface TestSectionItemsTable {
+  id: Generated<string>
+  test_version_id: string
+  section_id: string
+  item_id: string
+  item_version_id: string
+  ordinal: number
+  points: ColumnType<number, number, number>
+}
+
+export interface SelectionRulesTable {
+  id: Generated<string>
+  test_version_id: string
+  section_id: string
+  ordinal: number
+  count: number
+  points_per_item: ColumnType<number, number, number>
+  filter: Json<Record<string, unknown>>
+}
+
+export interface SelectionPoolEntriesTable {
+  selection_rule_id: string
+  item_version_id: string
+}
+
 export interface Database {
   users: UsersTable
   roles: RolesTable
@@ -388,6 +461,12 @@ export interface Database {
   item_version_topics: ItemVersionTopicsTable
   item_version_objectives: ItemVersionObjectivesTable
   item_version_tags: ItemVersionTagsTable
+  tests: TestsTable
+  test_versions: TestVersionsTable
+  test_sections: TestSectionsTable
+  test_section_items: TestSectionItemsTable
+  selection_rules: SelectionRulesTable
+  selection_pool_entries: SelectionPoolEntriesTable
 }
 
 export type UserRow = Selectable<UsersTable>

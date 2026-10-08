@@ -1,3 +1,4 @@
+import { createTestUseCases } from '../application/assessment/test-use-cases.js'
 import { createAuditUseCases } from '../application/audit/use-cases.js'
 import { systemClock, type Clock } from '../application/shared/context.js'
 import { createEducationUseCases } from '../application/education/use-cases.js'
@@ -25,7 +26,8 @@ export function createServices(db: Db, opts: { clock?: Clock; storage?: MediaSto
   const media = createMediaUseCases({ uow, storage, processor: new SharpMediaProcessor(), clock })
   const qtypes = createQtypeUseCases({ uow, registry })
   const items = createItemUseCases({ uow, registry, clock })
-  return { uow, identity, audit, education, media, qtypes, items, registry, storage }
+  const tests = createTestUseCases({ uow, clock, items })
+  return { uow, identity, audit, education, media, qtypes, items, tests, registry, storage }
 }
 
 export type Services = ReturnType<typeof createServices>

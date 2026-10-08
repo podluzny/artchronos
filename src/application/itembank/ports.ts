@@ -121,9 +121,7 @@ export interface ItemRepository {
   list(filter: ScopeFilter, q: ListQuery): Promise<{ records: ItemListRow[]; total: number }>
   findById(id: string): Promise<ItemRecord | null>
   relations(userId: string, itemId: string): Promise<ItemRelations>
-  versions(
-    itemId: string,
-  ): Promise<
+  versions(itemId: string): Promise<
     {
       id: string
       versionNo: number
@@ -176,8 +174,16 @@ export interface ItemRepository {
   deleteVersion(versionId: string): Promise<void>
   deleteItem(itemId: string): Promise<void>
   maxVersionNo(itemId: string): Promise<number>
-  /** Используется ли версия в не-DRAFT тестах (M4) — для BR-044/BR-039. */
+  /** Используется ли версия в не-DRAFT версиях тестов или замороженных пулах. */
   versionReferencedOutsideDraftTests(versionId: string): Promise<boolean>
+  /** Ссылается ли на версию хоть одна версия теста (BR-044: такой черновик не удаляется, а архивируется). */
+  versionReferencedByTests(versionId: string): Promise<boolean>
+  /** Входит ли версия в пакет отправленного (READY_FOR_REVIEW / IN_REVIEW) теста. */
+  versionInOpenPackage(versionId: string): Promise<boolean>
+  /** Вопрос используется в не-DRAFT версиях тестов других владельцев (ограничение архивации, §4.4). */
+  itemUsedInFrozenTestsOfOthers(itemId: string, userId: string): Promise<boolean>
+  /** Auto-rebind (versioning-model §4 п.4): DRAFT-версии тестов владельца переключаются на новую версию вопроса. */
+  rebindDraftTests(fromVersionId: string, toVersionId: string, testOwnerId: string): Promise<string[]>
   countStudentItemsInAssignment(assignmentId: string, ownerId: string): Promise<number>
 }
 

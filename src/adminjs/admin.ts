@@ -1,4 +1,5 @@
 import AdminJS, { type AdminJSOptions } from 'adminjs'
+import type { TestUseCases } from '../application/assessment/test-use-cases.js'
 import type { AuditUseCases } from '../application/audit/use-cases.js'
 import type { EducationUseCases } from '../application/education/use-cases.js'
 import type { IdentityUseCases } from '../application/identity/use-cases.js'
@@ -12,6 +13,7 @@ import { identityResources } from './resources/identity.js'
 import { itemResources } from './resources/items.js'
 import { mediaResources } from './resources/media.js'
 import { qtypeResources } from './resources/qtypes.js'
+import { assignmentSummaryAction, testResources } from './resources/tests.js'
 
 export interface AdminServices {
   identity: IdentityUseCases
@@ -20,6 +22,7 @@ export interface AdminServices {
   media: MediaUseCases
   qtypes: QtypeUseCases
   items: ItemUseCases
+  tests: TestUseCases
 }
 
 export const ADMIN_ROOT = '/admin'
@@ -32,10 +35,11 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
     componentLoader,
     ...(opts.assetsCDN ? { assetsCDN: opts.assetsCDN } : {}),
     resources: [
+      ...testResources(services.tests, services.items, services.education),
       ...itemResources(services.items, services.media),
       ...qtypeResources(services.qtypes),
       ...mediaResources(services.media),
-      ...educationResources(services.education),
+      ...educationResources(services.education, { summary: assignmentSummaryAction(services.tests) }),
       ...identityResources(services),
     ],
     dashboard: { component: Components.Dashboard },
@@ -105,6 +109,34 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
                 archiveReason: 'Причина архивации',
               },
               actions: { members: 'Изменить состав' },
+            },
+            Test: {
+              properties: {
+                title: 'Название',
+                state: 'Состояние версии',
+                versionNo: 'Версия',
+                owner: 'Автор',
+                assignment: 'Задание',
+                assignmentId: 'Задание',
+                course: 'Курс',
+                courseId: 'Курс',
+                itemCount: 'Вопросов',
+                maxScore: 'Макс. балл',
+                structure: 'Структура',
+                issues: 'Готовность',
+                versions: 'Версии',
+                contentHash: 'Хэш содержимого',
+                status: 'Статус',
+                updatedAt: 'Изменен',
+              },
+              actions: {
+                new: 'Создать тест',
+                builder: 'Конструктор',
+                preview: 'Предпросмотр',
+                submit: 'Отправить на экспертизу',
+                recall: 'Отозвать отправку',
+                newVersion: 'Новая версия',
+              },
             },
             Item: {
               properties: {
@@ -213,6 +245,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
                 close: 'Закрыть',
                 reopen: 'Открыть заново',
                 extendDeadline: 'Продлить срок',
+                summary: 'Сводка по тестам',
               },
             },
             User: {
@@ -277,6 +310,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
             StudentGroup: 'Группы',
             QuestionType: 'Типы вопросов',
             Item: 'Вопросы',
+            Test: 'Тесты',
             MediaAsset: 'Медиатека',
             Assignment: 'Задания',
             Администрирование: 'Администрирование',

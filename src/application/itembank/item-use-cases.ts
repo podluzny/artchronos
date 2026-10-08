@@ -372,6 +372,40 @@ export function createItemUseCases(deps: ItemDeps) {
     }
   }
 
+  /** Представление вопроса «как у студента»: перемешивание вариантов по seed (SPEC-ITEM-003). */
+  function buildPreview(
+    item: Pick<ItemRecord, 'interactionKey' | 'questionTypeName'>,
+    version: ItemVersionRecord,
+    qtv: QuestionTypeVersionRecord,
+    issues: Issue[],
+    seed: number,
+    shuffleOverride?: boolean,
+  ): PreviewData {
+    const doc = version.document
+    const shuffle =
+      shuffleOverride === false ? false : doc.content.shuffleOptions === true || doc.content.shuffleResponses === true
+    const roles = [...new Set(doc.options.map((o) => o.role))]
+    const options = roles.flatMap((role) => {
+      const list = doc.options.filter((o) => o.role === role).sort((a, b) => a.ordinal - b.ordinal)
+      const doShuffle = role === 'SEQUENCE_ELEMENT' || (shuffle && (role === 'OPTION' || role === 'RESPONSE'))
+      return doShuffle ? seededShuffle(list, seed + role.length) : list
+    })
+    return {
+      interactionKey: item.interactionKey,
+      typeName: item.questionTypeName,
+      config: qtv.interactionConfig,
+      stem: doc.stem,
+      content: doc.content,
+      options,
+      media: doc.media,
+      answerKey: doc.answerKey,
+      feedback: version.meta.feedback,
+      errors: issues.filter((i) => i.severity === 'ERROR'),
+      versionNo: version.versionNo,
+      state: version.state,
+    }
+  }
+
   /** Изменение: невидимый вопрос — 404 (не раскрываем существование), видимый без права — 403. */
   async function requireUpdate(actor: Actor, item: ItemRecord) {
     const { scopes } = await requireRead(actor, item)
@@ -637,16 +671,31 @@ export function createItemUseCases(deps: ItemDeps) {
             authorIds: authors,
           })
           await tx.items.setItemPointers(item.id, { currentDraftVersionId: id })
+          // auto-rebind (versioning-model §4 п.4): черновики тестов автора переходят на новую версию
+          const rebound =
+            src.state === 'CHANGES_REQUESTED' ? await tx.items.rebindDraftTests(src.id, id, actor.userId) : []
           await tx.audit.record(
             actor,
             {
               action: 'item.version.created',
               resourceType: 'item',
               resourceId: item.id,
-              changes: { versionId: id, versionNo, basedOn: src.versionNo },
+              changes: { versionId: id, versionNo, basedOn: src.versionNo, reboundTests: rebound },
             },
             ctx,
           )
+          for (const testId of rebound) {
+            await tx.audit.record(
+              actor,
+              {
+                action: 'test.item.rebound',
+                resourceType: 'test',
+                resourceId: testId,
+                changes: { itemId: item.id, from: src.id, to: id },
+              },
+              ctx,
+            )
+          }
           return id
         })
         return {
@@ -717,6 +766,8 @@ export function createItemUseCases(deps: ItemDeps) {
         if (!v || v.itemId !== item.id) throw DomainError.notFound()
         if (v.state === 'IN_REVIEW')
           throw DomainError.rule('BR-038', 'Экспертиза уже начата — отозвать отправку нельзя')
+        if (await r().items.versionInOpenPackage(v.id))
+          throw new DomainError('INVALID_STATE', 'Вопрос отправлен в составе теста — отзовите отправку теста')
         const state = transition(v.state, 'recall', 'item')
         await uow.transaction(async (tx) => {
           await tx.items.setVersionState(v.id, { state })
@@ -739,7 +790,7 @@ export function createItemUseCases(deps: ItemDeps) {
         await requireUpdate(actor, item)
         if (!item.currentDraftVersionId) throw new DomainError('INVALID_STATE', 'Нет черновика')
         const v = (await r().items.findVersion(item.currentDraftVersionId))!
-        const referenced = await r().items.versionReferencedOutsideDraftTests(v.id)
+        const referenced = await r().items.versionReferencedByTests(v.id)
         return uow.transaction(async (tx) => {
           await tx.items.setItemPointers(item.id, { currentDraftVersionId: null })
           if (!v.everSubmitted && !referenced) {
@@ -792,6 +843,11 @@ export function createItemUseCases(deps: ItemDeps) {
         const { scopes } = await requireRead(actor, item)
         requireScope(actor, 'item.archive', scopes)
         if (item.status === 'ARCHIVED') throw new DomainError('INVALID_STATE', 'Вопрос уже в архиве')
+        if (!actor.has('item.archive', 'ANY') && (await r().items.itemUsedInFrozenTestsOfOthers(item.id, actor.userId)))
+          throw DomainError.rule(
+            'BR-039',
+            'Вопрос используется в отправленных тестах других авторов — архивация невозможна',
+          )
         const reason = (input.reason ?? '').trim()
         if (!reason) throw DomainError.validation([{ field: 'reason', message: 'Укажите причину' }])
         await uow.transaction(async (tx) => {
@@ -835,28 +891,7 @@ export function createItemUseCases(deps: ItemDeps) {
       async run(actor, input) {
         const d = await details(actor, await loadItem(input.itemId), input.versionId)
         const seed = Number.isFinite(input.seed) ? Number(input.seed) : 1
-        const doc = d.version.document
-        const shuffle = doc.content.shuffleOptions === true || doc.content.shuffleResponses === true
-        const roles = [...new Set(doc.options.map((o) => o.role))]
-        const options = roles.flatMap((role) => {
-          const list = doc.options.filter((o) => o.role === role).sort((a, b) => a.ordinal - b.ordinal)
-          const doShuffle = role === 'SEQUENCE_ELEMENT' || (shuffle && (role === 'OPTION' || role === 'RESPONSE'))
-          return doShuffle ? seededShuffle(list, seed + role.length) : list
-        })
-        return {
-          interactionKey: d.item.interactionKey,
-          typeName: d.item.questionTypeName,
-          config: d.typeVersion.interactionConfig,
-          stem: doc.stem,
-          content: doc.content,
-          options,
-          media: doc.media,
-          answerKey: doc.answerKey,
-          feedback: d.version.meta.feedback,
-          errors: d.issues.filter((i) => i.severity === 'ERROR'),
-          versionNo: d.version.versionNo,
-          state: d.version.state,
-        }
+        return buildPreview(d.item, d.version, d.typeVersion, d.issues, seed)
       },
     }),
 
@@ -913,6 +948,35 @@ export function createItemUseCases(deps: ItemDeps) {
         },
       },
     ),
+
+    /**
+     * Внутренний API для конструктора тестов (без проверки прав: доступ к пакету проверяет вызывающий use case).
+     * Не является use case и не вызывается из UI напрямую.
+     */
+    internal: {
+      /** Полная проверка версии (BR-020, BR-024, BR-025, BR-039). */
+      async validateVersion(versionId: string): Promise<Issue[]> {
+        const v = await r().items.findVersion(versionId)
+        if (!v) return [{ path: 'item', code: 'NOT_FOUND', severity: 'ERROR', message: 'Версия вопроса не найдена' }]
+        const item = (await r().items.findById(v.itemId))!
+        return fullIssues(
+          v.document,
+          v.meta,
+          pluginFor(item.interactionKey),
+          await typeVersionFor(v.questionTypeVersionId),
+        )
+      },
+      contentHash: async (versionId: string) => {
+        const v = (await r().items.findVersion(versionId))!
+        return contentHashOf(v.document, v.meta, v.questionTypeVersionId)
+      },
+      async previewVersion(versionId: string, seed: number, shuffleOptions?: boolean): Promise<PreviewData> {
+        const v = (await r().items.findVersion(versionId))!
+        const item = (await r().items.findById(v.itemId))!
+        const qtv = await typeVersionFor(v.questionTypeVersionId)
+        return buildPreview(item, v, qtv, [], seed, shuffleOptions)
+      },
+    },
   }
 }
 

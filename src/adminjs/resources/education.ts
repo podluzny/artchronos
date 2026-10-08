@@ -37,7 +37,11 @@ function iso(d: Date | null): string {
   return d ? d.toISOString() : ''
 }
 
-export function educationResources(edu: EducationUseCases): ResourceWithOptions[] {
+/** extraAssignmentActions — действия задания из других модулей (сводка по тестам, M4). */
+export function educationResources(
+  edu: EducationUseCases,
+  extraAssignmentActions: Record<string, unknown> = {},
+): ResourceWithOptions[] {
   const ctx = () => currentScope().ctx
 
   // ---------------- Subject ----------------
@@ -725,6 +729,7 @@ export function educationResources(edu: EducationUseCases): ResourceWithOptions[
               return { redirectUrl: goShow(h, 'Assignment', id!), notice: 'Срок продлен' }
             },
           }),
+          ...extraAssignmentActions,
         },
       },
     },

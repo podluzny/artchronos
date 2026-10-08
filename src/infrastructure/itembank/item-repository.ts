@@ -447,8 +447,44 @@ export class KyselyItemRepository implements ItemRepository {
     return Number(r.n)
   }
 
-  async versionReferencedOutsideDraftTests(_versionId: string) {
-    return false // M4: ссылки из TestSectionItem / SelectionPoolEntry не-DRAFT версий тестов
+  async versionReferencedOutsideDraftTests(versionId: string) {
+    const r = await sql<{ x: boolean }>`select (
+      exists (select 1 from test_section_items tsi join test_versions tv on tv.id = tsi.test_version_id
+              where tsi.item_version_id = ${versionId} and tv.state <> 'DRAFT')
+      or exists (select 1 from selection_pool_entries p where p.item_version_id = ${versionId})) as x`.execute(this.db)
+    return !!r.rows[0]?.x
+  }
+
+  async versionReferencedByTests(versionId: string) {
+    const r = await sql<{ x: boolean }>`select (
+      exists (select 1 from test_section_items tsi where tsi.item_version_id = ${versionId})
+      or exists (select 1 from selection_pool_entries p where p.item_version_id = ${versionId})) as x`.execute(this.db)
+    return !!r.rows[0]?.x
+  }
+
+  async versionInOpenPackage(versionId: string) {
+    const r = await sql<{ x: boolean }>`select exists (select 1 from test_versions tv
+      where ${versionId} = any(tv.package_item_version_ids) and tv.state in ('READY_FOR_REVIEW','IN_REVIEW')) as x`.execute(
+      this.db,
+    )
+    return !!r.rows[0]?.x
+  }
+
+  async itemUsedInFrozenTestsOfOthers(itemId: string, userId: string) {
+    const r = await sql<{ x: boolean }>`select exists (select 1 from test_section_items tsi
+      join test_versions tv on tv.id = tsi.test_version_id join tests t on t.id = tv.test_id
+      where tsi.item_id = ${itemId} and tv.state <> 'DRAFT' and t.owner_id <> ${userId}) as x`.execute(this.db)
+    return !!r.rows[0]?.x
+  }
+
+  async rebindDraftTests(fromVersionId: string, toVersionId: string, testOwnerId: string) {
+    const r = await sql<{ test_id: string }>`
+      update test_section_items tsi set item_version_id = ${toVersionId}
+      from test_versions tv join tests t on t.id = tv.test_id
+      where tsi.test_version_id = tv.id and tv.state = 'DRAFT' and t.owner_id = ${testOwnerId}
+        and tsi.item_version_id = ${fromVersionId}
+      returning tv.test_id`.execute(this.db)
+    return [...new Set(r.rows.map((x) => x.test_id))]
   }
 
   async countStudentItemsInAssignment(assignmentId: string, ownerId: string) {

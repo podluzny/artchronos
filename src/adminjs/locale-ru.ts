@@ -11,6 +11,10 @@ export const ru = {
     archive: 'В архив',
     restore: 'Восстановить',
     history: 'История',
+    builder: 'Конструктор',
+    preview: 'Предпросмотр',
+    editDraft: 'Редактировать черновик',
+    summary: 'Сводка по тестам',
   },
   buttons: {
     save: 'Сохранить',

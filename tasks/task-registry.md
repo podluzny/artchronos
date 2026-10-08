@@ -157,12 +157,20 @@ SC-E2E-001 шаг 3 автоматизирован. Таблица `question_typ
 
 | ID | Title | Type | Block | Spec | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-066 | Test domain + creation | domain, implementation | BL-08 | SPEC-TEST-001 | AC-TEST-001.1…4 | T-065 | planned |
-| T-067 | Test builder: sections, fixed items | implementation, ui | BL-08 | SPEC-TEST-002 | AC-TEST-002.1…3, .6, .7 | T-066 | planned |
-| T-068 | Selection rules, pool size | implementation | BL-08 | SPEC-TEST-002 | AC-TEST-002.4, .5 | T-067 | planned |
-| T-069 | Test settings and preview | implementation, ui | BL-08 | SPEC-TEST-003 | AC-TEST-003.1…4 | T-068 | planned |
-| T-070 | Readiness check, submit/recall (каскад), new test version | implementation | BL-08 | SPEC-TEST-004 | AC-TEST-004.1…8 | T-069, T-072 | planned |
-| T-071 | Acceptance BL-08, matrix §4.5, E2E шаги 7–9 | test | BL-08 | SPEC-TEST-* | AT-TEST-* | T-070 | planned |
+| T-066 | Test domain + creation | domain, implementation | BL-08 | SPEC-TEST-001 | AC-TEST-001.1…4 | T-065 | done |
+| T-067 | Test builder: sections, fixed items | implementation, ui | BL-08 | SPEC-TEST-002 | AC-TEST-002.1…3, .6, .7 | T-066 | done |
+| T-068 | Selection rules, pool size | implementation | BL-08 | SPEC-TEST-002 | AC-TEST-002.4, .5 | T-067 | done |
+| T-069 | Test settings and preview | implementation, ui | BL-08 | SPEC-TEST-003 | AC-TEST-003.1…4 | T-068 | done |
+| T-070 | Readiness check, submit/recall (каскад), new test version | implementation | BL-08 | SPEC-TEST-004 | AC-TEST-004.1…8 | T-069, T-072 | done |
+| T-071 | Acceptance BL-08, matrix §4.5, E2E шаги 7–9 | test | BL-08 | SPEC-TEST-* | AT-TEST-* | T-070 | done |
+
+Примечания M4:
+- Review + ReviewAssignment при отправке теста и отмена review при отзыве подключаются в M5 через хуки `onSubmitted` / `onRecalled` use cases тестов (в той же транзакции отправки).
+- Перенос открытых ContentIssue в новую версию (SPEC-TEST-004 п.4) — M5 (появляется вместе с моделью ContentIssue).
+- Заморозка пула при approve — M5; триггер БД уже допускает вставку `SelectionPoolEntry` только в `IN_REVIEW` и запрещает изменения после.
+- Сравнение версий теста (versioning-model §7, Should) отложено; contentHash версии теста вычисляется при отправке.
+- Перетаскивание (drag-and-drop) в конструкторе заменено кнопками ↑/↓ — та же функция, проще для клавиатуры.
+- E2E: шаг 8a (преподаватель подтверждает права на изображения) добавлен, т.к. изображения в шаге 5 загружает студент; сценарий SC-E2E-001 предполагает seed с уже подтвержденными правами.
 
 ### M5 — Expert Review (BL-09, BL-10, BL-12 model)
 
