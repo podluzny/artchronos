@@ -4,3 +4,4 @@ assets
 dist
 .adminjs
 package-lock.json
+.vercel
