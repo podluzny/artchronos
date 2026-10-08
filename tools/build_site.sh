@@ -1,14 +1,14 @@
 #!/bin/sh
-# Собирает статический сайт документации в public/ для Vercel.
-# README.md копируется как home.md, сайдбар — как sidebar.md: обычные имена файлов,
-# без зависимости от того, как хостинг обращается с README и файлами на "_".
+# Собирает статический сайт SDD-документации (docsify) в каталог DEST (по умолчанию public/sdd).
+# README.md копируется как home.md, сайдбар — как sidebar.md (обычные имена файлов для хостинга).
 set -eu
 cd "$(dirname "$0")/.."
-rm -rf public
-mkdir -p public
-cp index.html public/
-cp -R assets docs specs scenarios tasks decisions validation public/
-cp README.md public/home.md
-cp _sidebar.md public/sidebar.md
-sed -i.bak 's#(/README.md)#(/home.md)#' public/sidebar.md && rm -f public/sidebar.md.bak
-echo "site built: $(find public -type f | wc -l) files"
+DEST="${1:-public/sdd}"
+rm -rf "$DEST"
+mkdir -p "$DEST"
+cp index.html "$DEST/"
+cp -R assets docs specs scenarios tasks decisions validation "$DEST/"
+cp README.md "$DEST/home.md"
+cp _sidebar.md "$DEST/sidebar.md"
+sed -i.bak 's#(/README.md)#(/home.md)#' "$DEST/sidebar.md" && rm -f "$DEST/sidebar.md.bak"
+echo "site built in $DEST: $(find "$DEST" -type f | wc -l) files"

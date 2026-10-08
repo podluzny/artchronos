@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: artchronos
+          POSTGRES_PASSWORD: artchronos
+          POSTGRES_DB: artchronos_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U artchronos" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      TEST_DATABASE_URL: postgresql://artchronos:artchronos@localhost:5432/artchronos_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run format:check
+      - name: Architecture rules (ADR-004)
+        run: npm run deps:check
+      - name: Unit, integration, acceptance tests
+        run: npm test
+      - name: Traceability integrity
+        run: python3 tools/build_traceability.py --check
+      - name: Dependency audit (NFR-SEC-011)
+        run: npm audit --omit=dev --audit-level=critical
+      - name: E2E (SC-E2E-001)
+        run: npx playwright install --with-deps chromium && npm run test:e2e

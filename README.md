@@ -3,9 +3,40 @@
 Административная система для подготовки, экспертизы, публикации и управления тестами по искусству.
 Административный интерфейс — **AdminJS**. Разработка ведется по методологии **SDD (Specification-Driven Development)**.
 
-> M0 (Domain & Specification Baseline) закрыт 2026-10-08: решения в [`docs/open-questions.md`](docs/open-questions.md)
-> подтверждены, ADR-001…008 приняты. Текущий этап — **M1 Identity & Governance**,
-> первая задача — `T-031` (см. [`tasks/task-registry.md`](tasks/task-registry.md)).
+> M0 (спецификации) и M1 (Identity & Governance) закрыты. Текущий этап — **M2 Educational Context**
+> (см. [`tasks/task-registry.md`](tasks/task-registry.md), прогресс по требованиям — [`validation/acceptance-matrix.md`](validation/acceptance-matrix.md)).
+
+## Запуск локально
+
+Требуется Node.js ≥ 20 и PostgreSQL 16.
+
+```bash
+cp .env.example .env            # DATABASE_URL, SESSION_SECRET, ADMIN_EMAIL, ADMIN_PASSWORD
+npm ci
+npm run dev                     # миграции + seed + первый администратор; http://localhost:3000/admin
+```
+
+Проверки (то же выполняет CI):
+
+```bash
+npm run typecheck && npm run lint && npm run format:check && npm run deps:check
+npm test                        # unit + integration + acceptance (нужен TEST_DATABASE_URL)
+npm run test:e2e                # SC-E2E-001 через браузер (Playwright)
+npm run test:report && python3 tools/build_traceability.py   # обновить матрицы по результатам тестов
+```
+
+## Тестовый стенд (Vercel + Neon, ADR-009)
+
+Переменные окружения проекта Vercel:
+
+| Переменная | Откуда |
+|---|---|
+| `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | интеграция Neon (создаются автоматически) |
+| `SESSION_SECRET` | случайная строка ≥ 32 символов |
+| `ADMIN_EMAIL`, `ADMIN_PASSWORD` | первый администратор (создается при сборке, если администраторов нет; пароль ≥ 12 символов) |
+
+Сборка (`vercel.json` → `scripts/vercel-build.ts`): компиляция TypeScript, предсборка фронтенда AdminJS
+(`/admin-assets/`), сайт документации (`/sdd/`), миграции и seed. Приложение — `/admin`.
 
 ## Порядок SDD
 

@@ -5,7 +5,7 @@
 | Задача | T-029 |
 | Генерируется | `python3 tools/build_traceability.py` — статусы ⏳ обновляются по результатам CI |
 
-Статусы: ⏳ planned · 🔴 failing · ✓ passing. На M0 все тесты — planned.
+Статусы: ⏳ planned · 🔴 failing · ✓ passing. Источник статусов — `validation/test-results.json` (`npm run test:report`).
 
 ## BL-01
 
@@ -13,41 +13,41 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-AUTH-001 | SC-AUTH-001 | AT-AUTH-001.* | ⏳ |
-| FR-AUTH-004 | SC-AUTH-003 | AT-AUTH-001.* | ⏳ |
-| FR-AUTH-006 | SC-AUTH-001 | AT-AUTH-001.* | ⏳ |
-| NFR-SEC-002 | SC-AUTH-001, SC-AUTH-003, SC-AUTH-004 | AT-AUTH-001.*, AT-AUTH-004.* | ⏳ |
-| NFR-SEC-003 | SC-AUTH-001, SC-AUTH-002, SC-AUTH-003 | AT-AUTH-001.*, AT-AUTH-002.* | ⏳ |
-| NFR-SEC-005 | SC-AUTH-001, SC-AUTH-003 | AT-AUTH-001.* | ⏳ |
-| BR-014 | SC-AUTH-001, SC-AUTH-002, SC-AUTH-003 | AT-AUTH-001.*, AT-AUTH-002.*, AT-AUTH-004.* | ⏳ |
-| BR-035 | SC-AUTH-001, SC-AUTH-003, SC-AUTH-004 | AT-AUTH-001.*, AT-AUTH-004.* | ⏳ |
-| FR-AUTH-002 | SC-AUTH-002 | AT-AUTH-002.* | ⏳ |
-| FR-AUTH-003 | SC-AUTH-002 | AT-AUTH-002.* | ⏳ |
-| NFR-SEC-004 | SC-AUTH-002 | AT-AUTH-002.* | ⏳ |
-| FR-AUTH-005 | SC-AUTH-004 | AT-AUTH-004.* | ⏳ |
-| FR-AUTH-007 | SC-USER-001 | AT-AUTH-004.* | ⏳ |
+| FR-AUTH-001 | SC-AUTH-001 | AT-AUTH-001.* | ✓ |
+| FR-AUTH-004 | SC-AUTH-003 | AT-AUTH-001.* | ✓ |
+| FR-AUTH-006 | SC-AUTH-001 | AT-AUTH-001.* | ✓ |
+| NFR-SEC-002 | SC-AUTH-001, SC-AUTH-003, SC-AUTH-004 | AT-AUTH-001.*, AT-AUTH-004.* | ✓ |
+| NFR-SEC-003 | SC-AUTH-001, SC-AUTH-002, SC-AUTH-003 | AT-AUTH-001.*, AT-AUTH-002.* | ✓ |
+| NFR-SEC-005 | SC-AUTH-001, SC-AUTH-003 | AT-AUTH-001.* | ✓ |
+| BR-014 | SC-AUTH-001, SC-AUTH-002, SC-AUTH-003 | AT-AUTH-001.*, AT-AUTH-002.*, AT-AUTH-004.* | ✓ |
+| BR-035 | SC-AUTH-001, SC-AUTH-003, SC-AUTH-004 | AT-AUTH-001.*, AT-AUTH-004.* | ✓ |
+| FR-AUTH-002 | SC-AUTH-002 | AT-AUTH-002.* | ✓ |
+| FR-AUTH-003 | SC-AUTH-002 | AT-AUTH-002.* | ✓ |
+| NFR-SEC-004 | SC-AUTH-002 | AT-AUTH-002.* | ✓ |
+| FR-AUTH-005 | SC-AUTH-004 | AT-AUTH-004.* | ✓ |
+| FR-AUTH-007 | SC-USER-001 | AT-AUTH-004.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-AUTH-001.1 | Активный пользователь с верным паролем входит; создается сессия с новым id; аудит `auth.login.success` | positive | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.2 | Неверный пароль и несуществующий email дают идентичный ответ (текст, статус, время ± 20%) | negative | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.3 | После 5 неудач вход с верным паролем отклоняется 15 минут | negative | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.4 | `BLOCKED`, `ARCHIVED`, `INVITED` пользователи не входят | negative | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.5 | Пароль не попадает в логи и аудит | security | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.6 | Cookie сессии HttpOnly, SameSite=Lax, Secure (prod) | security | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-001.7 | Пользователь с `mustChangePassword` не может открыть ни один ресурс до смены пароля | negative | SPEC-AUTH-001 | ⏳ |
-| AT-AUTH-002.1 | После logout повтор запроса со старым cookie → 401 | negative | SPEC-AUTH-002 | ⏳ |
-| AT-AUTH-002.2 | Сессия без активности > idle timeout недействительна | negative | SPEC-AUTH-002 | ⏳ |
-| AT-AUTH-002.3 | Сессия старше absolute timeout недействительна при любой активности | negative | SPEC-AUTH-002 | ⏳ |
-| AT-AUTH-002.4 | Блокировка пользователя делает недействительными все его сессии немедленно | negative | SPEC-AUTH-002 | ⏳ |
-| AT-AUTH-002.5 | Изменяющий запрос без CSRF-защиты отклоняется | security | SPEC-AUTH-002 | ⏳ |
-| AT-AUTH-004.1 | Смена пароля отзывает все прочие сессии пользователя | positive | SPEC-AUTH-004 | ⏳ |
-| AT-AUTH-004.2 | Слабый пароль отклоняется | negative | SPEC-AUTH-004 | ⏳ |
-| AT-AUTH-004.3 | Токен одноразовый и ограничен по времени; хранится только hash | security | SPEC-AUTH-004 | ⏳ |
-| AT-AUTH-004.4 | Пользователь без `user.password.reset` не может сбросить пароль другому | permission | SPEC-AUTH-004 | ⏳ |
-| AT-AUTH-004.5 | Активация переводит INVITED → ACTIVE | positive | SPEC-AUTH-004 | ⏳ |
+| AT-AUTH-001.1 | Активный пользователь с верным паролем входит; создается сессия с новым id; аудит `auth.login.success` | positive | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.2 | Неверный пароль и несуществующий email дают идентичный ответ (текст, статус, время ± 20%) | negative | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.3 | После 5 неудач вход с верным паролем отклоняется 15 минут | negative | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.4 | `BLOCKED`, `ARCHIVED`, `INVITED` пользователи не входят | negative | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.5 | Пароль не попадает в логи и аудит | security | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.6 | Cookie сессии HttpOnly, SameSite=Lax, Secure (prod) | security | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-001.7 | Пользователь с `mustChangePassword` не может открыть ни один ресурс до смены пароля | negative | SPEC-AUTH-001 | ✓ |
+| AT-AUTH-002.1 | После logout повтор запроса со старым cookie → 401 | negative | SPEC-AUTH-002 | ✓ |
+| AT-AUTH-002.2 | Сессия без активности > idle timeout недействительна | negative | SPEC-AUTH-002 | ✓ |
+| AT-AUTH-002.3 | Сессия старше absolute timeout недействительна при любой активности | negative | SPEC-AUTH-002 | ✓ |
+| AT-AUTH-002.4 | Блокировка пользователя делает недействительными все его сессии немедленно | negative | SPEC-AUTH-002 | ✓ |
+| AT-AUTH-002.5 | Изменяющий запрос без CSRF-защиты отклоняется | security | SPEC-AUTH-002 | ✓ |
+| AT-AUTH-004.1 | Смена пароля отзывает все прочие сессии пользователя | positive | SPEC-AUTH-004 | ✓ |
+| AT-AUTH-004.2 | Слабый пароль отклоняется | negative | SPEC-AUTH-004 | ✓ |
+| AT-AUTH-004.3 | Токен одноразовый и ограничен по времени; хранится только hash | security | SPEC-AUTH-004 | ✓ |
+| AT-AUTH-004.4 | Пользователь без `user.password.reset` не может сбросить пароль другому | permission | SPEC-AUTH-004 | ✓ |
+| AT-AUTH-004.5 | Активация переводит INVITED → ACTIVE | positive | SPEC-AUTH-004 | ✓ |
 
 ## BL-02
 
@@ -55,59 +55,59 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-AUTH-006 | SC-AUTH-001 | AT-AUTH-003.* | ⏳ |
-| FR-PERM-002 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| FR-PERM-003 | SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| FR-PERM-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| NFR-SEC-001 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| NFR-SEC-010 | SC-E2E-001, SC-ITEM-005, SC-PERM-001 | AT-AUTH-003.*, AT-USER-002.* | ⏳ |
-| NFR-PERF-003 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| NFR-OBS-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| BR-001 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| BR-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| BR-013 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ⏳ |
-| BR-015 | SC-E2E-001, SC-ITEM-005, SC-PERM-001 | AT-AUTH-003.*, AT-USER-001.*, AT-USER-002.* | ⏳ |
-| FR-USER-001 | SC-USER-001 | AT-USER-001.* | ⏳ |
-| FR-USER-002 | SC-USER-001 | AT-USER-001.* | ⏳ |
-| FR-USER-003 | SC-USER-003 | AT-USER-001.* | ⏳ |
-| FR-USER-005 | SC-USER-001 | AT-USER-001.* | ⏳ |
-| FR-USER-006 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ⏳ |
-| NFR-AUDIT-001 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ⏳ |
-| BR-005 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ⏳ |
-| BR-014 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ⏳ |
-| BR-016 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ⏳ |
-| BR-035 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ⏳ |
-| FR-USER-004 | SC-USER-002 | AT-USER-002.* | ⏳ |
-| FR-PERM-001 | SC-PERM-001 | AT-USER-002.* | ⏳ |
-| BR-046 | SC-PERM-001, SC-USER-002 | AT-USER-002.* | ⏳ |
+| FR-AUTH-006 | SC-AUTH-001 | AT-AUTH-003.* | ✓ |
+| FR-PERM-002 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| FR-PERM-003 | SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| FR-PERM-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| NFR-SEC-001 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| NFR-SEC-010 | SC-E2E-001, SC-ITEM-005, SC-PERM-001 | AT-AUTH-003.*, AT-USER-002.* | ✓ |
+| NFR-PERF-003 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| NFR-OBS-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| BR-001 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| BR-004 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| BR-013 | SC-E2E-001, SC-ITEM-005 | AT-AUTH-003.* | ✓ |
+| BR-015 | SC-E2E-001, SC-ITEM-005, SC-PERM-001 | AT-AUTH-003.*, AT-USER-001.*, AT-USER-002.* | ✓ |
+| FR-USER-001 | SC-USER-001 | AT-USER-001.* | ✓ |
+| FR-USER-002 | SC-USER-001 | AT-USER-001.* | ✓ |
+| FR-USER-003 | SC-USER-003 | AT-USER-001.* | ✓ |
+| FR-USER-005 | SC-USER-001 | AT-USER-001.* | ✓ |
+| FR-USER-006 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ✓ |
+| NFR-AUDIT-001 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ✓ |
+| BR-005 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ✓ |
+| BR-014 | SC-USER-001, SC-USER-003 | AT-USER-001.* | ✓ |
+| BR-016 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ✓ |
+| BR-035 | SC-PERM-001, SC-USER-001, SC-USER-002 | AT-USER-001.*, AT-USER-002.* | ✓ |
+| FR-USER-004 | SC-USER-002 | AT-USER-002.* | ✓ |
+| FR-PERM-001 | SC-PERM-001 | AT-USER-002.* | ✓ |
+| BR-046 | SC-PERM-001, SC-USER-002 | AT-USER-002.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-AUTH-003.1 | Для каждой ячейки матрицы permission-model §4: разрешенное действие выполняется, запрещенное → 403/404 — при прямом вызове application service | permission | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.2 | То же при прямом HTTP-вызове action AdminJS (подмена recordId/actionName) | permission | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.3 | Списки возвращают только объекты в scope; подсчет (`count`) соответствует фильтру | permission | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.4 | Чтение объекта вне scope → 404 | negative | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.5 | Admin со scope ANY получает отказ при нарушении BR (например, редактирование APPROVED, approve своего контента) | negative | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.6 | Изменение ролей пользователя применяется со следующего запроса без перелогина | positive | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.7 | Поля owner/state/authorIds/assignmentId, переданные в payload формы, игнорируются или отклоняются | security | SPEC-AUTH-003 | ⏳ |
-| AT-AUTH-003.8 | Все use cases декларируют permission (архитектурный тест) | maintainability | SPEC-AUTH-003 | ⏳ |
-| AT-USER-001.1 | Admin создает студента; пользователь в INVITED, получает ссылку активации; аудит | positive | SPEC-USER-001 | ⏳ |
-| AT-USER-001.2 | Дубликат email (разный регистр) отклоняется | negative | SPEC-USER-001 | ⏳ |
-| AT-USER-001.3 | Блокировка отзывает сессии; заблокированный не входит | positive | SPEC-USER-001 | ⏳ |
-| AT-USER-001.4 | Admin не может заблокировать себя (BR-015) | negative | SPEC-USER-001 | ⏳ |
-| AT-USER-001.5 | Нельзя заблокировать/архивировать последнего активного Admin (BR-016) | negative | SPEC-USER-001 | ⏳ |
-| AT-USER-001.6 | Физическое удаление пользователя невозможно | negative | SPEC-USER-001 | ⏳ |
-| AT-USER-001.7 | Expert/Student не может создавать и изменять пользователей | permission | SPEC-USER-001 | ⏳ |
-| AT-USER-001.8 | Teacher видит в списке только студентов своих курсов | permission | SPEC-USER-001 | ⏳ |
-| AT-USER-002.1 | Admin назначает роль; запись аудита содержит до/после | positive | SPEC-USER-002 | ⏳ |
-| AT-USER-002.2 | Пользователь не может изменить собственные роли (в т.ч. Admin) | negative | SPEC-USER-002 | ⏳ |
-| AT-USER-002.3 | Нельзя снять ADMIN у последнего активного администратора | negative | SPEC-USER-002 | ⏳ |
-| AT-USER-002.4 | Нельзя удалить системную роль | negative | SPEC-USER-002 | ⏳ |
-| AT-USER-002.5 | Неподдерживаемый scope permission отклоняется | negative | SPEC-USER-002 | ⏳ |
-| AT-USER-002.6 | Изменение состава роли журналируется (NFR-AUDIT-001) | audit | SPEC-USER-002 | ⏳ |
-| AT-USER-002.7 | Эксперт не может менять пользователей и роли | permission | SPEC-USER-002 | ⏳ |
+| AT-AUTH-003.1 | Для каждой ячейки матрицы permission-model §4: разрешенное действие выполняется, запрещенное → 403/404 — при прямом вызове application service | permission | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.2 | То же при прямом HTTP-вызове action AdminJS (подмена recordId/actionName) | permission | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.3 | Списки возвращают только объекты в scope; подсчет (`count`) соответствует фильтру | permission | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.4 | Чтение объекта вне scope → 404 | negative | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.5 | Admin со scope ANY получает отказ при нарушении BR (например, редактирование APPROVED, approve своего контента) | negative | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.6 | Изменение ролей пользователя применяется со следующего запроса без перелогина | positive | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.7 | Поля owner/state/authorIds/assignmentId, переданные в payload формы, игнорируются или отклоняются | security | SPEC-AUTH-003 | ✓ |
+| AT-AUTH-003.8 | Все use cases декларируют permission (архитектурный тест) | maintainability | SPEC-AUTH-003 | ✓ |
+| AT-USER-001.1 | Admin создает студента; пользователь в INVITED, получает ссылку активации; аудит | positive | SPEC-USER-001 | ✓ |
+| AT-USER-001.2 | Дубликат email (разный регистр) отклоняется | negative | SPEC-USER-001 | ✓ |
+| AT-USER-001.3 | Блокировка отзывает сессии; заблокированный не входит | positive | SPEC-USER-001 | ✓ |
+| AT-USER-001.4 | Admin не может заблокировать себя (BR-015) | negative | SPEC-USER-001 | ✓ |
+| AT-USER-001.5 | Нельзя заблокировать/архивировать последнего активного Admin (BR-016) | negative | SPEC-USER-001 | ✓ |
+| AT-USER-001.6 | Физическое удаление пользователя невозможно | negative | SPEC-USER-001 | ✓ |
+| AT-USER-001.7 | Expert/Student не может создавать и изменять пользователей | permission | SPEC-USER-001 | ✓ |
+| AT-USER-001.8 | Teacher видит в списке только студентов своих курсов | permission | SPEC-USER-001 | ✓ |
+| AT-USER-002.1 | Admin назначает роль; запись аудита содержит до/после | positive | SPEC-USER-002 | ✓ |
+| AT-USER-002.2 | Пользователь не может изменить собственные роли (в т.ч. Admin) | negative | SPEC-USER-002 | ✓ |
+| AT-USER-002.3 | Нельзя снять ADMIN у последнего активного администратора | negative | SPEC-USER-002 | ✓ |
+| AT-USER-002.4 | Нельзя удалить системную роль | negative | SPEC-USER-002 | ✓ |
+| AT-USER-002.5 | Неподдерживаемый scope permission отклоняется | negative | SPEC-USER-002 | ✓ |
+| AT-USER-002.6 | Изменение состава роли журналируется (NFR-AUDIT-001) | audit | SPEC-USER-002 | ✓ |
+| AT-USER-002.7 | Эксперт не может менять пользователей и роли | permission | SPEC-USER-002 | ✓ |
 
 ## BL-03
 
@@ -508,36 +508,36 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-AUDIT-001 | SC-AUDIT-001 | AT-AUDIT-001.* | ⏳ |
-| FR-AUDIT-002 | SC-AUDIT-001 | AT-AUDIT-001.* | ⏳ |
-| NFR-AUDIT-001 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| NFR-AUDIT-002 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| NFR-AUDIT-003 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| NFR-AUDIT-004 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| NFR-AUDIT-005 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| BR-034 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| BR-035 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ⏳ |
-| FR-AUDIT-003 | SC-AUDIT-002 | AT-AUDIT-002.* | ⏳ |
-| FR-AUDIT-004 | SC-AUDIT-003 | AT-AUDIT-002.* | ⏳ |
-| BR-005 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ⏳ |
-| BR-039 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ⏳ |
-| BR-042 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ⏳ |
-| BR-044 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ⏳ |
+| FR-AUDIT-001 | SC-AUDIT-001 | AT-AUDIT-001.* | ✓ |
+| FR-AUDIT-002 | SC-AUDIT-001 | AT-AUDIT-001.* | ✓ |
+| NFR-AUDIT-001 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| NFR-AUDIT-002 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| NFR-AUDIT-003 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| NFR-AUDIT-004 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| NFR-AUDIT-005 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| BR-034 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| BR-035 | SC-AUDIT-001, SC-E2E-001 | AT-AUDIT-001.* | ✓ |
+| FR-AUDIT-003 | SC-AUDIT-002 | AT-AUDIT-002.* | ✓ |
+| FR-AUDIT-004 | SC-AUDIT-003 | AT-AUDIT-002.* | ✓ |
+| BR-005 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ✓ |
+| BR-039 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ✓ |
+| BR-042 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ✓ |
+| BR-044 | SC-AUDIT-002, SC-AUDIT-003 | AT-AUDIT-002.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-AUDIT-001.1 | Каждый use case изменения создает запись с actor, action, resource, diff | audit | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-001.2 | Изменение ролей/permissions/статуса пользователя журналируется (NFR-AUDIT-001) | audit | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-001.3 | Попытка изменить/удалить запись через приложение невозможна; через SQL под ролью приложения — отказ | security | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-001.4 | Сбой записи аудита откатывает операцию | data | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-001.5 | Пароли, hash, токены не попадают в changes | security | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-001.6 | Не-Admin не имеет доступа к журналу | permission | SPEC-AUDIT-001 | ⏳ |
-| AT-AUDIT-002.1 | История объекта показывает события создания, изменений, переходов, решений | positive | SPEC-AUDIT-002 | ⏳ |
-| AT-AUDIT-002.2 | Пользователь без права чтения объекта не видит его историю | permission | SPEC-AUDIT-002 | ⏳ |
-| AT-AUDIT-002.3 | Архивирование не удаляет данные; restore возвращает объект | positive | SPEC-AUDIT-002 | ⏳ |
-| AT-AUDIT-002.4 | Используемый объект нельзя удалить физически ни одним путем | negative | SPEC-AUDIT-002 | ⏳ |
+| AT-AUDIT-001.1 | Каждый use case изменения создает запись с actor, action, resource, diff | audit | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-001.2 | Изменение ролей/permissions/статуса пользователя журналируется (NFR-AUDIT-001) | audit | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-001.3 | Попытка изменить/удалить запись через приложение невозможна; через SQL под ролью приложения — отказ | security | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-001.4 | Сбой записи аудита откатывает операцию | data | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-001.5 | Пароли, hash, токены не попадают в changes | security | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-001.6 | Не-Admin не имеет доступа к журналу | permission | SPEC-AUDIT-001 | ✓ |
+| AT-AUDIT-002.1 | История объекта показывает события создания, изменений, переходов, решений | positive | SPEC-AUDIT-002 | ✓ |
+| AT-AUDIT-002.2 | Пользователь без права чтения объекта не видит его историю | permission | SPEC-AUDIT-002 | ✓ |
+| AT-AUDIT-002.3 | Архивирование не удаляет данные; restore возвращает объект | positive | SPEC-AUDIT-002 | ✓ |
+| AT-AUDIT-002.4 | Используемый объект нельзя удалить физически ни одним путем | negative | SPEC-AUDIT-002 | ✓ |
 
 ## BL-12
 
@@ -568,10 +568,10 @@
 |---|---|---|---|
 | AT-PERM-001 | Студент не может читать чужой private draft | AT-ITEM-004.1, AT-ITEM-002.2 | ⏳ |
 | AT-PERM-002 | Студент не может approve | AT-ITEM-004.5, AT-REVIEW-003.9 | ⏳ |
-| AT-PERM-003 | Эксперт не может менять пользователей | AT-USER-001.7, AT-USER-002.7 | ⏳ |
-| AT-PERM-004 | Администратор имеет полный доступ в пределах BR | AT-AUTH-003.1, AT-AUTH-003.5 | ⏳ |
-| AT-PERM-005 | UI restrictions не заменяют server-side authorization | AT-AUTH-003.2, AT-AUTH-003.7 | ⏳ |
-| AT-PERM-MATRIX | Параметризованная проверка всех ячеек permission-model §4 без UI | SPEC-AUTH-003 | ⏳ |
+| AT-PERM-003 | Эксперт не может менять пользователей | AT-USER-001.7, AT-USER-002.7 | ✓ |
+| AT-PERM-004 | Администратор имеет полный доступ в пределах BR | AT-AUTH-003.1, AT-AUTH-003.5 | ✓ |
+| AT-PERM-005 | UI restrictions не заменяют server-side authorization | AT-AUTH-003.2, AT-AUTH-003.7 | ✓ |
+| AT-PERM-MATRIX | Параметризованная проверка всех ячеек permission-model §4 без UI | SPEC-AUTH-003 | ✓ |
 | AT-E2E-001 | SC-E2E-001 через UI (Playwright) | scenarios/scenario-registry.md | ⏳ |
 | AT-E2E-001-API | SC-E2E-001 через application services без UI | scenarios/scenario-registry.md | ⏳ |
 
@@ -582,5 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 0 / 192 (M0 — кода нет) |
+| Проходящих AT | 50 / 192 |
+| Падающих AT | 0 |
+| Требований (FR/NFR/BR) с ≥1 проходящим AT | 47 / 157 (30%) |
 | Ошибок целостности ссылок | 0 |

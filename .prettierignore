@@ -1,0 +1,6 @@
+*.md
+public
+assets
+dist
+.adminjs
+package-lock.json

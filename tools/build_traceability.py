@@ -233,11 +233,40 @@ def build_traceability(d):
     return "\n".join(L) + "\n"
 
 
+AT_RE = re.compile(r"\bAT-[A-Z0-9]+-\d{3}(?:\.\d+)?[a-z]?|\bAT-PERM-(?:MATRIX|\d{3})|\bAT-E2E-001(?:-API)?")
+
+
+def load_results():
+    """Статусы AT из результатов тестов: validation/test-results.json (vitest --reporter=json)
+    и validation/e2e-results.json (playwright, опционально). Имя теста должно содержать AT-идентификатор."""
+    status = {}
+
+    def mark(name, ok):
+        for m in AT_RE.findall(name):
+            key = re.sub(r"[a-z]$", "", m)
+            if status.get(key) == "fail":
+                continue
+            status[key] = "pass" if ok else "fail"
+
+    p = ROOT / "validation/test-results.json"
+    if p.exists():
+        import json
+        data = json.loads(p.read_text(encoding="utf-8"))
+        for f in data.get("testResults", []):
+            for t in f.get("assertionResults", []):
+                mark(" ".join(t.get("ancestorTitles", []) + [t.get("title", "")]), t.get("status") == "passed")
+    return status
+
+
+STATUS_ICON = {"pass": "✓", "fail": "🔴", None: "⏳"}
+
+
 def build_acceptance(d, errors):
+    results = load_results()
     L = []
     L.append("# Acceptance Matrix\n")
     L.append("| Поле | Значение |\n|---|---|\n| Задача | T-029 |\n| Генерируется | `python3 tools/build_traceability.py` — статусы ⏳ обновляются по результатам CI |\n")
-    L.append("Статусы: ⏳ planned · 🔴 failing · ✓ passing. На M0 все тесты — planned.\n")
+    L.append("Статусы: ⏳ planned · 🔴 failing · ✓ passing. Источник статусов — `validation/test-results.json` (`npm run test:report`).\n")
     blocks = defaultdict(list)
     for sid, s in d["SPEC"].items():
         for b in re.findall(r"BL-\d{2}", s["block"])[:1]:
@@ -265,23 +294,28 @@ def build_acceptance(d, errors):
             total_req.add(r)
             if tests:
                 covered.add(r)
-            L.append(f"| {r} | {', '.join(scs) or '—'} | {', '.join(tests)} | ⏳ |")
+            ats_r = [at(a) for sp in specs for a in d["SPEC"][sp]["ac"]]
+            st = [results.get(x) for x in ats_r]
+            icon = "✓" if st and all(x == "pass" for x in st) else ("🔴" if "fail" in st else ("◐" if "pass" in st else "⏳"))
+            L.append(f"| {r} | {', '.join(scs) or '—'} | {', '.join(tests)} | {icon} |")
         L.append("\n### Acceptance tests\n")
         L.append("| AT | Критерий | Тип | SPEC | Status |\n|---|---|---|---|---|")
         for sid in blocks[b]:
             for a, v in d["SPEC"][sid]["ac"].items():
-                L.append(f"| {at(a)} | {v['text']} | {v['kind']} | {sid} | ⏳ |")
+                L.append(f"| {at(a)} | {v['text']} | {v['kind']} | {sid} | {STATUS_ICON[results.get(at(a))]} |")
         L.append("")
     L.append("## Сквозные acceptance-наборы\n")
     L.append("| AT | Состав | Источник | Status |\n|---|---|---|---|")
-    L.append("| AT-PERM-001 | Студент не может читать чужой private draft | AT-ITEM-004.1, AT-ITEM-002.2 | ⏳ |")
-    L.append("| AT-PERM-002 | Студент не может approve | AT-ITEM-004.5, AT-REVIEW-003.9 | ⏳ |")
-    L.append("| AT-PERM-003 | Эксперт не может менять пользователей | AT-USER-001.7, AT-USER-002.7 | ⏳ |")
-    L.append("| AT-PERM-004 | Администратор имеет полный доступ в пределах BR | AT-AUTH-003.1, AT-AUTH-003.5 | ⏳ |")
-    L.append("| AT-PERM-005 | UI restrictions не заменяют server-side authorization | AT-AUTH-003.2, AT-AUTH-003.7 | ⏳ |")
-    L.append("| AT-PERM-MATRIX | Параметризованная проверка всех ячеек permission-model §4 без UI | SPEC-AUTH-003 | ⏳ |")
-    L.append("| AT-E2E-001 | SC-E2E-001 через UI (Playwright) | scenarios/scenario-registry.md | ⏳ |")
-    L.append("| AT-E2E-001-API | SC-E2E-001 через application services без UI | scenarios/scenario-registry.md | ⏳ |")
+    def st(k):
+        return STATUS_ICON[results.get(k)]
+    L.append(f"| AT-PERM-001 | Студент не может читать чужой private draft | AT-ITEM-004.1, AT-ITEM-002.2 | {st('AT-PERM-001')} |")
+    L.append(f"| AT-PERM-002 | Студент не может approve | AT-ITEM-004.5, AT-REVIEW-003.9 | {st('AT-PERM-002')} |")
+    L.append(f"| AT-PERM-003 | Эксперт не может менять пользователей | AT-USER-001.7, AT-USER-002.7 | {st('AT-PERM-003')} |")
+    L.append(f"| AT-PERM-004 | Администратор имеет полный доступ в пределах BR | AT-AUTH-003.1, AT-AUTH-003.5 | {st('AT-PERM-004')} |")
+    L.append(f"| AT-PERM-005 | UI restrictions не заменяют server-side authorization | AT-AUTH-003.2, AT-AUTH-003.7 | {st('AT-PERM-005')} |")
+    L.append(f"| AT-PERM-MATRIX | Параметризованная проверка всех ячеек permission-model §4 без UI | SPEC-AUTH-003 | {st('AT-PERM-MATRIX')} |")
+    L.append(f"| AT-E2E-001 | SC-E2E-001 через UI (Playwright) | scenarios/scenario-registry.md | {st('AT-E2E-001')} |")
+    L.append(f"| AT-E2E-001-API | SC-E2E-001 через application services без UI | scenarios/scenario-registry.md | {st('AT-E2E-001-API')} |")
     L.append("")
     n_ac = sum(len(s["ac"]) for s in d["SPEC"].values())
     fr_m = [f for f, v in d["FR"].items() if v["prio"].startswith("M")]
@@ -292,7 +326,17 @@ def build_acceptance(d, errors):
     L.append(f"| Acceptance criteria / AT | {n_ac} |")
     L.append(f"| FR (Must) с AT | {len(fr_cov)} / {len(fr_m)} |")
     L.append(f"| BR с AT | {len(br_cov)} / {len(d['BR'])} |")
-    L.append(f"| Проходящих AT | 0 / {n_ac} (M0 — кода нет) |")
+    n_pass = sum(1 for s_ in d["SPEC"].values() for a in s_["ac"] if results.get(at(a)) == "pass")
+    n_fail = sum(1 for s_ in d["SPEC"].values() for a in s_["ac"] if results.get(at(a)) == "fail")
+    req_pass = 0
+    for r in sorted(total_req):
+        specs = [x for x, v in d["SPEC"].items() if r in v["req"] + v["br"]]
+        ats_r = [at(a) for sp in specs for a in d["SPEC"][sp]["ac"]]
+        if ats_r and any(results.get(x) == "pass" for x in ats_r):
+            req_pass += 1
+    L.append(f"| Проходящих AT | {n_pass} / {n_ac} |")
+    L.append(f"| Падающих AT | {n_fail} |")
+    L.append(f"| Требований (FR/NFR/BR) с ≥1 проходящим AT | {req_pass} / {len(total_req)} ({round(100 * req_pass / max(1, len(total_req)))}%) |")
     L.append(f"| Ошибок целостности ссылок | {len(errors)} |")
     return "\n".join(L) + "\n"
 

@@ -2,7 +2,7 @@
 
 | Поле | Значение |
 |---|---|
-| Статус реестра | M0 закрыт (2026-10-08); M1 — в работе |
+| Статус реестра | M0, M1 закрыты (2026-10-08); M2 — в работе |
 
 ## 1. Правила
 
@@ -89,27 +89,31 @@ T-030 закрыта: решения Q-* подтверждены, ADR-001…008
 
 ### M1 — Identity & Governance (BL-01, BL-02, BL-11)
 
+Итог M1 (2026-10-08): все AT блоков BL-01/02/11 проходят (`validation/acceptance-matrix.md`); SC-E2E-001 шаги 1–2 автоматизированы (Playwright).
+Отклонения от плана: ORM заменен на Kysely (ADR-008, изменение); тестовый стенд — Vercel + Neon (ADR-009);
+история объекта реализована как фильтр журнала аудита (действие «История»), без отдельного компонента.
+
 | ID | Title | Type | Block | Spec / ADR | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-031 | Project scaffold: TS strict, AdminJS+Express, Prisma, Docker, CI (lint, typecheck, tests, dependency rules, audit) | infra | — | ADR-008, ADR-004, NFR-MAINT-001, NFR-MAINT-002, NFR-MAINT-003, NFR-MAINT-004, NFR-MAINT-005, NFR-SEC-009, NFR-SEC-011, NFR-L10N-001 | архитектурный тест зависимостей проходит | T-030 | ready |
-| T-032 | Identity domain + data model + migrations (User, Role, Permission, UserRole, RolePermission, Session, PasswordToken) | domain, db | BL-01/02 | SPEC-USER-001, SPEC-USER-002, SPEC-AUTH-001, NFR-DATA-002, NFR-DATA-007, NFR-EXT-003 | — (основа) | T-031 | planned |
-| T-033 | Audit foundation: AuditLog, AuditWriter (транзакционный), права БД append-only | implementation, db | BL-11 | SPEC-AUDIT-001 | AC-AUDIT-001.1, .3, .4, .5 | T-031 | planned |
-| T-034 | Implement AuthorizationService, ActorContext, scopeFilter, use-case permission declaration | security | BL-02 | SPEC-AUTH-003 | AC-AUTH-003.1 … AC-AUTH-003.8 | T-032 | planned |
-| T-035 | Permission catalog + system roles seed (по permission-model §4) | db, security | BL-02 | SPEC-USER-002, permission-model | AC-USER-002.4 | T-034 | planned |
-| T-036 | AdminJS `DomainResource` adapter, маппинг DomainError, `availableActions` | implementation | BL-02 | ADR-004, SPEC-AUTH-003 | AC-AUTH-003.2, .7 | T-034 | planned |
-| T-037 | Login, sessions, logout, lockout, CSRF | implementation, security | BL-01 | SPEC-AUTH-001, SPEC-AUTH-002, ADR-006 | AC-AUTH-001.1…7, AC-AUTH-002.1…5 | T-032, T-033 | planned |
-| T-038 | Password change, reset, activation | implementation | BL-01 | SPEC-AUTH-004 | AC-AUTH-004.1…5 | T-037 | planned |
-| T-039 | Implement User management use cases and resource | implementation, ui | BL-02 | SPEC-USER-001 | AC-USER-001.1…8 | T-036, T-037 | planned |
-| T-040 | Role management and role assignment | implementation, ui | BL-02 | SPEC-USER-002 | AC-USER-002.1…7 | T-039 | planned |
-| T-041 | Audit log resource and object history component | ui | BL-11 | SPEC-AUDIT-001, SPEC-AUDIT-002 | AC-AUDIT-001.6, AC-AUDIT-002.1, .2 | T-033, T-036 | planned |
-| T-042 | Permission matrix acceptance suite (identity), harness для AT-PERM-MATRIX | test | BL-02 | SPEC-AUTH-003, permission-model §4.1 | AT-PERM-001…005 (часть) | T-040 | planned |
-| T-043 | E2E harness (Playwright + API-runner) и SC-E2E-001 шаги 1–2 | test | — | SC-E2E-001 | AT-E2E-001 (шаги 1–2) | T-040 | planned |
+| T-031 | Project scaffold: TS strict, AdminJS+Express, Prisma, Docker, CI (lint, typecheck, tests, dependency rules, audit) | infra | — | ADR-008, ADR-004, NFR-MAINT-001, NFR-MAINT-002, NFR-MAINT-003, NFR-MAINT-004, NFR-MAINT-005, NFR-SEC-009, NFR-SEC-011, NFR-L10N-001 | архитектурный тест зависимостей проходит | T-030 | done |
+| T-032 | Identity domain + data model + migrations (User, Role, Permission, UserRole, RolePermission, Session, PasswordToken) | domain, db | BL-01/02 | SPEC-USER-001, SPEC-USER-002, SPEC-AUTH-001, NFR-DATA-002, NFR-DATA-007, NFR-EXT-003 | — (основа) | T-031 | done |
+| T-033 | Audit foundation: AuditLog, AuditWriter (транзакционный), права БД append-only | implementation, db | BL-11 | SPEC-AUDIT-001 | AC-AUDIT-001.1, .3, .4, .5 | T-031 | done |
+| T-034 | Implement AuthorizationService, ActorContext, scopeFilter, use-case permission declaration | security | BL-02 | SPEC-AUTH-003 | AC-AUTH-003.1 … AC-AUTH-003.8 | T-032 | done |
+| T-035 | Permission catalog + system roles seed (по permission-model §4) | db, security | BL-02 | SPEC-USER-002, permission-model | AC-USER-002.4 | T-034 | done |
+| T-036 | AdminJS `DomainResource` adapter, маппинг DomainError, `availableActions` | implementation | BL-02 | ADR-004, SPEC-AUTH-003 | AC-AUTH-003.2, .7 | T-034 | done |
+| T-037 | Login, sessions, logout, lockout, CSRF | implementation, security | BL-01 | SPEC-AUTH-001, SPEC-AUTH-002, ADR-006 | AC-AUTH-001.1…7, AC-AUTH-002.1…5 | T-032, T-033 | done |
+| T-038 | Password change, reset, activation | implementation | BL-01 | SPEC-AUTH-004 | AC-AUTH-004.1…5 | T-037 | done |
+| T-039 | Implement User management use cases and resource | implementation, ui | BL-02 | SPEC-USER-001 | AC-USER-001.1…8 | T-036, T-037 | done |
+| T-040 | Role management and role assignment | implementation, ui | BL-02 | SPEC-USER-002 | AC-USER-002.1…7 | T-039 | done |
+| T-041 | Audit log resource and object history component | ui | BL-11 | SPEC-AUDIT-001, SPEC-AUDIT-002 | AC-AUDIT-001.6, AC-AUDIT-002.1, .2 | T-033, T-036 | done |
+| T-042 | Permission matrix acceptance suite (identity), harness для AT-PERM-MATRIX | test | BL-02 | SPEC-AUTH-003, permission-model §4.1 | AT-PERM-001…005 (часть) | T-040 | done |
+| T-043 | E2E harness (Playwright + API-runner) и SC-E2E-001 шаги 1–2 | test | — | SC-E2E-001 | AT-E2E-001 (шаги 1–2) | T-040 | done |
 
 ### M2 — Educational Context (BL-03, BL-04)
 
 | ID | Title | Type | Block | Spec | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-044 | Subjects, courses, topics, objectives (domain, db, use cases, resources, дерево тем) | implementation | BL-03 | SPEC-EDU-001 | AC-EDU-001.1…5 | T-042 | planned |
+| T-044 | Subjects, courses, topics, objectives (domain, db, use cases, resources, дерево тем) | implementation | BL-03 | SPEC-EDU-001 | AC-EDU-001.1…5 | T-042 | ready |
 | T-045 | Student groups | implementation | BL-03 | SPEC-EDU-002 | AC-EDU-002.1…4 | T-044 | planned |
 | T-046 | Assignment model and creation | implementation | BL-04 | SPEC-ASSIGN-001 | AC-ASSIGN-001.1…6 | T-045, T-057* | planned |
 | T-047 | Assignment lifecycle, deadline extension, student «Мои задания», teacher summary | implementation, ui | BL-04 | SPEC-ASSIGN-002 | AC-ASSIGN-002.1…6 | T-046 | planned |
@@ -121,11 +125,11 @@ T-030 закрыта: решения Q-* подтверждены, ADR-001…008
 
 | ID | Title | Type | Block | Spec / ADR | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-049 | MediaStorage port, S3 и LocalFs драйверы, выдача файлов через авторизованный endpoint | infra, security | BL-05 | ADR-007, SPEC-MEDIA-001 | AC-MEDIA-001.7, NFR-EXT-004 | T-042 | planned |
+| T-049 | MediaStorage port, S3 и LocalFs драйверы, выдача файлов через авторизованный endpoint | infra, security | BL-05 | ADR-007, SPEC-MEDIA-001 | AC-MEDIA-001.7, NFR-EXT-004 | T-042 | ready |
 | T-050 | Upload pipeline: сигнатуры, sharp, EXIF, sha256, очередь производных | implementation | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.1…5 | T-049 | planned |
 | T-051 | Медиатека: ресурс, сетка, фильтры, медиа-пикер | ui | BL-05 | SPEC-MEDIA-001 | AC-MEDIA-001.6 | T-050 | planned |
 | T-052 | Права медиа, «где используется», архив | implementation | BL-05 | SPEC-MEDIA-002 | AC-MEDIA-002.1…7 | T-051, T-058 | planned |
-| T-053 | InteractionPlugin contract, реестр, contract test suite | implementation | BL-06 | SPEC-QTYPE-002, ADR-001 | AC-QTYPE-002.1…3 | T-031 | planned |
+| T-053 | InteractionPlugin contract, реестр, contract test suite | implementation | BL-06 | SPEC-QTYPE-002, ADR-001 | AC-QTYPE-002.1…3 | T-031 | ready |
 | T-054 | Plugin `choice` (editor, preview, evaluators) | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
 | T-055 | Plugins `match`, `order` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
 | T-056 | Plugins `text_entry`, `extended_text` | implementation | BL-06 | SPEC-QTYPE-002 | AC-QTYPE-002.1, .4, .5 | T-053 | planned |
@@ -172,6 +176,6 @@ T-030 закрыта: решения Q-* подтверждены, ADR-001…008
 | T-082 | Accessibility audit кастомных компонентов | test | NFR-A11Y-001…003 | T-078 | planned |
 | T-083 | Performance tests на seed 50k вопросов / 10k медиа | test | NFR-PERF-001…005 | T-078 | planned |
 | T-084 | Backup/restore drill (БД + storage) | infra | NFR-DATA-006 | T-078 | planned |
-| T-085 | Observability: логи, метрики, health | infra | NFR-OBS-001…004 | T-031 | planned |
+| T-085 | Observability: логи, метрики, health | infra | NFR-OBS-001…004 | T-031 | ready |
 | T-086 | Archive/restore и media rights regression | test | SPEC-AUDIT-002, SPEC-MEDIA-002 | T-078 | planned |
 | T-087 | Финальная acceptance: acceptance-matrix 100%, traceability без пробелов | test, doc | validation/* | T-079…T-086 | planned |

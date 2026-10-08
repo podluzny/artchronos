@@ -1,1 +1,10 @@
+node_modules/
+dist/
 public/
+.adminjs/
+.env
+.env.*
+!.env.example
+*.log
+test-results/
+playwright-report/
