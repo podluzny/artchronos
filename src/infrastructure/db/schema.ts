@@ -89,6 +89,119 @@ export interface AuditLogTable {
   user_agent: string | null
 }
 
+type Archivable = {
+  status: Generated<'ACTIVE' | 'ARCHIVED'>
+  archived_at: Date | null
+  archived_by: string | null
+  archive_reason: string | null
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+  revision: Generated<number>
+}
+
+export interface SubjectsTable extends Archivable {
+  id: Generated<string>
+  code: string
+  name: string
+}
+
+export interface CoursesTable extends Archivable {
+  id: Generated<string>
+  subject_id: string
+  code: string
+  name: string
+  academic_period: string | null
+}
+
+export interface CourseTeachersTable {
+  course_id: string
+  user_id: string
+}
+
+export interface TopicsTable extends Archivable {
+  id: Generated<string>
+  course_id: string
+  parent_id: string | null
+  name: string
+  ordinal: Generated<number>
+}
+
+export interface LearningObjectivesTable extends Archivable {
+  id: Generated<string>
+  course_id: string
+  topic_id: string
+  code: string
+  text: string
+  bloom_level: string | null
+}
+
+export interface StudentGroupsTable extends Archivable {
+  id: Generated<string>
+  course_id: string
+  name: string
+}
+
+export interface GroupMembershipsTable {
+  group_id: string
+  user_id: string
+  added_at: Generated<Date>
+}
+
+export interface QuestionTypesTable {
+  id: Generated<string>
+  code: string
+  name: string
+  description: string | null
+  interaction_key: string
+  status: Generated<'ACTIVE' | 'INACTIVE'>
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+  revision: Generated<number>
+}
+
+export interface AssignmentsTable {
+  id: Generated<string>
+  course_id: string
+  owner_id: string
+  title: string
+  instructions: string | null
+  min_items: Generated<number>
+  max_items: Generated<number>
+  max_tests_per_student: Generated<number>
+  deadline_at: Date | null
+  default_reviewer_id: string | null
+  status: Generated<'DRAFT' | 'ACTIVE' | 'CLOSED' | 'ARCHIVED'>
+  created_at: Generated<Date>
+  updated_at: Generated<Date>
+  revision: Generated<number>
+}
+
+export interface AssignmentTopicsTable {
+  assignment_id: string
+  topic_id: string
+}
+export interface AssignmentObjectivesTable {
+  assignment_id: string
+  objective_id: string
+}
+export interface AssignmentQuestionTypesTable {
+  assignment_id: string
+  question_type_id: string
+}
+export interface AssignmentTargetsTable {
+  assignment_id: string
+  user_id: string | null
+  group_id: string | null
+}
+export interface DeadlineExtensionsTable {
+  assignment_id: string
+  user_id: string
+  new_deadline_at: Date
+  reason: string | null
+  granted_by: string
+  granted_at: Generated<Date>
+}
+
 export interface Database {
   users: UsersTable
   roles: RolesTable
@@ -98,6 +211,20 @@ export interface Database {
   sessions: SessionsTable
   password_tokens: PasswordTokensTable
   audit_log: AuditLogTable
+  subjects: SubjectsTable
+  courses: CoursesTable
+  course_teachers: CourseTeachersTable
+  topics: TopicsTable
+  learning_objectives: LearningObjectivesTable
+  student_groups: StudentGroupsTable
+  group_memberships: GroupMembershipsTable
+  question_types: QuestionTypesTable
+  assignments: AssignmentsTable
+  assignment_topics: AssignmentTopicsTable
+  assignment_objectives: AssignmentObjectivesTable
+  assignment_question_types: AssignmentQuestionTypesTable
+  assignment_targets: AssignmentTargetsTable
+  deadline_extensions: DeadlineExtensionsTable
 }
 
 export type UserRow = Selectable<UsersTable>

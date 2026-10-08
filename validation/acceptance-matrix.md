@@ -115,28 +115,28 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-EDU-001 | SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| FR-EDU-002 | SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| FR-EDU-003 | SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| FR-EDU-005 | SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| BR-039 | SC-AUDIT-003, SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| BR-042 | SC-AUDIT-003, SC-EDU-001 | AT-EDU-001.* | ⏳ |
-| BR-035 | SC-AUDIT-003, SC-EDU-001, SC-EDU-002 | AT-EDU-001.*, AT-EDU-002.* | ⏳ |
-| FR-EDU-004 | SC-EDU-002 | AT-EDU-002.* | ⏳ |
+| FR-EDU-001 | SC-EDU-001 | AT-EDU-001.* | ✓ |
+| FR-EDU-002 | SC-EDU-001 | AT-EDU-001.* | ✓ |
+| FR-EDU-003 | SC-EDU-001 | AT-EDU-001.* | ✓ |
+| FR-EDU-005 | SC-EDU-001 | AT-EDU-001.* | ✓ |
+| BR-039 | SC-AUDIT-003, SC-EDU-001 | AT-EDU-001.* | ✓ |
+| BR-042 | SC-AUDIT-003, SC-EDU-001 | AT-EDU-001.* | ✓ |
+| BR-035 | SC-AUDIT-003, SC-EDU-001, SC-EDU-002 | AT-EDU-001.*, AT-EDU-002.* | ✓ |
+| FR-EDU-004 | SC-EDU-002 | AT-EDU-002.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-EDU-001.1 | Teacher создает тему и подтему в своем курсе | positive | SPEC-EDU-001 | ⏳ |
-| AT-EDU-001.2 | Teacher не может изменять темы чужого курса | permission | SPEC-EDU-001 | ⏳ |
-| AT-EDU-001.3 | Удаление используемой темы невозможно; доступно архивирование | negative | SPEC-EDU-001 | ⏳ |
-| AT-EDU-001.4 | Архивированная тема недоступна для выбора в новом задании/вопросе | negative | SPEC-EDU-001 | ⏳ |
-| AT-EDU-001.5 | Цикл в иерархии тем отклоняется | negative | SPEC-EDU-001 | ⏳ |
-| AT-EDU-002.1 | Teacher создает группу в своем курсе и добавляет студентов | positive | SPEC-EDU-002 | ⏳ |
-| AT-EDU-002.2 | Пользователь без роли STUDENT не добавляется | negative | SPEC-EDU-002 | ⏳ |
-| AT-EDU-002.3 | Студент видит курс через членство в группе | positive | SPEC-EDU-002 | ⏳ |
-| AT-EDU-002.4 | Teacher не управляет группами чужого курса | permission | SPEC-EDU-002 | ⏳ |
+| AT-EDU-001.1 | Teacher создает тему и подтему в своем курсе | positive | SPEC-EDU-001 | ✓ |
+| AT-EDU-001.2 | Teacher не может изменять темы чужого курса | permission | SPEC-EDU-001 | ✓ |
+| AT-EDU-001.3 | Удаление используемой темы невозможно; доступно архивирование | negative | SPEC-EDU-001 | ✓ |
+| AT-EDU-001.4 | Архивированная тема недоступна для выбора в новом задании/вопросе | negative | SPEC-EDU-001 | ✓ |
+| AT-EDU-001.5 | Цикл в иерархии тем отклоняется | negative | SPEC-EDU-001 | ✓ |
+| AT-EDU-002.1 | Teacher создает группу в своем курсе и добавляет студентов | positive | SPEC-EDU-002 | ✓ |
+| AT-EDU-002.2 | Пользователь без роли STUDENT не добавляется | negative | SPEC-EDU-002 | ✓ |
+| AT-EDU-002.3 | Студент видит курс через членство в группе | positive | SPEC-EDU-002 | ✓ |
+| AT-EDU-002.4 | Teacher не управляет группами чужого курса | permission | SPEC-EDU-002 | ✓ |
 
 ## BL-04
 
@@ -144,38 +144,38 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-ASSIGN-001 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ⏳ |
-| FR-ASSIGN-002 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ⏳ |
-| FR-ASSIGN-003 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ⏳ |
-| FR-ASSIGN-006 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ⏳ |
-| BR-018 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ⏳ |
-| BR-021 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ⏳ |
-| BR-027 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ⏳ |
-| BR-039 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ⏳ |
-| BR-043 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ⏳ |
-| FR-ASSIGN-004 | SC-ASSIGN-003 | AT-ASSIGN-002.* | ⏳ |
-| FR-ASSIGN-005 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ⏳ |
-| FR-ASSIGN-007 | SC-TEST-001 | AT-ASSIGN-002.* | ⏳ |
-| FR-ASSIGN-008 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ⏳ |
-| BR-017 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ⏳ |
-| BR-031 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ⏳ |
-| BR-035 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ⏳ |
+| FR-ASSIGN-001 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ✓ |
+| FR-ASSIGN-002 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ✓ |
+| FR-ASSIGN-003 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ✓ |
+| FR-ASSIGN-006 | SC-ASSIGN-001 | AT-ASSIGN-001.* | ✓ |
+| BR-018 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
+| BR-021 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
+| BR-027 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
+| BR-039 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
+| BR-043 | SC-ASSIGN-001, SC-E2E-001 | AT-ASSIGN-001.* | ✓ |
+| FR-ASSIGN-004 | SC-ASSIGN-003 | AT-ASSIGN-002.* | ◐ |
+| FR-ASSIGN-005 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ◐ |
+| FR-ASSIGN-007 | SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
+| FR-ASSIGN-008 | SC-ASSIGN-002 | AT-ASSIGN-002.* | ◐ |
+| BR-017 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
+| BR-031 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
+| BR-035 | SC-ASSIGN-002, SC-ASSIGN-003, SC-TEST-001 | AT-ASSIGN-002.* | ◐ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-ASSIGN-001.1 | Teacher создает задание в своем курсе с темами, целями, типами, ограничениями, дедлайном, адресатами | positive | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-001.2 | Студент не может создать задание | permission | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-001.3 | Teacher не может создать задание в чужом курсе | permission | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-001.4 | Неактивный тип вопроса нельзя выбрать | negative | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-001.5 | minItems > maxItems отклоняется | negative | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-001.6 | Default reviewer без `review.perform` отклоняется | negative | SPEC-ASSIGN-001 | ⏳ |
-| AT-ASSIGN-002.1 | Студент видит только адресованные ему задания (лично или через группу) | permission | SPEC-ASSIGN-002 | ⏳ |
-| AT-ASSIGN-002.2 | После CLOSED студент не может создать Item/Test и отправить версию по заданию | negative | SPEC-ASSIGN-002 | ⏳ |
-| AT-ASSIGN-002.3 | Первая отправка после дедлайна отклоняется; с продлением — принимается | negative/positive | SPEC-ASSIGN-002 | ⏳ |
-| AT-ASSIGN-002.4 | Повторная отправка после CHANGES_REQUESTED после дедлайна, при ACTIVE задании, принимается | positive | SPEC-ASSIGN-002 | ⏳ |
-| AT-ASSIGN-002.5 | Активация без адресатов отклоняется | negative | SPEC-ASSIGN-002 | ⏳ |
+| AT-ASSIGN-001.1 | Teacher создает задание в своем курсе с темами, целями, типами, ограничениями, дедлайном, адресатами | positive | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-001.2 | Студент не может создать задание | permission | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-001.3 | Teacher не может создать задание в чужом курсе | permission | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-001.4 | Неактивный тип вопроса нельзя выбрать | negative | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-001.5 | minItems > maxItems отклоняется | negative | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-001.6 | Default reviewer без `review.perform` отклоняется | negative | SPEC-ASSIGN-001 | ✓ |
+| AT-ASSIGN-002.1 | Студент видит только адресованные ему задания (лично или через группу) | permission | SPEC-ASSIGN-002 | ✓ |
+| AT-ASSIGN-002.2 | После CLOSED студент не может создать Item/Test и отправить версию по заданию | negative | SPEC-ASSIGN-002 | ✓ |
+| AT-ASSIGN-002.3 | Первая отправка после дедлайна отклоняется; с продлением — принимается | negative/positive | SPEC-ASSIGN-002 | ✓ |
+| AT-ASSIGN-002.4 | Повторная отправка после CHANGES_REQUESTED после дедлайна, при ACTIVE задании, принимается | positive | SPEC-ASSIGN-002 | ✓ |
+| AT-ASSIGN-002.5 | Активация без адресатов отклоняется | negative | SPEC-ASSIGN-002 | ✓ |
 | AT-ASSIGN-002.6 | Сводка показывает состояние последней версии теста каждого адресата | positive | SPEC-ASSIGN-002 | ⏳ |
 
 ## BL-05
@@ -582,7 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 50 / 192 |
+| Проходящих AT | 70 / 192 |
 | Падающих AT | 0 |
-| Требований (FR/NFR/BR) с ≥1 проходящим AT | 47 / 157 (30%) |
+| Требований (FR/NFR/BR) с ≥1 проходящим AT | 66 / 157 (42%) |
 | Ошибок целостности ссылок | 0 |

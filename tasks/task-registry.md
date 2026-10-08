@@ -2,7 +2,7 @@
 
 | Поле | Значение |
 |---|---|
-| Статус реестра | M0, M1 закрыты (2026-10-08); M2 — в работе |
+| Статус реестра | M0, M1, M2 закрыты (2026-10-08); M3 — в работе |
 
 ## 1. Правила
 
@@ -111,13 +111,17 @@ T-030 закрыта: решения Q-* подтверждены, ADR-001…008
 
 ### M2 — Educational Context (BL-03, BL-04)
 
+Итог M2: AT блоков BL-03/04 проходят, кроме зависящих от тестов (AT-ASSIGN-002.6 — сводка по тестам студентов, M4);
+правила BR-017/BR-031 реализованы в домене и проверены unit-тестами, применение к вопросам и тестам — M3/M4.
+SC-E2E-001 шаг 3 автоматизирован. Таблица `question_types` и seed MVP-типов вынесены в M2 (версии и схемы — M3).
+
 | ID | Title | Type | Block | Spec | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-044 | Subjects, courses, topics, objectives (domain, db, use cases, resources, дерево тем) | implementation | BL-03 | SPEC-EDU-001 | AC-EDU-001.1…5 | T-042 | ready |
-| T-045 | Student groups | implementation | BL-03 | SPEC-EDU-002 | AC-EDU-002.1…4 | T-044 | planned |
-| T-046 | Assignment model and creation | implementation | BL-04 | SPEC-ASSIGN-001 | AC-ASSIGN-001.1…6 | T-045, T-057* | planned |
-| T-047 | Assignment lifecycle, deadline extension, student «Мои задания», teacher summary | implementation, ui | BL-04 | SPEC-ASSIGN-002 | AC-ASSIGN-002.1…6 | T-046 | planned |
-| T-048 | Acceptance BL-03/04, permission matrix §4.2, E2E шаг 3 | test | BL-03/04 | SPEC-EDU-*, SPEC-ASSIGN-* | AT-EDU-*, AT-ASSIGN-* | T-047 | planned |
+| T-044 | Subjects, courses, topics, objectives (domain, db, use cases, resources, дерево тем) | implementation | BL-03 | SPEC-EDU-001 | AC-EDU-001.1…5 | T-042 | done |
+| T-045 | Student groups | implementation | BL-03 | SPEC-EDU-002 | AC-EDU-002.1…4 | T-044 | done |
+| T-046 | Assignment model and creation | implementation | BL-04 | SPEC-ASSIGN-001 | AC-ASSIGN-001.1…6 | T-045, T-057* | done |
+| T-047 | Assignment lifecycle, deadline extension, student «Мои задания», teacher summary | implementation, ui | BL-04 | SPEC-ASSIGN-002 | AC-ASSIGN-002.1…6 | T-046 | done |
+| T-048 | Acceptance BL-03/04, permission matrix §4.2, E2E шаг 3 | test | BL-03/04 | SPEC-EDU-*, SPEC-ASSIGN-* | AT-EDU-*, AT-ASSIGN-* | T-047 | done |
 
 \* T-046 требует хотя бы seed-реестра типов вопросов: модель `QuestionType` + seed из T-057 выносится вперед (минимальная часть без UI), см. примечание в product-scope §1.
 

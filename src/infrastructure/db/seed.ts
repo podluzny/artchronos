@@ -3,6 +3,7 @@ import { PERMISSIONS } from '../../domain/identity/permission-catalog.js'
 import { SYSTEM_ROLES, type SystemRoleCode } from '../../domain/identity/system-roles.js'
 import { validatePassword } from '../../domain/identity/password-policy.js'
 import { normalizeEmail } from '../../domain/shared/text.js'
+import { MVP_QUESTION_TYPES } from '../../domain/itembank/mvp-question-types.js'
 import type { PasswordHasher } from '../../application/identity/ports.js'
 import type { Db } from './kysely.js'
 
@@ -43,6 +44,14 @@ export async function seedCatalog(db: Db): Promise<void> {
         )
         if (rows.length) await trx.insertInto('role_permissions').values(rows).execute()
       }
+    }
+    // MVP-типы вопросов (question-type-system §3): создаются активными, если их нет; существующие не трогаем.
+    for (const t of MVP_QUESTION_TYPES) {
+      await trx
+        .insertInto('question_types')
+        .values({ code: t.code, name: t.name, interaction_key: t.interactionKey, status: 'ACTIVE' })
+        .onConflict((oc) => oc.column('code').doNothing())
+        .execute()
     }
   })
 }

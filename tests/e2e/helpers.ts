@@ -35,3 +35,33 @@ export async function activate(page: Page, link: string, password: string) {
   await page.click('button[type=submit]')
   await expect(page.getByText('Пароль сохранен')).toBeVisible()
 }
+
+/** Выбор значения в reference/select-поле AdminJS (react-select). */
+export async function pickSelect(page: Page, label: string, optionText: string) {
+  const group = page
+    .locator('section, div')
+    .filter({ has: page.locator(`label:text-is("${label}")`) })
+    .last()
+  const input = group.locator('input[role=combobox], input[id^=react-select]').first()
+  await input.click()
+  await input.fill(optionText.slice(0, 12))
+  await page.locator('[class*=option]', { hasText: optionText }).first().click()
+}
+
+export async function submitAndWait(page: Page) {
+  await page.locator('button[type=submit]').first().click()
+  await page.waitForURL(/\/show$|\/resources\/[A-Za-z]+(\?.*)?$/)
+}
+
+/** Открывает карточку записи из списка ресурса по тексту в строке. */
+export async function openRecord(page: Page, resource: string, text: string) {
+  await page.goto(`/admin/resources/${resource}/actions/list`)
+  await page.locator('tbody tr td', { hasText: text }).first().click()
+  await page.waitForURL(/\/show$/)
+}
+
+/** Запускает действие записи по подписи кнопки на карточке. */
+export async function recordAction(page: Page, label: string) {
+  await page.locator('a, button', { hasText: label }).first().click()
+  await page.waitForURL(/\/actions\/|\/records\/.+\/[a-zA-Z]+$/)
+}

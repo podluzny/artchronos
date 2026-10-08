@@ -67,8 +67,8 @@ export class KyselyUserRepository implements UserRepository {
     return this.base().where((eb) => {
       const conds: Expression<SqlBool>[] = []
       if (filter.kind === 'SCOPED') {
-        // COURSE: студенты групп курсов, где актор — преподаватель (появится в M2, BL-03).
-        conds.push(sql<SqlBool>`false`)
+        // COURSE: студенты групп курсов, где актор — преподаватель (SPEC-USER-001).
+        conds.push(filter.scopes.has('COURSE') ? inTeacherCourses(filter.userId) : sql<SqlBool>`false`)
       }
       const f = query.filters
       if (f.status) conds.push(eb('users.status', '=', f.status as UserRow['status']))
@@ -102,8 +102,15 @@ export class KyselyUserRepository implements UserRepository {
     return Number(r.n)
   }
 
-  async inActorCourses(_actorId: string, _userId: string) {
-    return false // M2: членство в группах курсов преподавателя
+  async inActorCourses(actorId: string, userId: string) {
+    if (!isUuid(userId)) return false
+    const r = await this.db
+      .selectFrom('users')
+      .select('users.id')
+      .where('users.id', '=', userId)
+      .where(inTeacherCourses(actorId))
+      .executeTakeFirst()
+    return !!r
   }
 
   async insert(data: Parameters<UserRepository['insert']>[0]) {
@@ -189,6 +196,12 @@ export class KyselyUserRepository implements UserRepository {
       .executeTakeFirstOrThrow()
     return Number(r.n)
   }
+}
+
+/** Пользователь — член группы курса, который ведет преподаватель teacherId. */
+function inTeacherCourses(teacherId: string) {
+  return sql<SqlBool>`exists (select 1 from group_memberships gm join student_groups g on g.id = gm.group_id
+    join course_teachers ct on ct.course_id = g.course_id where gm.user_id = users.id and ct.user_id = ${teacherId})`
 }
 
 export function escapeLike(s: string): string {

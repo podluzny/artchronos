@@ -1,15 +1,17 @@
 import type { AuditTx } from '../application/audit/use-cases.js'
+import type { EducationTx } from '../application/education/ports.js'
 import type { IdentityTx } from '../application/identity/ports.js'
 import type { UnitOfWork } from '../application/shared/uow.js'
 import { KyselyAuditReadRepository } from './audit/audit-read-repository.js'
 import { KyselyAuditWriter } from './audit/audit-writer.js'
 import type { Db } from './db/kysely.js'
+import { KyselyEducationRepository } from './education/education-repository.js'
 import { KyselyRoleRepository } from './identity/role-repository.js'
 import { KyselyPasswordTokenRepository, KyselySessionRepository } from './identity/token-repositories.js'
 import { KyselyUserRepository } from './identity/user-repository.js'
 
 /** Полный набор репозиториев приложения, привязанный к соединению или транзакции. */
-export type AppTx = IdentityTx & AuditTx
+export type AppTx = IdentityTx & AuditTx & EducationTx
 
 export function bindRepositories(db: Db): AppTx {
   return {
@@ -19,6 +21,7 @@ export function bindRepositories(db: Db): AppTx {
     tokens: new KyselyPasswordTokenRepository(db),
     audit: new KyselyAuditWriter(db),
     auditRead: new KyselyAuditReadRepository(db),
+    education: new KyselyEducationRepository(db),
   }
 }
 

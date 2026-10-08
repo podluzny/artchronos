@@ -8,6 +8,9 @@ export const ru = {
     bulkDelete: 'Удалить выбранные',
     list: 'Список',
     search: 'Поиск',
+    archive: 'В архив',
+    restore: 'Восстановить',
+    history: 'История',
   },
   buttons: {
     save: 'Сохранить',
