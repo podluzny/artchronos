@@ -233,7 +233,7 @@ def build_traceability(d):
     return "\n".join(L) + "\n"
 
 
-AT_RE = re.compile(r"\bAT-[A-Z0-9]+-\d{3}(?:\.\d+)?[a-z]?|\bAT-PERM-(?:MATRIX|\d{3})|\bAT-E2E-001(?:-API)?")
+AT_RE = re.compile(r"\bAT-E2E-001(?:-API)?|\bAT-PERM-(?:MATRIX|\d{3})|\bAT-[A-Z0-9]+-\d{3}(?:\.\d+)?[a-z]?")
 
 
 def load_results():
@@ -255,6 +255,19 @@ def load_results():
         for f in data.get("testResults", []):
             for t in f.get("assertionResults", []):
                 mark(" ".join(t.get("ancestorTitles", []) + [t.get("title", "")]), t.get("status") == "passed")
+    p = ROOT / "validation/e2e-results.json"
+    if p.exists():
+        import json
+
+        def walk(suite, prefix):
+            title = " ".join(x for x in [prefix, suite.get("title", "")] if x)
+            for spec in suite.get("specs", []):
+                mark(f"{title} {spec.get('title', '')}", bool(spec.get("ok")))
+            for child in suite.get("suites", []):
+                walk(child, title)
+
+        for suite in json.loads(p.read_text(encoding="utf-8")).get("suites", []):
+            walk(suite, "")
     return status
 
 

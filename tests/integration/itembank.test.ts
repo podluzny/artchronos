@@ -7,6 +7,7 @@ import { freshDb } from '../support/db.js'
 import { makeCourseWorld } from '../support/education.js'
 import { ctx, makeUser, setupServices } from '../support/fixtures.js'
 import { tempStorage, uploadImage } from '../support/media.js'
+import { walkState } from '../support/states.js'
 
 let db: Db
 let services: Services
@@ -51,9 +52,7 @@ async function studentItem(stem?: string) {
 }
 
 /** Имитация решения экспертизы (Review — M5): прямой перевод состояния, допускаемый триггером. */
-async function forceState(versionId: string, state: string) {
-  await sql`update item_versions set state = ${state} where id = ${versionId}`.execute(db)
-}
+const forceState = (versionId: string, state: string) => walkState(db, 'item_versions', versionId, state)
 
 describe('SPEC-QTYPE-001 Реестр типов вопросов', () => {
   it('seed: MVP-типы активны и имеют версию v1', async () => {
@@ -623,7 +622,7 @@ describe('SPEC-ITEM-003 Предпросмотр', () => {
 })
 
 describe('SPEC-ITEM-004 Доступ к вопросам', () => {
-  it('AT-ITEM-004.1 студент не видит вопросы другого студента ни в списке, ни по id', async () => {
+  it('AT-ITEM-004.1 AT-PERM-001 студент не видит вопросы другого студента ни в списке, ни по id', async () => {
     const mine = await studentItem('Мой вопрос')
     const s2 = await makeUser(services, admin, ['STUDENT'])
     const list = await services.items.listItems.run(s2.actor, { filters: {}, limit: 500, offset: 0 }, ctx)

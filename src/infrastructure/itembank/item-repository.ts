@@ -17,8 +17,13 @@ import { upsertTags } from '../media/media-repository.js'
 
 const own = (uid: string) =>
   sql<boolean>`(i.owner_id = ${uid} or exists (select 1 from item_versions av where av.item_id = i.id and ${uid} = any(av.author_ids)))`
+/** ASSIGNED: вопрос задания, которое ведет пользователь, или вопрос, назначенный ему на экспертизу (сам или в пакете теста). */
 const assignedVia = (uid: string) =>
-  sql<boolean>`(i.assignment_id in (select a.id from assignments a where a.owner_id = ${uid} or a.default_reviewer_id = ${uid}))`
+  sql<boolean>`(i.assignment_id in (select a.id from assignments a where a.owner_id = ${uid} or a.default_reviewer_id = ${uid})
+    or exists (select 1 from reviews rv join review_assignments ra on ra.review_id = rv.id
+      where ra.reviewer_id = ${uid} and ra.status in ('ACTIVE','COMPLETED')
+        and (rv.item_id = i.id or exists (select 1 from test_section_items tsi
+          where tsi.test_version_id = rv.test_version_id and tsi.item_id = i.id))))`
 const teachesCourse = (uid: string) =>
   sql<boolean>`exists (select 1 from course_teachers ct where ct.course_id = i.course_id and ct.user_id = ${uid})`
 const courseVisible = (uid: string) =>

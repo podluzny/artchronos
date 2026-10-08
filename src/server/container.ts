@@ -1,4 +1,6 @@
 import { createTestUseCases } from '../application/assessment/test-use-cases.js'
+import { createDeliveryService } from '../application/delivery/delivery-service.js'
+import { createReviewHooks, createReviewUseCases } from '../application/review/review-use-cases.js'
 import { createAuditUseCases } from '../application/audit/use-cases.js'
 import { systemClock, type Clock } from '../application/shared/context.js'
 import { createEducationUseCases } from '../application/education/use-cases.js'
@@ -25,9 +27,27 @@ export function createServices(db: Db, opts: { clock?: Clock; storage?: MediaSto
   const storage = opts.storage ?? createStorage(db)
   const media = createMediaUseCases({ uow, storage, processor: new SharpMediaProcessor(), clock })
   const qtypes = createQtypeUseCases({ uow, registry })
-  const items = createItemUseCases({ uow, registry, clock })
-  const tests = createTestUseCases({ uow, clock, items })
-  return { uow, identity, audit, education, media, qtypes, items, tests, registry, storage }
+  const hooks = createReviewHooks()
+  const items = createItemUseCases({
+    uow,
+    registry,
+    clock,
+    onSubmitted: hooks.itemSubmitted,
+    onRecalled: hooks.itemRecalled,
+    onNewVersion: hooks.newVersion,
+  })
+  const tests = createTestUseCases({
+    uow,
+    clock,
+    items,
+    onSubmitted: hooks.testSubmitted,
+    onRecalled: hooks.testRecalled,
+    onNewVersion: hooks.newVersion,
+  })
+  const reviews = createReviewUseCases({ uow, clock, items })
+  /** Прототип модели прохождения (BL-12): только для тестов, в UI не подключается. */
+  const delivery = createDeliveryService({ uow, registry, clock })
+  return { uow, identity, audit, education, media, qtypes, items, tests, reviews, delivery, registry, storage }
 }
 
 export type Services = ReturnType<typeof createServices>

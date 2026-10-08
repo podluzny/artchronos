@@ -154,7 +154,7 @@ describe('SPEC-MEDIA-002 Права, использование, архив', ()
     ).rejects.toMatchObject({ code: 'FORBIDDEN' })
   })
 
-  it('AT-MEDIA-002.7 RESTRICTED требует основание', async () => {
+  it('RESTRICTED требует основание', async () => {
     const id = await uploadImage(services, teacher.actor)
     const m = await services.media.getMedia.run(teacher.actor, { id }, ctx)
     await expect(

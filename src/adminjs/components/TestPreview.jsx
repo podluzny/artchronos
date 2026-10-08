@@ -5,17 +5,24 @@ import { ApiClient } from 'adminjs'
 const api = new ApiClient()
 const card = { border: '1px solid rgba(127,127,127,0.3)', borderRadius: 6, padding: 12, marginBottom: 10 }
 
-const Option = ({ o }) => (
-  <li style={{ marginBottom: 4 }}>
-    {o.text}
-    {o.mediaAssetId ? (
-      <img
-        src={`/admin/media-file/${o.mediaAssetId}/thumb`}
-        alt={o.altTextOverride || o.text || 'изображение'}
-        style={{ maxWidth: 160, maxHeight: 110, borderRadius: 4, display: 'block', marginTop: 4 }}
-      />
-    ) : null}
-  </li>
+const letter = (i) => String.fromCharCode(1040 + (i >= 9 ? i + 1 : i))
+
+const Option = ({ o, i }) => (
+  <Box flex alignItems="flex-start" mb="sm">
+    <Text mr="default" style={{ minWidth: 18 }}>
+      <b>{letter(i)}.</b>
+    </Text>
+    <Box>
+      {o.text ? <Text>{o.text}</Text> : null}
+      {o.mediaAssetId ? (
+        <img
+          src={`/admin/media-file/${o.mediaAssetId}/thumb`}
+          alt={o.altTextOverride || o.text || 'изображение'}
+          style={{ maxWidth: 160, maxHeight: 110, borderRadius: 4, display: 'block' }}
+        />
+      ) : null}
+    </Box>
+  </Box>
 )
 
 /** Предпросмотр теста — «виртуальная попытка» по seed (SPEC-TEST-003). Ничего не сохраняется. */
@@ -89,11 +96,11 @@ const TestPreview = (props) => {
                     />
                   ))}
                 <Box my="default" dangerouslySetInnerHTML={{ __html: it.preview.stem }} />
-                <ol style={{ margin: 0, paddingLeft: 20 }}>
-                  {it.preview.options.map((o) => (
-                    <Option key={o.key} o={o} />
+                <Box>
+                  {it.preview.options.map((o, i) => (
+                    <Option key={o.key} o={o} i={i} />
                   ))}
-                </ol>
+                </Box>
               </Box>
             )
           })}

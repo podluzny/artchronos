@@ -90,6 +90,13 @@ export interface MediaUsage {
   via: 'OPTION' | 'MEDIA'
 }
 
+export interface AffectedTest {
+  testId: string
+  title: string
+  versionNo: number
+  state: string
+}
+
 export interface MediaRepository {
   list(filter: ScopeFilter, q: ListQuery): Promise<{ records: MediaRecord[]; total: number }>
   findById(id: string): Promise<MediaRecord | null>
@@ -125,6 +132,8 @@ export interface MediaRepository {
   setTopics(id: string, topicIds: string[]): Promise<void>
   setArchived(id: string, archived: boolean, by: string, reason: string | null): Promise<void>
   usage(id: string): Promise<MediaUsage[]>
+  /** Тесты, чьи утвержденные/опубликованные версии содержат вопросы с этим медиа (AC-MEDIA-002.7). */
+  affectedTests(id: string): Promise<AffectedTest[]>
   delete(id: string): Promise<void>
 }
 

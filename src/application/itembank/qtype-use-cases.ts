@@ -248,6 +248,19 @@ export function createQtypeUseCases(deps: QtypeDeps) {
         return { activeAssignments: t.activeAssignmentCount }
       },
     }),
+
+    /**
+     * AC-QTYPE-002.3: проверка при старте — у каждого типа в БД есть зарегистрированный interaction-плагин.
+     * Иначе приложение не запускается (сообщение называет тип и interactionKey).
+     */
+    async verifyRegistry(): Promise<void> {
+      const all = await repo().list({ filters: {}, limit: 1000, offset: 0 })
+      const missing = all.records.filter((t) => !registry.get(t.interactionKey))
+      if (missing.length)
+        throw new Error(
+          `Нет interaction-плагина для типов вопросов: ${missing.map((t) => `${t.code} (${t.interactionKey})`).join(', ')} (BR-023)`,
+        )
+    },
   }
 }
 

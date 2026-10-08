@@ -47,7 +47,11 @@ const METADATA_FIELDS = [
   'rightsNote',
 ] as const
 
-export function mediaRecord(m: MediaRecord, usage?: { itemId: string; versionNo: number; state: string }[]) {
+export function mediaRecord(
+  m: MediaRecord,
+  usage?: { itemId: string; versionNo: number; state: string }[],
+  tests: { title: string; versionNo: number; state: string }[] = [],
+) {
   return {
     id: m.id,
     thumb: m.kind === 'IMAGE' ? `/admin/media-file/${m.id}/thumb` : '',
@@ -79,7 +83,10 @@ export function mediaRecord(m: MediaRecord, usage?: { itemId: string; versionNo:
     archiveReason: m.archiveReason ?? '',
     usage: usage
       ? usage.length
-        ? usage.map((u) => `вопрос ${u.itemId.slice(0, 8)} · v${u.versionNo} · ${u.state}`).join('\n')
+        ? [
+            ...usage.map((u) => `вопрос ${u.itemId.slice(0, 8)} · v${u.versionNo} · ${u.state}`),
+            ...tests.map((t) => `тест «${t.title}» · v${t.versionNo} · ${t.state}`),
+          ].join('\n')
         : 'не используется'
       : '',
     createdAt: m.createdAt,
@@ -95,7 +102,12 @@ export function mediaResources(uc: MediaUseCases): ResourceWithOptions[] {
       const r = await uc.listMedia.run(a, q, c)
       return { records: r.records.map((m) => mediaRecord(m)), total: r.total }
     },
-    get: async (a, id, c) => mediaRecord(await uc.getMedia.run(a, { id }, c), await uc.mediaUsage.run(a, { id }, c)),
+    get: async (a, id, c) =>
+      mediaRecord(
+        await uc.getMedia.run(a, { id }, c),
+        await uc.mediaUsage.run(a, { id }, c),
+        await uc.affectedTests.run(a, { id }, c),
+      ),
     update: async (a, id, p, c) => {
       const metadata: Record<string, unknown> = {}
       for (const f of METADATA_FIELDS) if (p[f] !== undefined) metadata[f] = p[f]
@@ -302,7 +314,18 @@ export function mediaResources(uc: MediaUseCases): ResourceWithOptions[] {
             },
             submit: async (actor, p, id, c, h) => {
               const m = await uc.getMedia.run(actor, { id: id! }, c)
-              await uc.setRightsStatus.run(actor, { id: id!, status: p.status, note: p.note, revision: m.revision }, c)
+              const r = await uc.setRightsStatus.run(
+                actor,
+                { id: id!, status: p.status, note: p.note, revision: m.revision },
+                c,
+              )
+              const affected = r.affectedTests.filter((t) => t.state === 'PUBLISHED')
+              if (affected.length)
+                return {
+                  title: 'Статус прав сохранен. Затронуты опубликованные тесты',
+                  text: affected.map((t) => `«${t.title}» v${t.versionNo}`).join('\n'),
+                  backUrl: h.recordActionUrl({ resourceId: 'MediaAsset', recordId: id!, actionName: 'show' }),
+                }
               return {
                 redirectUrl: h.recordActionUrl({ resourceId: 'MediaAsset', recordId: id!, actionName: 'show' }),
                 notice: 'Статус прав сохранен',

@@ -16,9 +16,9 @@ import {
 /**
  * AT-E2E-001 — SC-E2E-001 (scenarios/scenario-registry.md). Сценарий наращивается по мере готовности блоков:
  * M1: шаги 1–2. M2: шаг 3 (учебная структура и задание через UI). M3: шаги 4–6 (вопросы студента).
- * M4: шаги 7–9 (тест студента, отправка, неизменяемость). Создание Review (шаг 8) — M5.
+ * M4: шаги 7–9 (тест студента, отправка, неизменяемость). M5: шаги 10–18 (экспертиза, доработка, публикация, аудит).
  */
-test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
+test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
   const teacher = {
     email: `t1.${Date.now()}@e2e.local`,
     name: 'Преподаватель Т1',
@@ -280,5 +280,128 @@ test.describe.serial('SC-E2E-001 E2E reference scenario', () => {
     const body = await res.json()
     expect(body.ok).toBe(false)
     expect(body.message).toMatch(/BR-007/)
+  })
+
+  test('шаг 8 (M5): создан Review с основным экспертом t1', async ({ page }) => {
+    await login(page, teacher.email, teacher.password)
+    await page.goto('/admin/resources/Review/actions/list?filters.queue=mine')
+    await expect(page.locator('tbody tr', { hasText: `Пейзаж XIX века ${stamp}` })).toHaveCount(1)
+    await expect(page.locator('tbody tr', { hasText: teacher.name })).toHaveCount(1)
+  })
+
+  test('шаг 10–13: t1 начинает экспертизу, создает BLOCKING замечание, approve отклонен, возвращает на доработку', async ({
+    page,
+  }) => {
+    await login(page, teacher.email, teacher.password)
+    await openRecord(page, 'Review', `Пейзаж XIX века ${stamp}`)
+    await recordAction(page, 'Открыть экспертизу')
+    await page.getByRole('button', { name: 'Начать экспертизу' }).click()
+    await expect(page.getByTestId('review-status')).toHaveText('Идет экспертиза')
+    // шаг 11: комментарий к вопросу 1 и блокирующее замечание
+    await page.getByTestId('review-item').first().getByRole('button', { name: 'Комментировать этот вопрос' }).click()
+    await page.fill('#review-comment', 'Неоднозначный дистрактор «И. И. Левитан»')
+    await pickSelect(page, 'Комментарий к выбранному вопросу', 'Замечание: блокирующее')
+    await page.getByRole('button', { name: 'Отправить' }).click()
+    await expect(page.getByTestId('issue')).toHaveCount(1)
+    await expect(page.getByTestId('issue')).toContainText('Открыто')
+    await expect(page.getByTestId('review-item').first()).toContainText('Неоднозначный дистрактор')
+    // шаг 12: approve отклонен (BR-028)
+    await page.getByRole('button', { name: 'Принять' }).click()
+    await expect(page.getByText(/BR-028/).first()).toBeVisible()
+    // шаг 13
+    await page.fill('#review-summary', 'Исправьте дистрактор в вопросе 1')
+    await page.getByRole('button', { name: 'Вернуть на доработку' }).click()
+    await expect(page.getByTestId('review-status')).toHaveText('Возвращено на доработку')
+  })
+
+  test('шаг 14: s1 создает v2, исправляет вопрос 1, отмечает замечание и отправляет v2', async ({ page }) => {
+    await login(page, student.email, student.password)
+    await openRecord(page, 'Test', `Пейзаж XIX века ${stamp}`)
+    await expect(page.getByText('Возвращено на доработку').first()).toBeVisible()
+    await recordAction(page, 'Новая версия')
+    await page.locator('button[type=submit]').first().click()
+    await page.waitForURL(/\/builder$/)
+    await expect(page.getByTestId('test-item')).toHaveCount(2)
+    await expect(page.getByTestId('test-item').first()).toContainText('v2')
+    // исправление вопроса 1 (новый черновик v2 создан автоматически — auto-rebind)
+    await openRecord(page, 'Item', 'Кто автор картины «Грачи прилетели»?')
+    await recordAction(page, 'Редактировать черновик')
+    await page.locator('input[placeholder="Текст"]').nth(2).fill('В. М. Васнецов')
+    await page.getByRole('button', { name: 'Сохранить черновик' }).click()
+    await expect(page.getByText(/сохранен/i).first()).toBeVisible()
+    // замечание помечается исправленным
+    await openRecord(page, 'Review', `Пейзаж XIX века ${stamp}`)
+    await recordAction(page, 'Открыть экспертизу')
+    await page.getByRole('button', { name: 'Исправлено' }).click()
+    await expect(page.getByTestId('issue')).toContainText('Исправлено автором')
+    // отправка v2
+    await openRecord(page, 'Test', `Пейзаж XIX века ${stamp}`)
+    await expect(page.getByText('Ошибок нет — тест готов к отправке на экспертизу')).toBeVisible()
+    await recordAction(page, 'Отправить на экспертизу')
+    await submitAndWait(page)
+    await expect(page.getByText('Отправлено на экспертизу').first()).toBeVisible()
+  })
+
+  test('шаг 15: t1 видит перенесенное замечание, закрывает его, отмечает checklist и принимает v2', async ({
+    page,
+  }) => {
+    await login(page, teacher.email, teacher.password)
+    await page.goto('/admin/resources/Review/actions/list?filters.status=OPEN')
+    await page
+      .locator('tbody tr td', { hasText: `Пейзаж XIX века ${stamp} · v2` })
+      .first()
+      .click()
+    await page.waitForURL(/\/show$/)
+    await recordAction(page, 'Открыть экспертизу')
+    await page.getByRole('button', { name: 'Начать экспертизу' }).click()
+    await expect(page.getByTestId('issue')).toContainText('из предыдущей версии')
+    await page.getByTestId('issue').getByRole('button', { name: 'Закрыть' }).click()
+    await expect(page.getByTestId('issue')).toContainText('Закрыто')
+    const boxes = page.getByTestId('checklist').locator('input[type=checkbox]')
+    const count = await boxes.count()
+    for (let i = 0; i < count - 1; i++) {
+      await boxes.nth(i).click({ force: true })
+      await expect(boxes.nth(i)).toBeChecked()
+    }
+    await page.getByRole('button', { name: 'Принять' }).click()
+    await expect(page.getByTestId('review-status')).toHaveText('Принято')
+  })
+
+  test('шаг 16: студент не может принять или опубликовать прямым запросом', async ({ page }) => {
+    await login(page, student.email, student.password)
+    const reviews = await (await page.request.get('/admin/api/resources/Review/actions/list')).json()
+    const rv = reviews.records.find((r: { params: { subject: string } }) => r.params.subject.includes(`${stamp} · v2`))
+    const approve = await page.request.post(`/admin/api/resources/Review/records/${rv.id}/workspace`, {
+      headers: { Origin: 'http://localhost:3300' },
+      data: { op: 'approve' },
+    })
+    expect((await approve.json()).ok).toBe(false)
+    const tests = await (await page.request.get('/admin/api/resources/Test/actions/list')).json()
+    const t = tests.records.find((r: { params: { title: string } }) => r.params.title === `Пейзаж XIX века ${stamp}`)
+    const publish = await page.request.post(`/admin/api/resources/Test/records/${t.id}/publish`, {
+      headers: { Origin: 'http://localhost:3300' },
+      data: {},
+    })
+    expect(publish.ok() && (await publish.json()).notice?.type !== 'error').toBe(false)
+  })
+
+  test('шаг 17–18: Admin публикует v2 и видит цепочку событий в журнале аудита', async ({ page }) => {
+    await login(page, ADMIN.email, ADMIN.password)
+    await openRecord(page, 'Test', `Пейзаж XIX века ${stamp}`)
+    await recordAction(page, 'Опубликовать')
+    await submitAndWait(page)
+    await expect(page.getByText('Опубликовано').first()).toBeVisible()
+    await recordAction(page, 'Журнал')
+    await page.waitForURL(/AuditLog/)
+    await page.goto(`${page.url()}&perPage=100`)
+    for (const action of [
+      'test.created',
+      'test.submitted',
+      'test.changes_requested',
+      'test.version.created',
+      'test.approved',
+      'test.published',
+    ])
+      await expect(page.getByText(action, { exact: true }).first()).toBeVisible()
   })
 })

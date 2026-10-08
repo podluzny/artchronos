@@ -184,23 +184,23 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-MEDIA-001 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
-| FR-MEDIA-002 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
-| FR-MEDIA-004 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
-| FR-MEDIA-005 | SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
-| FR-MEDIA-008 | SC-MEDIA-001 | AT-MEDIA-001.* | ◐ |
-| NFR-SEC-006 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
-| NFR-PERF-004 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
-| BR-025 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ◐ |
-| BR-045 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ◐ |
-| BR-035 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ◐ |
-| FR-MEDIA-003 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| FR-MEDIA-006 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| FR-MEDIA-007 | SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| BR-005 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| BR-024 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| BR-026 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
-| BR-039 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ◐ |
+| FR-MEDIA-001 | SC-MEDIA-001 | AT-MEDIA-001.* | ✓ |
+| FR-MEDIA-002 | SC-MEDIA-001 | AT-MEDIA-001.* | ✓ |
+| FR-MEDIA-004 | SC-MEDIA-001 | AT-MEDIA-001.* | ✓ |
+| FR-MEDIA-005 | SC-MEDIA-003 | AT-MEDIA-001.* | ✓ |
+| FR-MEDIA-008 | SC-MEDIA-001 | AT-MEDIA-001.* | ✓ |
+| NFR-SEC-006 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ✓ |
+| NFR-PERF-004 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ✓ |
+| BR-025 | SC-MEDIA-001, SC-MEDIA-003 | AT-MEDIA-001.* | ✓ |
+| BR-045 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ✓ |
+| BR-035 | SC-AUDIT-003, SC-MEDIA-001, SC-MEDIA-002 | AT-MEDIA-001.*, AT-MEDIA-002.* | ✓ |
+| FR-MEDIA-003 | SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| FR-MEDIA-006 | SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| FR-MEDIA-007 | SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| BR-005 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| BR-024 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| BR-026 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
+| BR-039 | SC-AUDIT-003, SC-MEDIA-002 | AT-MEDIA-002.* | ✓ |
 
 ### Acceptance tests
 
@@ -212,13 +212,13 @@
 | AT-MEDIA-001.4 | Клиентское значение rightsStatus при загрузке игнорируется | security | SPEC-MEDIA-001 | ✓ |
 | AT-MEDIA-001.5 | GPS-метаданные удаляются из изображения | security | SPEC-MEDIA-001 | ✓ |
 | AT-MEDIA-001.6 | Поиск по artist/workTitle/тегу находит медиа | positive | SPEC-MEDIA-001 | ✓ |
-| AT-MEDIA-001.7 | Файл недоступен без аутентификации; прямой URL storage недоступен | security | SPEC-MEDIA-001 | ⏳ |
+| AT-MEDIA-001.7 | Файл недоступен без аутентификации; прямой URL storage недоступен | security | SPEC-MEDIA-001 | ✓ |
 | AT-MEDIA-002.1 | Teacher устанавливает CLEARED при заполненных обязательных полях; аудит | positive | SPEC-MEDIA-002 | ✓ |
 | AT-MEDIA-002.2 | Student не может установить CLEARED (прямой запрос) | permission | SPEC-MEDIA-002 | ✓ |
 | AT-MEDIA-002.3 | Изменение лицензии студентом у CLEARED медиа возвращает PENDING | positive | SPEC-MEDIA-002 | ✓ |
-| AT-MEDIA-002.4 | Удаление медиа, используемого не-DRAFT версией, отклоняется | negative | SPEC-MEDIA-002 | ⏳ |
-| AT-MEDIA-002.5 | Архивированное медиа нельзя выбрать в новом вопросе | negative | SPEC-MEDIA-002 | ⏳ |
-| AT-MEDIA-002.6 | «Где используется» показывает ссылки через ItemOption и ItemMedia | positive | SPEC-MEDIA-002 | ⏳ |
+| AT-MEDIA-002.4 | Удаление медиа, используемого не-DRAFT версией, отклоняется | negative | SPEC-MEDIA-002 | ✓ |
+| AT-MEDIA-002.5 | Архивированное медиа нельзя выбрать в новом вопросе | negative | SPEC-MEDIA-002 | ✓ |
+| AT-MEDIA-002.6 | «Где используется» показывает ссылки через ItemOption и ItemMedia | positive | SPEC-MEDIA-002 | ✓ |
 | AT-MEDIA-002.7 | RESTRICTED показывает затронутые опубликованные тесты | positive | SPEC-MEDIA-002 | ✓ |
 
 ## BL-06
@@ -256,7 +256,7 @@
 | AT-QTYPE-001.6 | QuestionTypeVersion неизменна (прямой UPDATE отклоняется) | negative | SPEC-QTYPE-001 | ✓ |
 | AT-QTYPE-002.1 | Contract test suite проходит для каждого MVP-плагина (`choice`, `match`, `order`, `text_entry`, `extended_text`) | contract | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.2 | Регистрация плагина-фикстуры добавляет тип без миграции БД | extensibility | SPEC-QTYPE-002 | ✓ |
-| AT-QTYPE-002.3 | Отсутствующий плагин для существующего типа → ошибка старта | negative | SPEC-QTYPE-002 | ⏳ |
+| AT-QTYPE-002.3 | Отсутствующий плагин для существующего типа → ошибка старта | negative | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.4 | Evaluators MVP вычисляют ожидаемые баллы на эталонном наборе ответов | positive | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.5 | Компоненты плагинов проходят axe-core без нарушений уровня AA | a11y | SPEC-QTYPE-002 | ⏳ |
 
@@ -413,53 +413,53 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-REVIEW-001 | SC-REVIEW-001 | AT-REVIEW-001.* | ⏳ |
-| FR-REVIEW-002 | SC-REVIEW-004 | AT-REVIEW-001.* | ⏳ |
-| FR-REVIEW-003 | SC-REVIEW-001 | AT-REVIEW-001.* | ⏳ |
-| BR-001 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-002 | AT-REVIEW-001.*, AT-REVIEW-003.* | ⏳ |
-| BR-027 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-004 | AT-REVIEW-001.* | ⏳ |
-| BR-030 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-002 | AT-REVIEW-001.*, AT-REVIEW-002.*, AT-REVIEW-003.* | ⏳ |
-| BR-035 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-004 | AT-REVIEW-001.* | ⏳ |
-| FR-REVIEW-004 | SC-REVIEW-003 | AT-REVIEW-002.* | ⏳ |
-| FR-REVIEW-005 | SC-REVIEW-002 | AT-REVIEW-002.* | ⏳ |
-| FR-REVIEW-006 | SC-REVIEW-002, SC-REVIEW-005 | AT-REVIEW-002.* | ⏳ |
-| FR-REVIEW-009 | SC-REVIEW-005 | AT-REVIEW-002.* | ⏳ |
-| FR-REVIEW-010 | SC-REVIEW-006 | AT-REVIEW-002.* | ⏳ |
-| BR-028 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-002.*, AT-REVIEW-003.* | ⏳ |
-| BR-040 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-002.*, AT-REVIEW-003.* | ⏳ |
-| FR-REVIEW-007 | SC-REVIEW-002 | AT-REVIEW-003.* | ⏳ |
-| FR-REVIEW-008 | SC-REVIEW-003 | AT-REVIEW-003.* | ⏳ |
-| BR-011 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ⏳ |
-| BR-012 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ⏳ |
-| BR-024 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ⏳ |
-| BR-029 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ⏳ |
+| FR-REVIEW-001 | SC-REVIEW-001 | AT-REVIEW-001.* | ✓ |
+| FR-REVIEW-002 | SC-REVIEW-004 | AT-REVIEW-001.* | ✓ |
+| FR-REVIEW-003 | SC-REVIEW-001 | AT-REVIEW-001.* | ✓ |
+| BR-001 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-002 | AT-REVIEW-001.*, AT-REVIEW-003.* | ✓ |
+| BR-027 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-004 | AT-REVIEW-001.* | ✓ |
+| BR-030 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-002 | AT-REVIEW-001.*, AT-REVIEW-002.*, AT-REVIEW-003.* | ✓ |
+| BR-035 | SC-E2E-001, SC-REVIEW-001, SC-REVIEW-004 | AT-REVIEW-001.* | ✓ |
+| FR-REVIEW-004 | SC-REVIEW-003 | AT-REVIEW-002.* | ✓ |
+| FR-REVIEW-005 | SC-REVIEW-002 | AT-REVIEW-002.* | ✓ |
+| FR-REVIEW-006 | SC-REVIEW-002, SC-REVIEW-005 | AT-REVIEW-002.* | ✓ |
+| FR-REVIEW-009 | SC-REVIEW-005 | AT-REVIEW-002.* | ✓ |
+| FR-REVIEW-010 | SC-REVIEW-006 | AT-REVIEW-002.* | ✓ |
+| BR-028 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-002.*, AT-REVIEW-003.* | ✓ |
+| BR-040 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-002.*, AT-REVIEW-003.* | ✓ |
+| FR-REVIEW-007 | SC-REVIEW-002 | AT-REVIEW-003.* | ✓ |
+| FR-REVIEW-008 | SC-REVIEW-003 | AT-REVIEW-003.* | ✓ |
+| BR-011 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ✓ |
+| BR-012 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ✓ |
+| BR-024 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ✓ |
+| BR-029 | SC-E2E-001, SC-REVIEW-002, SC-REVIEW-003 | AT-REVIEW-003.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-REVIEW-001.1 | После submit по заданию создается ReviewAssignment(PRIMARY) на default reviewer | positive | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-001.2 | Назначение автора reviewer'ом отклоняется | negative | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-001.3 | Одновременно может быть только один активный PRIMARY | negative | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-001.4 | Reviewer видит Review в очереди; другой эксперт — нет | permission | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-001.5 | Студент не может назначать экспертов | permission | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-001.6 | Переназначение журналируется с причиной | audit | SPEC-REVIEW-001 | ⏳ |
-| AT-REVIEW-002.1 | Start переводит версию в IN_REVIEW; recall после этого невозможен | positive | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.2 | Комментарий привязывается к вопросу/полю и отображается в этом месте | positive | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.3 | ADVISORY не может отмечать checklist | permission | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.4 | Автор не может закрыть замечание, может пометить ADDRESSED | permission | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.5 | Незакрытые замечания переносятся в review следующей версии | positive | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.6 | Комментарии закрытого Review не изменяются | negative | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-002.7 | Студент-автор не видит review чужих тестов | permission | SPEC-REVIEW-002 | ⏳ |
-| AT-REVIEW-003.1 | Request changes переводит тест и вопросы пакета в CHANGES_REQUESTED; Review закрыт | positive | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.2 | Request changes без issue и summary отклоняется | negative | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.3 | Approve с незаполненным обязательным checklist отклоняется | negative | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.4 | Approve при открытом BLOCKING issue отклоняется | negative | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.5 | Автор (включая Admin-автора, назначившего себя) не может approve/request changes | negative | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.6 | Approve переводит тест и каскадные вопросы в APPROVED и замораживает пулы | positive | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.7 | Approve с медиа не CLEARED отклоняется | negative | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.8 | ADVISORY не может принять решение | permission | SPEC-REVIEW-003 | ⏳ |
-| AT-REVIEW-003.9 | Студент не может approve (прямой запрос) | permission | SPEC-REVIEW-003 | ⏳ |
+| AT-REVIEW-001.1 | После submit по заданию создается ReviewAssignment(PRIMARY) на default reviewer | positive | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-001.2 | Назначение автора reviewer'ом отклоняется | negative | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-001.3 | Одновременно может быть только один активный PRIMARY | negative | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-001.4 | Reviewer видит Review в очереди; другой эксперт — нет | permission | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-001.5 | Студент не может назначать экспертов | permission | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-001.6 | Переназначение журналируется с причиной | audit | SPEC-REVIEW-001 | ✓ |
+| AT-REVIEW-002.1 | Start переводит версию в IN_REVIEW; recall после этого невозможен | positive | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.2 | Комментарий привязывается к вопросу/полю и отображается в этом месте | positive | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.3 | ADVISORY не может отмечать checklist | permission | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.4 | Автор не может закрыть замечание, может пометить ADDRESSED | permission | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.5 | Незакрытые замечания переносятся в review следующей версии | positive | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.6 | Комментарии закрытого Review не изменяются | negative | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-002.7 | Студент-автор не видит review чужих тестов | permission | SPEC-REVIEW-002 | ✓ |
+| AT-REVIEW-003.1 | Request changes переводит тест и вопросы пакета в CHANGES_REQUESTED; Review закрыт | positive | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.2 | Request changes без issue и summary отклоняется | negative | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.3 | Approve с незаполненным обязательным checklist отклоняется | negative | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.4 | Approve при открытом BLOCKING issue отклоняется | negative | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.5 | Автор (включая Admin-автора, назначившего себя) не может approve/request changes | negative | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.6 | Approve переводит тест и каскадные вопросы в APPROVED и замораживает пулы | positive | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.7 | Approve с медиа не CLEARED отклоняется | negative | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.8 | ADVISORY не может принять решение | permission | SPEC-REVIEW-003 | ✓ |
+| AT-REVIEW-003.9 | Студент не может approve (прямой запрос) | permission | SPEC-REVIEW-003 | ✓ |
 
 ## BL-10
 
@@ -467,40 +467,40 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-PUB-001 | — | AT-PUB-001.* | ⏳ |
-| NFR-DATA-001 | — | AT-PUB-001.* | ⏳ |
-| NFR-DATA-004 | — | AT-PUB-001.* | ⏳ |
-| BR-002 | — | AT-PUB-001.* | ⏳ |
-| BR-006 | — | AT-PUB-001.* | ⏳ |
-| BR-007 | — | AT-PUB-001.* | ⏳ |
-| BR-008 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-001.*, AT-PUB-002.* | ⏳ |
-| BR-013 | — | AT-PUB-001.* | ⏳ |
-| BR-041 | — | AT-PUB-001.* | ⏳ |
-| FR-PUB-002 | SC-PUBLISH-001 | AT-PUB-002.* | ⏳ |
-| FR-PUB-003 | SC-PUBLISH-002 | AT-PUB-002.* | ⏳ |
-| FR-PUB-004 | SC-PUBLISH-003 | AT-PUB-002.* | ⏳ |
-| FR-PUB-005 | SC-PUBLISH-001 | AT-PUB-002.* | ⏳ |
-| BR-005 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ⏳ |
-| BR-009 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ⏳ |
-| BR-036 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ⏳ |
-| BR-039 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ⏳ |
+| FR-PUB-001 | — | AT-PUB-001.* | ✓ |
+| NFR-DATA-001 | — | AT-PUB-001.* | ✓ |
+| NFR-DATA-004 | — | AT-PUB-001.* | ✓ |
+| BR-002 | — | AT-PUB-001.* | ✓ |
+| BR-006 | — | AT-PUB-001.* | ✓ |
+| BR-007 | — | AT-PUB-001.* | ✓ |
+| BR-008 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-001.*, AT-PUB-002.* | ✓ |
+| BR-013 | — | AT-PUB-001.* | ✓ |
+| BR-041 | — | AT-PUB-001.* | ✓ |
+| FR-PUB-002 | SC-PUBLISH-001 | AT-PUB-002.* | ✓ |
+| FR-PUB-003 | SC-PUBLISH-002 | AT-PUB-002.* | ✓ |
+| FR-PUB-004 | SC-PUBLISH-003 | AT-PUB-002.* | ✓ |
+| FR-PUB-005 | SC-PUBLISH-001 | AT-PUB-002.* | ✓ |
+| BR-005 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ✓ |
+| BR-009 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ✓ |
+| BR-036 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ✓ |
+| BR-039 | SC-E2E-001, SC-PUBLISH-001, SC-PUBLISH-002 | AT-PUB-002.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-PUB-001.1 | Для каждой пары (state, action) вне таблицы переходов — отказ (параметризованный тест полного декартова произведения) | negative | SPEC-PUB-001 | ⏳ |
-| AT-PUB-001.2 | Для каждого допустимого перехода — успех при выполненных guards | positive | SPEC-PUB-001 | ⏳ |
-| AT-PUB-001.3 | Прямой UPDATE содержимого APPROVED версии в БД отклоняется триггером | data | SPEC-PUB-001 | ⏳ |
-| AT-PUB-001.4 | Admin не может выполнить запрещенный переход (например, DRAFT → APPROVED) | negative | SPEC-PUB-001 | ⏳ |
-| AT-PUB-001.5 | `availableActions` совпадает с множеством переходов, разрешенных сервером | consistency | SPEC-PUB-001 | ⏳ |
-| AT-PUB-002.1 | Admin публикует APPROVED версию | positive | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.2 | Публикация не-APPROVED версии отклоняется | negative | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.3 | Публикация новой версии архивирует предыдущую (SUPERSEDED); в любой момент ≤ 1 PUBLISHED | positive | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.4 | Withdraw без причины отклоняется; с причиной — версия ARCHIVED (WITHDRAWN) | negative/positive | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.5 | Teacher/Student не могут публиковать (прямой запрос) | permission | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.6 | Физическое удаление опубликованной/архивированной версии невозможно | negative | SPEC-PUB-002 | ⏳ |
-| AT-PUB-002.7 | Архив теста с PUBLISHED версией отклоняется | negative | SPEC-PUB-002 | ⏳ |
+| AT-PUB-001.1 | Для каждой пары (state, action) вне таблицы переходов — отказ (параметризованный тест полного декартова произведения) | negative | SPEC-PUB-001 | ✓ |
+| AT-PUB-001.2 | Для каждого допустимого перехода — успех при выполненных guards | positive | SPEC-PUB-001 | ✓ |
+| AT-PUB-001.3 | Прямой UPDATE содержимого APPROVED версии в БД отклоняется триггером | data | SPEC-PUB-001 | ✓ |
+| AT-PUB-001.4 | Admin не может выполнить запрещенный переход (например, DRAFT → APPROVED) | negative | SPEC-PUB-001 | ✓ |
+| AT-PUB-001.5 | `availableActions` совпадает с множеством переходов, разрешенных сервером | consistency | SPEC-PUB-001 | ✓ |
+| AT-PUB-002.1 | Admin публикует APPROVED версию | positive | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.2 | Публикация не-APPROVED версии отклоняется | negative | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.3 | Публикация новой версии архивирует предыдущую (SUPERSEDED); в любой момент ≤ 1 PUBLISHED | positive | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.4 | Withdraw без причины отклоняется; с причиной — версия ARCHIVED (WITHDRAWN) | negative/positive | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.5 | Teacher/Student не могут публиковать (прямой запрос) | permission | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.6 | Физическое удаление опубликованной/архивированной версии невозможно | negative | SPEC-PUB-002 | ✓ |
+| AT-PUB-002.7 | Архив теста с PUBLISHED версией отклоняется | negative | SPEC-PUB-002 | ✓ |
 
 ## BL-11
 
@@ -545,35 +545,35 @@
 
 | Requirement | Scenario | Test | Status |
 |---|---|---|---|
-| FR-DELIV-001 | — | AT-DELIV-001.* | ⏳ |
-| FR-DELIV-002 | SC-ITEM-004 | AT-DELIV-001.* | ⏳ |
-| NFR-EXT-005 | — | AT-DELIV-001.* | ⏳ |
-| NFR-SEC-008 | — | AT-DELIV-001.* | ⏳ |
-| BR-036 | — | AT-DELIV-001.* | ⏳ |
-| BR-037 | — | AT-DELIV-001.* | ⏳ |
+| FR-DELIV-001 | — | AT-DELIV-001.* | ✓ |
+| FR-DELIV-002 | SC-ITEM-004 | AT-DELIV-001.* | ✓ |
+| NFR-EXT-005 | — | AT-DELIV-001.* | ✓ |
+| NFR-SEC-008 | — | AT-DELIV-001.* | ✓ |
+| BR-036 | — | AT-DELIV-001.* | ✓ |
+| BR-037 | — | AT-DELIV-001.* | ✓ |
 
 ### Acceptance tests
 
 | AT | Критерий | Тип | SPEC | Status |
 |---|---|---|---|---|
-| AT-DELIV-001.1 | Тест-прототип (без UI) создает Attempt по PUBLISHED версии, отвечает на все MVP-типы и получает Result без изменения схемы контента | architecture | SPEC-DELIV-001 | ⏳ |
-| AT-DELIV-001.2 | Attempt по не-PUBLISHED версии невозможен (domain) | negative | SPEC-DELIV-001 | ⏳ |
-| AT-DELIV-001.3 | Одинаковый seed дает одинаковую выборку | positive | SPEC-DELIV-001 | ⏳ |
-| AT-DELIV-001.4 | Delivery-сериализатор не содержит answerKey | security | SPEC-DELIV-001 | ⏳ |
-| AT-DELIV-001.5 | Withdraw версии не изменяет существующие Attempt/Result | data | SPEC-DELIV-001 | ⏳ |
+| AT-DELIV-001.1 | Тест-прототип (без UI) создает Attempt по PUBLISHED версии, отвечает на все MVP-типы и получает Result без изменения схемы контента | architecture | SPEC-DELIV-001 | ✓ |
+| AT-DELIV-001.2 | Attempt по не-PUBLISHED версии невозможен (domain) | negative | SPEC-DELIV-001 | ✓ |
+| AT-DELIV-001.3 | Одинаковый seed дает одинаковую выборку | positive | SPEC-DELIV-001 | ✓ |
+| AT-DELIV-001.4 | Delivery-сериализатор не содержит answerKey | security | SPEC-DELIV-001 | ✓ |
+| AT-DELIV-001.5 | Withdraw версии не изменяет существующие Attempt/Result | data | SPEC-DELIV-001 | ✓ |
 
 ## Сквозные acceptance-наборы
 
 | AT | Состав | Источник | Status |
 |---|---|---|---|
-| AT-PERM-001 | Студент не может читать чужой private draft | AT-ITEM-004.1, AT-ITEM-002.2 | ⏳ |
-| AT-PERM-002 | Студент не может approve | AT-ITEM-004.5, AT-REVIEW-003.9 | ⏳ |
+| AT-PERM-001 | Студент не может читать чужой private draft | AT-ITEM-004.1, AT-ITEM-002.2 | ✓ |
+| AT-PERM-002 | Студент не может approve | AT-ITEM-004.5, AT-REVIEW-003.9 | ✓ |
 | AT-PERM-003 | Эксперт не может менять пользователей | AT-USER-001.7, AT-USER-002.7 | ✓ |
 | AT-PERM-004 | Администратор имеет полный доступ в пределах BR | AT-AUTH-003.1, AT-AUTH-003.5 | ✓ |
 | AT-PERM-005 | UI restrictions не заменяют server-side authorization | AT-AUTH-003.2, AT-AUTH-003.7 | ✓ |
 | AT-PERM-MATRIX | Параметризованная проверка всех ячеек permission-model §4 без UI | SPEC-AUTH-003 | ✓ |
-| AT-E2E-001 | SC-E2E-001 через UI (Playwright) | scenarios/scenario-registry.md | ⏳ |
-| AT-E2E-001-API | SC-E2E-001 через application services без UI | scenarios/scenario-registry.md | ⏳ |
+| AT-E2E-001 | SC-E2E-001 через UI (Playwright) | scenarios/scenario-registry.md | ✓ |
+| AT-E2E-001-API | SC-E2E-001 через application services без UI | scenarios/scenario-registry.md | ✓ |
 
 ## Сводка покрытия (спецификационное)
 
@@ -582,7 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 145 / 192 |
+| Проходящих AT | 189 / 192 |
 | Падающих AT | 0 |
-| Требований (FR/NFR/BR) с ≥1 проходящим AT | 132 / 157 (84%) |
+| Требований (FR/NFR/BR) с ≥1 проходящим AT | 157 / 157 (100%) |
 | Ошибок целостности ссылок | 0 |

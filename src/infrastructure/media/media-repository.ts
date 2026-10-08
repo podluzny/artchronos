@@ -271,6 +271,21 @@ export class KyselyMediaRepository implements MediaRepository {
     }))
   }
 
+  async affectedTests(id: string) {
+    const r = await sql<{ test_id: string; title: string; version_no: number; state: string }>`
+      with versions as (
+        select o.item_version_id from item_options o where o.media_asset_id = ${id}
+        union select im.item_version_id from item_media im where im.media_asset_id = ${id})
+      select distinct t.id as test_id, tv.title, tv.version_no, tv.state from test_versions tv
+      join tests t on t.id = tv.test_id
+      where tv.state in ('APPROVED','PUBLISHED')
+        and (exists (select 1 from test_section_items tsi where tsi.test_version_id = tv.id and tsi.item_version_id in (select item_version_id from versions))
+          or exists (select 1 from selection_rules sr join selection_pool_entries pe on pe.selection_rule_id = sr.id
+                     where sr.test_version_id = tv.id and pe.item_version_id in (select item_version_id from versions)))
+      order by tv.state desc, tv.title`.execute(this.db)
+    return r.rows.map((x) => ({ testId: x.test_id, title: x.title, versionNo: x.version_no, state: x.state }))
+  }
+
   async delete(id: string) {
     await this.db.deleteFrom('media_tags').where('media_id', '=', id).execute()
     await this.db.deleteFrom('media_topics').where('media_id', '=', id).execute()

@@ -10,7 +10,7 @@ import type { Clock, RequestContext } from '../shared/context.js'
 import type { ListQuery } from '../shared/query.js'
 import type { UnitOfWork } from '../shared/uow.js'
 import { useCase } from '../shared/use-case.js'
-import type { MediaMetadata, MediaProcessor, MediaRecord, MediaStorage, MediaTx } from './ports.js'
+import type { AffectedTest, MediaMetadata, MediaProcessor, MediaRecord, MediaStorage, MediaTx } from './ports.js'
 
 export interface MediaDeps {
   uow: UnitOfWork<MediaTx>
@@ -238,7 +238,10 @@ export function createMediaUseCases(deps: MediaDeps) {
     }),
 
     /** SPEC-MEDIA-002: только media.rights.manage устанавливает CLEARED / RESTRICTED (BR-045). */
-    setRightsStatus: useCase<{ id: string; status: RightsStatus; note?: string | null; revision: number }, void>({
+    setRightsStatus: useCase<
+      { id: string; status: RightsStatus; note?: string | null; revision: number },
+      { affectedTests: AffectedTest[] }
+    >({
       name: 'media.setRightsStatus',
       permission: 'media.rights.manage',
       async run(actor, input, ctx) {
@@ -279,6 +282,18 @@ export function createMediaUseCases(deps: MediaDeps) {
             ctx,
           )
         })
+        // AC-MEDIA-002.7: при ограничении прав показываются затронутые утвержденные и опубликованные тесты
+        return { affectedTests: status === 'CLEARED' ? [] : await repo().affectedTests(m.id) }
+      },
+    }),
+
+    /** Затронутые тесты (утвержденные / опубликованные версии), использующие медиа. */
+    affectedTests: useCase<{ id: string }, AffectedTest[]>({
+      name: 'media.affectedTests',
+      permission: 'media.read',
+      async run(_actor, { id }) {
+        await load(id)
+        return repo().affectedTests(id)
       },
     }),
 

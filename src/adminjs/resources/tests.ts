@@ -85,9 +85,15 @@ function detailRecord(d: TestDetails) {
     canRecall: d.canRecall,
     canBranch: d.canBranch,
     hasErrors: d.issues.length > 0,
+    actions: d.availableActions.join(','),
     updatedAt: d.test.updatedAt,
   }
 }
+
+const can = (r: Record<string, any> | null, action: string) =>
+  String(r?.actions ?? '')
+    .split(',')
+    .includes(action)
 
 function failure(e: unknown) {
   if (!isDomainError(e)) throw e
@@ -258,6 +264,7 @@ export function testResources(
           { path: 'canRecall', type: 'boolean' },
           { path: 'canBranch', type: 'boolean' },
           { path: 'hasErrors', type: 'boolean' },
+          { path: 'actions' },
         ],
       }),
       options: {
@@ -298,6 +305,7 @@ export function testResources(
           canRecall: hidden,
           canBranch: hidden,
           hasErrors: hidden,
+          actions: hidden,
           issues: { components: { show: Components.JsonView } },
           structure: { components: { show: Components.JsonView } },
           versions: { components: { show: Components.JsonView } },
@@ -390,6 +398,97 @@ export function testResources(
               return { redirectUrl: back(h, id!), notice: 'Отправка отозвана' }
             },
           }),
+          publish: formAction({
+            actionType: 'record',
+            icon: 'Globe',
+            isAccessible: visibleIf((_a, r) => can(r, 'publish')),
+            description:
+              'Утвержденная версия станет опубликованной. Ранее опубликованная версия (если есть) будет переведена в архив (SUPERSEDED, BR-009).',
+            submitLabel: 'Опубликовать',
+            fields: [],
+            submit: async (actor, _p, id, c, h) => {
+              const r = await uc.publishTest.run(actor, { testId: id! }, c)
+              return {
+                redirectUrl: back(h, id!),
+                notice: r.superseded ? 'Опубликовано; предыдущая версия заменена' : 'Тест опубликован',
+              }
+            },
+          }),
+          withdraw: formAction({
+            actionType: 'record',
+            icon: 'XOctagon',
+            variant: 'danger',
+            isAccessible: visibleIf((_a, r) => can(r, 'withdraw')),
+            description:
+              'Новые попытки по версии станут невозможны; существующие попытки и результаты сохраняются (BR-036).',
+            submitLabel: 'Отозвать публикацию',
+            fields: [{ name: 'reason', label: 'Причина', type: 'textarea', required: true }],
+            submit: async (actor, p, id, c, h) => {
+              await uc.withdrawTest.run(actor, { testId: id!, reason: p.reason }, c)
+              return { redirectUrl: back(h, id!), notice: 'Публикация отозвана' }
+            },
+          }),
+          archive: formAction({
+            actionType: 'record',
+            icon: 'Archive',
+            variant: 'danger',
+            isAccessible: visibleIf((_a, r) => can(r, 'archive')),
+            description:
+              'Тест скрывается из рабочих списков; черновик переводится в архив. Опубликованный тест сначала отзовите.',
+            submitLabel: 'В архив',
+            fields: [{ name: 'reason', label: 'Причина', type: 'textarea', required: true }],
+            submit: async (actor, p, id, c, h) => {
+              await uc.archiveTest.run(actor, { testId: id!, reason: p.reason }, c)
+              return { redirectUrl: back(h, id!), notice: 'Тест в архиве' }
+            },
+          }),
+          restore: formAction({
+            actionType: 'record',
+            icon: 'RotateCcw',
+            isAccessible: visibleIf((_a, r) => can(r, 'restore')),
+            submitLabel: 'Восстановить',
+            fields: [],
+            submit: async (actor, _p, id, c, h) => {
+              await uc.restoreTest.run(actor, { testId: id! }, c)
+              return { redirectUrl: back(h, id!), notice: 'Тест восстановлен' }
+            },
+          }),
+          publications: formAction({
+            actionType: 'record',
+            icon: 'Clock',
+            isAccessible: visibleIf((a) => a.has('test.read')),
+            submitLabel: 'Показать',
+            description: 'История публикаций версий теста (публикация, замена, отзыв).',
+            fields: [],
+            submit: async (actor, _p, id, c, h) => {
+              const rows = await uc.publicationHistory.run(actor, { testId: id! }, c)
+              const fmt = (d: Date | null) => (d ? new Date(d).toLocaleString('ru-RU') : '')
+              const reason: Record<string, string> = { SUPERSEDED: 'заменена новой версией', WITHDRAWN: 'отозвана' }
+              return {
+                title: rows.length ? `Публикаций: ${rows.length}` : 'Тест не публиковался',
+                text: rows
+                  .map(
+                    (r) =>
+                      `v${r.versionNo}: опубликована ${fmt(r.publishedAt)}` +
+                      (r.archivedAt
+                        ? `; ${reason[r.archiveReason ?? ''] ?? 'в архиве'} ${fmt(r.archivedAt)}`
+                        : ' — действует'),
+                  )
+                  .join('\n'),
+                backUrl: back(h, id!),
+              }
+            },
+          }),
+          history: {
+            actionType: 'record',
+            icon: 'List',
+            component: false,
+            isAccessible: visibleIf((a) => a.has('audit.read')),
+            handler: async (_req: unknown, _res: unknown, context: any) => ({
+              record: context.record.toJSON(context.currentAdmin),
+              redirectUrl: `${context.h.resourceActionUrl({ resourceId: 'AuditLog', actionName: 'list' })}?filters.resourceType=test&filters.resourceId=${context.record.id()}`,
+            }),
+          },
           newVersion: formAction({
             actionType: 'record',
             icon: 'Copy',

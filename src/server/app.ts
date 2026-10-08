@@ -27,6 +27,8 @@ const COOKIE_NAME = 'artchronos.sid'
 
 export async function createApp(db: Db, config: AppConfig) {
   const services = createServices(db)
+  // AC-QTYPE-002.3: отсутствующий плагин для существующего типа — ошибка старта
+  await services.qtypes.verifyRegistry()
   const autoAssets = config.adminAssetsCdn === 'auto'
   const admin = buildAdmin(services, config.adminAssetsCdn && !autoAssets ? { assetsCDN: config.adminAssetsCdn } : {})
   // Сборка фронтенда AdminJS: локально — при старте; на Vercel и в тестах — заранее/не нужна (ADR-009).

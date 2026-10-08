@@ -1,5 +1,6 @@
 import AdminJS, { type AdminJSOptions } from 'adminjs'
 import type { TestUseCases } from '../application/assessment/test-use-cases.js'
+import type { ReviewUseCases } from '../application/review/review-use-cases.js'
 import type { AuditUseCases } from '../application/audit/use-cases.js'
 import type { EducationUseCases } from '../application/education/use-cases.js'
 import type { IdentityUseCases } from '../application/identity/use-cases.js'
@@ -13,6 +14,7 @@ import { identityResources } from './resources/identity.js'
 import { itemResources } from './resources/items.js'
 import { mediaResources } from './resources/media.js'
 import { qtypeResources } from './resources/qtypes.js'
+import { reviewResources } from './resources/reviews.js'
 import { assignmentSummaryAction, testResources } from './resources/tests.js'
 
 export interface AdminServices {
@@ -23,6 +25,7 @@ export interface AdminServices {
   qtypes: QtypeUseCases
   items: ItemUseCases
   tests: TestUseCases
+  reviews: ReviewUseCases
 }
 
 export const ADMIN_ROOT = '/admin'
@@ -35,6 +38,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
     componentLoader,
     ...(opts.assetsCDN ? { assetsCDN: opts.assetsCDN } : {}),
     resources: [
+      ...reviewResources(services.reviews, services.tests, services.items),
       ...testResources(services.tests, services.items, services.education),
       ...itemResources(services.items, services.media),
       ...qtypeResources(services.qtypes),
@@ -136,7 +140,42 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
                 submit: 'Отправить на экспертизу',
                 recall: 'Отозвать отправку',
                 newVersion: 'Новая версия',
+                publish: 'Опубликовать',
+                withdraw: 'Отозвать публикацию',
+                archive: 'В архив',
+                restore: 'Восстановить',
+                publications: 'Публикации',
+                history: 'Журнал',
               },
+            },
+            Review: {
+              properties: {
+                subject: 'Объект',
+                subjectType: 'Тип объекта',
+                versionState: 'Состояние версии',
+                status: 'Статус экспертизы',
+                queue: 'Очередь',
+                owner: 'Автор',
+                assignment: 'Задание',
+                course: 'Курс',
+                reviewer: 'Эксперт',
+                assignments: 'Назначения',
+                summary: 'Итоговый комментарий',
+                submittedAt: 'Отправлено',
+                decidedAt: 'Решение',
+              },
+              actions: { workspace: 'Открыть экспертизу', assign: 'Назначить эксперта' },
+            },
+            ChecklistTemplate: {
+              properties: {
+                name: 'Название',
+                appliesTo: 'Применяется к',
+                versionNo: 'Версия',
+                status: 'Статус',
+                items: 'Пункты',
+                createdAt: 'Создан',
+              },
+              actions: { newTemplateVersion: 'Изменить пункты' },
             },
             Item: {
               properties: {
@@ -311,6 +350,8 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
             QuestionType: 'Типы вопросов',
             Item: 'Вопросы',
             Test: 'Тесты',
+            Review: 'Экспертизы',
+            ChecklistTemplate: 'Шаблоны checklist',
             MediaAsset: 'Медиатека',
             Assignment: 'Задания',
             Администрирование: 'Администрирование',

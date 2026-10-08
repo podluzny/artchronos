@@ -7,3 +7,4 @@ package-lock.json
 .vercel
 validation/test-results.json
 test-results
+validation/e2e-results.json

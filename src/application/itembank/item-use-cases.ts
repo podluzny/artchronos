@@ -34,6 +34,17 @@ export interface ItemDeps {
     versionId: string,
     ctx: RequestContext,
   ) => Promise<void>
+  /** Отмена review при отзыве (M5). */
+  onRecalled?: (tx: ItemBankTx, actor: Actor, versionId: string, ctx: RequestContext) => Promise<void>
+  /** Новая версия: перенос незакрытых замечаний (FR-REVIEW-009). */
+  onNewVersion?: (
+    tx: ItemBankTx,
+    actor: Actor,
+    kind: 'item',
+    itemId: string,
+    versionId: string,
+    ctx: RequestContext,
+  ) => Promise<void>
 }
 
 // ---------------- схема входного документа ----------------
@@ -684,6 +695,7 @@ export function createItemUseCases(deps: ItemDeps) {
             },
             ctx,
           )
+          if (deps.onNewVersion) await deps.onNewVersion(tx, actor, 'item', item.id, id, ctx)
           for (const testId of rebound) {
             await tx.audit.record(
               actor,
@@ -777,6 +789,7 @@ export function createItemUseCases(deps: ItemDeps) {
             { action: 'item.recalled', resourceType: 'item', resourceId: item.id, changes: { versionId: v.id } },
             ctx,
           )
+          if (deps.onRecalled) await deps.onRecalled(tx, actor, v.id, ctx)
         })
       },
     }),

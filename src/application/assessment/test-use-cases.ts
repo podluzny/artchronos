@@ -52,6 +52,15 @@ export interface TestDeps {
     versionId: string,
     ctx: RequestContext,
   ) => Promise<void>
+  /** Новая версия теста или вопроса пакета: перенос незакрытых замечаний (FR-REVIEW-009). */
+  onNewVersion?: (
+    tx: AssessmentTx,
+    actor: Actor,
+    kind: 'test' | 'item',
+    containerId: string,
+    versionId: string,
+    ctx: RequestContext,
+  ) => Promise<void>
 }
 
 // ---------------- входные схемы ----------------
@@ -121,7 +130,11 @@ export interface TestDetails {
   canSubmit: boolean
   canRecall: boolean
   canBranch: boolean
+  /** SPEC-PUB-001 п.4: действия, которые сервер выполнит для этого пользователя (без побочных эффектов). */
+  availableActions: TestAction[]
 }
+
+export type TestAction = 'edit' | 'submit' | 'recall' | 'newVersion' | 'publish' | 'withdraw' | 'archive' | 'restore'
 
 export interface TestPreview {
   title: string
@@ -359,9 +372,10 @@ export function createTestUseCases(deps: TestDeps) {
     for (const sec of s.sections) {
       const rules = []
       for (const rule of s.rules.filter((x) => x.sectionId === sec.id)) {
-        const size = draft
-          ? (await poolFor(test.courseId, s, rule.filter)).length
-          : (await r().tests.frozenPool(rule.id)).length
+        // пул замораживается при утверждении (BR-012); до него — текущий пул
+        const size = version.approvedAt
+          ? (await r().tests.frozenPool(rule.id)).length
+          : (await poolFor(test.courseId, s, rule.filter)).length
         rules.push({ ...rule, poolSize: size })
       }
       sections.push({
@@ -408,7 +422,44 @@ export function createTestUseCases(deps: TestDeps) {
       canSubmit: canSubmitBase && draft,
       canRecall: canSubmitBase && version.state === 'READY_FOR_REVIEW',
       canBranch: canUpdate && active && !test.currentDraftVersionId && canBranch(version.state),
+      availableActions: availableActions(actor, test, version, versions, scopes, {
+        canEdit: canUpdate && draft && active,
+        canSubmit: canSubmitBase && draft,
+        canRecall: canSubmitBase && version.state === 'READY_FOR_REVIEW',
+        canBranch: canUpdate && active && !test.currentDraftVersionId && canBranch(version.state),
+      }),
     }
+  }
+
+  function availableActions(
+    actor: Actor,
+    test: TestRecord,
+    version: TestVersionRecord,
+    versions: { state: VersionState }[],
+    scopes: Set<Scope>,
+    f: { canEdit: boolean; canSubmit: boolean; canRecall: boolean; canBranch: boolean },
+  ): TestAction[] {
+    const out: TestAction[] = []
+    if (f.canEdit) out.push('edit')
+    if (f.canSubmit) out.push('submit')
+    if (f.canRecall) out.push('recall')
+    if (f.canBranch) out.push('newVersion')
+    const active = test.status === 'ACTIVE'
+    if (actor.has('test.publish') && active && version.state === 'APPROVED') out.push('publish')
+    if (actor.has('test.withdraw') && version.state === 'PUBLISHED') out.push('withdraw')
+    const arch = actor.scopes('test.archive')
+    const canArchive = arch.has('ANY') || (arch.has('OWN') && scopes.has('OWN'))
+    if (canArchive && active && archiveBlocker(versions) === null) out.push('archive')
+    if (canArchive && !active) out.push('restore')
+    return out
+  }
+
+  /** SPEC-PUB-002: архив невозможен при опубликованной версии и при идущей экспертизе. */
+  function archiveBlocker(versions: { state: VersionState }[]): string | null {
+    if (versions.some((v) => v.state === 'PUBLISHED')) return 'Сначала отзовите публикацию (SPEC-PUB-002)'
+    if (versions.some((v) => v.state === 'READY_FOR_REVIEW' || v.state === 'IN_REVIEW'))
+      return 'Тест на экспертизе — сначала отзовите отправку или дождитесь решения'
+    return null
   }
 
   async function creationContext(actor: Actor, assignmentId: string | null, courseId: string | null) {
@@ -1207,6 +1258,7 @@ export function createTestUseCases(deps: TestDeps) {
                   authorIds: [...new Set([...iv.authorIds, actor.userId])],
                 })
                 await tx.items.setItemPointers(item.id, { currentDraftVersionId: ivId })
+                if (deps.onNewVersion) await deps.onNewVersion(tx, actor, 'item', item.id, ivId, ctx)
                 await tx.audit.record(
                   actor,
                   {
@@ -1240,6 +1292,7 @@ export function createTestUseCases(deps: TestDeps) {
             })
           }
           await tx.tests.setTestPointers(test.id, { currentDraftVersionId: versionId })
+          if (deps.onNewVersion) await deps.onNewVersion(tx, actor, 'test', test.id, versionId, ctx)
           await tx.audit.record(
             actor,
             {
@@ -1256,7 +1309,7 @@ export function createTestUseCases(deps: TestDeps) {
     }),
 
     // ================= Предпросмотр =================
-    /** SPEC-TEST-003: «виртуальная попытка» по seed; DRAFT — текущий пул, иначе — замороженный. Ничего не сохраняется. */
+    /** SPEC-TEST-003: «виртуальная попытка» по seed; до утверждения — текущий пул, после — замороженный. Ничего не сохраняется. */
     previewTest: useCase<{ testId: string; versionId?: string; seed?: number }, TestPreview>({
       name: 'test.preview',
       permission: 'test.read',
@@ -1277,10 +1330,9 @@ export function createTestUseCases(deps: TestDeps) {
             .map((f) => ({ itemVersionId: f.itemVersionId, points: f.points, source: 'FIXED' as const }))
           for (const rule of s.rules.filter((x) => x.sectionId === sec.id)) {
             ruleNo += 1
-            const candidates =
-              v.state === 'DRAFT'
-                ? (await poolFor(test.courseId, s, rule.filter)).filter((c) => !used.has(c.itemId))
-                : (await r().tests.frozenPool(rule.id)).map((id) => ({ itemId: id, itemVersionId: id }))
+            const candidates = v.approvedAt
+              ? (await r().tests.frozenPool(rule.id)).map((id) => ({ itemId: id, itemVersionId: id }))
+              : (await poolFor(test.courseId, s, rule.filter)).filter((c) => !used.has(c.itemId))
             const picked = seededShuffle(candidates, seed * 31 + ruleNo).slice(0, rule.count)
             if (picked.length < rule.count)
               warnings.push(`Раздел «${sec.title}»: в пуле ${picked.length} из ${rule.count} вопросов (BR-012)`)
@@ -1309,6 +1361,175 @@ export function createTestUseCases(deps: TestDeps) {
           warnings,
           sections: out,
         }
+      },
+    }),
+
+    // ================= Публикация (SPEC-PUB-002) =================
+    /** T10: APPROVED → PUBLISHED; предыдущая опубликованная → ARCHIVED (SUPERSEDED) в той же транзакции (BR-009). */
+    publishTest: useCase<{ testId: string; versionId?: string }, { versionId: string; superseded: string | null }>({
+      name: 'test.publish',
+      permission: 'test.publish',
+      async run(actor, input, ctx) {
+        const test = await loadTest(input.testId)
+        await requireRead(actor, test)
+        if (test.status !== 'ACTIVE') throw new DomainError('INVALID_STATE', 'Тест в архиве — публикация невозможна')
+        const versions = await r().tests.versions(test.id)
+        const target = input.versionId
+          ? versions.find((v) => v.id === input.versionId)
+          : [...versions].reverse().find((v) => v.state === 'APPROVED')
+        if (!target) throw DomainError.rule('BR-008', 'Публикуется только утвержденная версия теста')
+        if (target.state !== 'APPROVED')
+          throw DomainError.rule('BR-008', 'Публикуется только утвержденная версия теста')
+        const prev = versions.find((v) => v.state === 'PUBLISHED') ?? null
+        const now = clock.now()
+        await uow.transaction(async (tx) => {
+          if (prev) {
+            await tx.tests.setVersionState(prev.id, {
+              state: transition(prev.state, 'supersede', 'test'),
+              archiveReason: 'SUPERSEDED',
+              archivedAt: now,
+            })
+            await tx.audit.record(
+              actor,
+              {
+                action: 'test.superseded',
+                resourceType: 'test',
+                resourceId: test.id,
+                changes: { versionId: prev.id, versionNo: prev.versionNo },
+              },
+              ctx,
+            )
+          }
+          await tx.tests.setVersionState(target.id, {
+            state: transition(target.state, 'publish', 'test'),
+            publishedAt: now,
+            publishedBy: actor.userId,
+          })
+          await tx.tests.setTestPointers(test.id, { publishedVersionId: target.id })
+          await tx.audit.record(
+            actor,
+            {
+              action: 'test.published',
+              resourceType: 'test',
+              resourceId: test.id,
+              changes: { versionId: target.id, versionNo: target.versionNo, superseded: prev?.versionNo ?? null },
+            },
+            ctx,
+          )
+        })
+        return { versionId: target.id, superseded: prev?.id ?? null }
+      },
+    }),
+
+    /** T11: отзыв публикации с обязательной причиной; попытки не затрагиваются (BR-036). */
+    withdrawTest: useCase<{ testId: string; reason: string }, void>({
+      name: 'test.withdraw',
+      permission: 'test.withdraw',
+      async run(actor, input, ctx) {
+        const test = await loadTest(input.testId)
+        await requireRead(actor, test)
+        const reason = (input.reason ?? '').trim()
+        if (!reason) throw DomainError.rule('BR-036', 'Укажите причину отзыва публикации', 'reason')
+        const pub = (await r().tests.versions(test.id)).find((v) => v.state === 'PUBLISHED')
+        if (!pub) throw new DomainError('INVALID_STATE', 'У теста нет опубликованной версии')
+        await uow.transaction(async (tx) => {
+          await tx.tests.setVersionState(pub.id, {
+            state: transition(pub.state, 'withdraw', 'test'),
+            archiveReason: 'WITHDRAWN',
+            archivedAt: clock.now(),
+          })
+          await tx.tests.setTestPointers(test.id, { publishedVersionId: null })
+          await tx.audit.record(
+            actor,
+            {
+              action: 'test.withdrawn',
+              resourceType: 'test',
+              resourceId: test.id,
+              changes: { versionId: pub.id, versionNo: pub.versionNo },
+              reason,
+            },
+            ctx,
+          )
+        })
+      },
+    }),
+
+    /** T13: архив теста (owner/Admin); черновик → ARCHIVED (CONTAINER_ARCHIVED). */
+    archiveTest: useCase<{ testId: string; reason: string }, void>({
+      name: 'test.archive',
+      permission: 'test.archive',
+      async run(actor, input, ctx) {
+        const test = await loadTest(input.testId)
+        const scopes = await requireRead(actor, test)
+        requireScope(actor, 'test.archive', scopes)
+        if (test.status === 'ARCHIVED') throw new DomainError('INVALID_STATE', 'Тест уже в архиве')
+        const reason = (input.reason ?? '').trim()
+        if (!reason) throw DomainError.validation([{ field: 'reason', message: 'Укажите причину' }])
+        const blocker = archiveBlocker(await r().tests.versions(test.id))
+        if (blocker) throw new DomainError('INVALID_STATE', blocker)
+        await uow.transaction(async (tx) => {
+          if (test.currentDraftVersionId) {
+            await tx.tests.setVersionState(test.currentDraftVersionId, {
+              state: transition('DRAFT', 'discard', 'test'),
+              archiveReason: 'CONTAINER_ARCHIVED',
+              archivedAt: clock.now(),
+            })
+            await tx.tests.setTestPointers(test.id, { currentDraftVersionId: null })
+          }
+          await tx.tests.setTestArchived(test.id, true, actor.userId, reason)
+          await tx.audit.record(
+            actor,
+            { action: 'test.archived', resourceType: 'test', resourceId: test.id, reason },
+            ctx,
+          )
+        })
+      },
+    }),
+
+    restoreTest: useCase<{ testId: string }, void>({
+      name: 'test.restore',
+      permission: 'test.archive',
+      async run(actor, input, ctx) {
+        const test = await loadTest(input.testId)
+        const scopes = await requireRead(actor, test)
+        requireScope(actor, 'test.archive', scopes)
+        if (test.status !== 'ARCHIVED') throw new DomainError('INVALID_STATE', 'Тест не в архиве')
+        await uow.transaction(async (tx) => {
+          await tx.tests.setTestArchived(test.id, false, actor.userId, null)
+          await tx.audit.record(actor, { action: 'test.restored', resourceType: 'test', resourceId: test.id }, ctx)
+        })
+      },
+    }),
+
+    /** История публикаций: по полям версий (publish / supersede / withdraw). */
+    publicationHistory: useCase<
+      { testId: string },
+      {
+        versionNo: number
+        state: VersionState
+        publishedAt: Date | null
+        archivedAt: Date | null
+        archiveReason: string | null
+      }[]
+    >({
+      name: 'test.publications',
+      permission: 'test.read',
+      async run(actor, { testId }) {
+        const test = await loadTest(testId)
+        await requireRead(actor, test)
+        const out = []
+        for (const v of await r().tests.versions(test.id)) {
+          const full = (await r().tests.findVersion(v.id))!
+          if (full.publishedAt)
+            out.push({
+              versionNo: full.versionNo,
+              state: full.state,
+              publishedAt: full.publishedAt,
+              archivedAt: full.archivedAt,
+              archiveReason: full.archiveReason,
+            })
+        }
+        return out
       },
     }),
 

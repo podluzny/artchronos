@@ -176,13 +176,22 @@ SC-E2E-001 шаг 3 автоматизирован. Таблица `question_typ
 
 | ID | Title | Type | Block | Spec | AC | Depends on | Status |
 |---|---|---|---|---|---|---|---|
-| T-072 | Review model, reviewer assignment, queue | implementation | BL-09 | SPEC-REVIEW-001 | AC-REVIEW-001.1…6 | T-066 | planned |
-| T-073 | Review page: checklist, comments, issues, carry-over, checklist templates | implementation, ui | BL-09 | SPEC-REVIEW-002 | AC-REVIEW-002.1…7 | T-072, T-070 | planned |
-| T-074 | Review decisions: request changes, approve (пакет, pool freeze) | implementation | BL-09 | SPEC-REVIEW-003 | AC-REVIEW-003.1…9 | T-073 | planned |
-| T-075 | Lifecycle: полная матрица переходов, availableActions consistency | test, implementation | BL-10 | SPEC-PUB-001 | AC-PUB-001.1…5 | T-074 | planned |
-| T-076 | Publish, withdraw, archive/restore test, история публикаций | implementation | BL-10 | SPEC-PUB-002 | AC-PUB-002.1…7 | T-074 | planned |
-| T-077 | Delivery model schema + prototype test (без UI) | domain, db, test | BL-12 | SPEC-DELIV-001 | AC-DELIV-001.1…5 | T-076 | planned |
-| T-078 | Полный SC-E2E-001 (UI и API варианты) | test | все | SC-E2E-001 | AT-E2E-001, AT-E2E-001-API | T-076 | planned |
+| T-072 | Review model, reviewer assignment, queue | implementation | BL-09 | SPEC-REVIEW-001 | AC-REVIEW-001.1…6 | T-066 | done |
+| T-073 | Review page: checklist, comments, issues, carry-over, checklist templates | implementation, ui | BL-09 | SPEC-REVIEW-002 | AC-REVIEW-002.1…7 | T-072, T-070 | done |
+| T-074 | Review decisions: request changes, approve (пакет, pool freeze) | implementation | BL-09 | SPEC-REVIEW-003 | AC-REVIEW-003.1…9 | T-073 | done |
+| T-075 | Lifecycle: полная матрица переходов, availableActions consistency | test, implementation | BL-10 | SPEC-PUB-001 | AC-PUB-001.1…5 | T-074 | done |
+| T-076 | Publish, withdraw, archive/restore test, история публикаций | implementation | BL-10 | SPEC-PUB-002 | AC-PUB-002.1…7 | T-074 | done |
+| T-077 | Delivery model schema + prototype test (без UI) | domain, db, test | BL-12 | SPEC-DELIV-001 | AC-DELIV-001.1…5 | T-076 | done |
+| T-078 | Полный SC-E2E-001 (UI и API варианты) | test | все | SC-E2E-001 | AT-E2E-001, AT-E2E-001-API | T-076 | done |
+
+Примечания M5:
+- Review создается хуком в транзакции отправки (тест — с автоназначением PRIMARY: эксперт задания по умолчанию или владелец задания; вопрос банка и тест вне задания — в очередь «Не назначено»). Отзыв отправки отменяет Review.
+- Замечания хранятся на уровне контейнера (тест/вопрос) и переносятся на новую версию (FR-REVIEW-009); автор отмечает ADDRESSED, основной эксперт текущей экспертизы — RESOLVED / WONT_FIX / повторно OPEN.
+- В БД добавлена дублирующая защита: допустимые переходы состояний версий (BR-013), закрытый review неизменен (BR-040), один активный PRIMARY (BR-030), Attempt только по PUBLISHED (BR-037).
+- Модель прохождения (BL-12): схема + прототип `createDeliveryService` без UI и без permissions `attempt.*` (вне MVP); проверяется тестами AT-DELIV-001.*.
+- AC-MEDIA-002.7 реализован в M5 (затронутые утвержденные/опубликованные тесты при ограничении прав) — до публикации проверять было нечего; AC-QTYPE-002.3 — проверка плагинов при старте приложения.
+- Предпросмотр правил отбора до утверждения использует текущий пул, после — замороженный.
+- Остаются для M6: AT-QTYPE-002.5 (axe-core), AT-ITEM-005.4 (50 000 вопросов), AT-ITEM-005.5 (drawer списка банка; сейчас — карточка вопроса и действие «Предпросмотр»).
 
 ### M6 — Hardening
 

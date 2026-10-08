@@ -20,8 +20,11 @@ import { escapeLike, isUuid } from '../identity/user-repository.js'
 
 const own = (uid: string) =>
   sql<boolean>`(t.owner_id = ${uid} or exists (select 1 from test_versions av where av.test_id = t.id and ${uid} = any(av.author_ids)))`
+/** ASSIGNED: тест задания, которое ведет пользователь, или тест, назначенный ему на экспертизу. */
 const assignedVia = (uid: string) =>
-  sql<boolean>`(t.assignment_id in (select a.id from assignments a where a.owner_id = ${uid} or a.default_reviewer_id = ${uid}))`
+  sql<boolean>`(t.assignment_id in (select a.id from assignments a where a.owner_id = ${uid} or a.default_reviewer_id = ${uid})
+    or exists (select 1 from reviews rv join review_assignments ra on ra.review_id = rv.id
+      where rv.test_id = t.id and ra.reviewer_id = ${uid} and ra.status in ('ACTIVE','COMPLETED')))`
 const teachesCourse = (uid: string) =>
   sql<boolean>`exists (select 1 from course_teachers ct where ct.course_id = t.course_id and ct.user_id = ${uid})`
 /** Тесты студентов курса и утвержденные/опубликованные тесты коллег. */
@@ -168,6 +171,9 @@ export class KyselyTestRepository implements TestRepository {
       approvedAt: v.approved_at,
       approvedBy: v.approved_by,
       publishedAt: v.published_at,
+      publishedBy: v.published_by,
+      archivedAt: v.archived_at,
+      archiveReason: v.archive_reason,
       contentHash: v.content_hash,
       createdAt: v.created_at,
       updatedAt: v.updated_at,
@@ -335,6 +341,11 @@ export class KyselyTestRepository implements TestRepository {
     if (d.everSubmitted !== undefined) values.ever_submitted = d.everSubmitted
     if (d.packageItemVersionIds !== undefined) values.package_item_version_ids = d.packageItemVersionIds
     if (d.archiveReason !== undefined) values.archive_reason = d.archiveReason
+    if (d.approvedAt !== undefined) values.approved_at = d.approvedAt
+    if (d.approvedBy !== undefined) values.approved_by = d.approvedBy
+    if (d.publishedAt !== undefined) values.published_at = d.publishedAt
+    if (d.publishedBy !== undefined) values.published_by = d.publishedBy
+    if (d.archivedAt !== undefined) values.archived_at = d.archivedAt
     await this.db
       .updateTable('test_versions')
       .set(values as any)
@@ -342,13 +353,40 @@ export class KyselyTestRepository implements TestRepository {
       .execute()
   }
 
-  async setTestPointers(testId: string, d: { currentDraftVersionId?: string | null }) {
+  async setTestPointers(
+    testId: string,
+    d: { currentDraftVersionId?: string | null; publishedVersionId?: string | null },
+  ) {
     const values: Record<string, unknown> = { updated_at: new Date(), revision: sql<number>`revision + 1` }
     if (d.currentDraftVersionId !== undefined) values.current_draft_version_id = d.currentDraftVersionId
+    if (d.publishedVersionId !== undefined) values.published_version_id = d.publishedVersionId
     await this.db
       .updateTable('tests')
       .set(values as any)
       .where('id', '=', testId)
+      .execute()
+  }
+
+  async setTestArchived(testId: string, archived: boolean, by: string, reason: string | null) {
+    await this.db
+      .updateTable('tests')
+      .set({
+        status: archived ? 'ARCHIVED' : 'ACTIVE',
+        archived_at: archived ? new Date() : null,
+        archived_by: archived ? by : null,
+        archive_reason: archived ? reason : null,
+        updated_at: new Date(),
+        revision: sql<number>`revision + 1`,
+      })
+      .where('id', '=', testId)
+      .execute()
+  }
+
+  async insertPoolEntries(ruleId: string, itemVersionIds: string[]) {
+    if (!itemVersionIds.length) return
+    await this.db
+      .insertInto('selection_pool_entries')
+      .values(itemVersionIds.map((item_version_id) => ({ selection_rule_id: ruleId, item_version_id })))
       .execute()
   }
 

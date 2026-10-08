@@ -7,6 +7,7 @@ import { freshDb } from '../support/db.js'
 import { makeCourseWorld } from '../support/education.js'
 import { auditActions, ctx, makeUser, setupServices } from '../support/fixtures.js'
 import { tempStorage, uploadImage } from '../support/media.js'
+import { walkState } from '../support/states.js'
 
 let db: Db
 let services: Services
@@ -75,12 +76,8 @@ async function approvedBankItem(w: World, opts: { difficulty?: number; author?: 
   return r
 }
 
-async function forceItemState(versionId: string, state: string) {
-  await sql`update item_versions set state = ${state}, ever_submitted = true where id = ${versionId}`.execute(db)
-}
-async function forceTestState(versionId: string, state: string) {
-  await sql`update test_versions set state = ${state} where id = ${versionId}`.execute(db)
-}
+const forceItemState = (versionId: string, state: string) => walkState(db, 'item_versions', versionId, state)
+const forceTestState = (versionId: string, state: string) => walkState(db, 'test_versions', versionId, state)
 
 /** Тест студента с двумя собственными вопросами в «Разделе 1». */
 async function studentTest(w: World) {
@@ -458,6 +455,7 @@ describe('SPEC-TEST-003 Настройки и предпросмотр', () => {
       db,
     )
     await forceTestState(t.versionId, 'APPROVED')
+    await sql`update test_versions set approved_at = now() where id = ${t.versionId}`.execute(db)
     await expect(
       sql`delete from selection_pool_entries where selection_rule_id = ${rule.ruleId}`.execute(db),
     ).rejects.toThrow(/frozen/)

@@ -20,5 +20,6 @@ export const Components = {
   JsonView: componentLoader.add('JsonView', path.join(dir, 'JsonView')),
   TestBuilder: componentLoader.add('TestBuilder', path.join(dir, 'TestBuilder')),
   TestPreview: componentLoader.add('TestPreview', path.join(dir, 'TestPreview')),
+  ReviewWorkspace: componentLoader.add('ReviewWorkspace', path.join(dir, 'ReviewWorkspace')),
   AssignmentSummary: componentLoader.add('AssignmentSummary', path.join(dir, 'AssignmentSummary')),
 }

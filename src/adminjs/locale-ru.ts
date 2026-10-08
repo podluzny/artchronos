@@ -15,6 +15,8 @@ export const ru = {
     preview: 'Предпросмотр',
     editDraft: 'Редактировать черновик',
     summary: 'Сводка по тестам',
+    workspace: 'Открыть экспертизу',
+    publications: 'Публикации',
   },
   buttons: {
     save: 'Сохранить',

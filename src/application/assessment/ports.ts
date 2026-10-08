@@ -48,6 +48,9 @@ export interface TestVersionRecord {
   approvedAt: Date | null
   approvedBy: string | null
   publishedAt: Date | null
+  publishedBy: string | null
+  archivedAt: Date | null
+  archiveReason: string | null
   contentHash: string | null
   createdAt: Date
   updatedAt: Date
@@ -163,9 +166,20 @@ export interface TestRepository {
       everSubmitted?: boolean
       packageItemVersionIds?: string[]
       archiveReason?: string | null
+      approvedAt?: Date
+      approvedBy?: string
+      publishedAt?: Date
+      publishedBy?: string
+      archivedAt?: Date
     },
   ): Promise<void>
-  setTestPointers(testId: string, d: { currentDraftVersionId?: string | null }): Promise<void>
+  setTestPointers(
+    testId: string,
+    d: { currentDraftVersionId?: string | null; publishedVersionId?: string | null },
+  ): Promise<void>
+  setTestArchived(testId: string, archived: boolean, by: string, reason: string | null): Promise<void>
+  /** BR-012: заморозка пула правила при approve. */
+  insertPoolEntries(ruleId: string, itemVersionIds: string[]): Promise<void>
   maxVersionNo(testId: string): Promise<number>
   insertSection(d: Omit<SectionRecord, 'id'>): Promise<string>
   updateSection(id: string, d: Partial<Omit<SectionRecord, 'id' | 'testVersionId'>>): Promise<void>

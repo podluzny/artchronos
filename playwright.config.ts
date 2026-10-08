@@ -6,7 +6,7 @@ export default defineConfig({
   timeout: 90_000,
   fullyParallel: false,
   workers: 1,
-  reporter: [['list']],
+  reporter: [['list'], ['json', { outputFile: 'validation/e2e-results.json' }]],
   use: {
     baseURL: 'http://localhost:3300',
     viewport: { width: 1280, height: 900 },
