@@ -206,6 +206,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
                 new: 'Создать вопрос',
                 editDraft: 'Редактировать черновик',
                 preview: 'Предпросмотр',
+                card: 'Быстрый просмотр',
                 newVersion: 'Новая версия',
                 submit: 'Отправить на экспертизу',
                 recall: 'Отозвать отправку',

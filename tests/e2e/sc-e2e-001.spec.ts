@@ -1,4 +1,5 @@
-import { expect, test } from '@playwright/test'
+import { AxeBuilder } from '@axe-core/playwright'
+import { expect, test, type Page } from '@playwright/test'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import {
@@ -403,5 +404,68 @@ test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
       'test.published',
     ])
       await expect(page.getByText(action, { exact: true }).first()).toBeVisible()
+  })
+
+  /** WCAG 2.1 AA для собственных компонентов (корень помечен data-a11y). Встроенный UI AdminJS — вне области. */
+  async function a11y(page: Page, url: string | null, ready: string) {
+    if (url) await page.goto(url)
+    await page.locator(ready).first().waitFor()
+    await page.locator('[data-a11y=component]').first().waitFor()
+    const r = await new AxeBuilder({ page })
+      .include('[data-a11y=component]')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze()
+    const issues = r.violations.map(
+      (v) =>
+        `${v.id} (${v.impact}): ${v.nodes
+          .map((n) => n.target.join(' '))
+          .slice(0, 3)
+          .join(' | ')}`,
+    )
+    expect(issues, url ?? page.url()).toEqual([])
+  }
+
+  test('AT-QTYPE-002.5 NFR-A11Y-001 собственные компоненты проходят axe-core без нарушений уровня AA', async ({
+    page,
+  }) => {
+    await login(page, ADMIN.email, ADMIN.password)
+    const ids = async (resource: string) =>
+      (
+        (await (await page.request.get(`/admin/api/resources/${resource}/actions/list`)).json()).records as {
+          id: string
+        }[]
+      ).map((r) => r.id)
+    const [item] = await ids('Item')
+    const [testId] = await ids('Test')
+    const [review] = await ids('Review')
+    const [assignmentId] = await ids('Assignment')
+    await a11y(page, '/admin/resources/Item/actions/new', '[data-a11y=component]')
+    // редактор на этапе заполнения вопроса
+    await pickSelect(page, 'Задание', assignment)
+    await page.locator('[data-type=single_choice]').click()
+    await a11y(page, null, '#stem')
+    await a11y(page, `/admin/resources/Item/records/${item}/preview`, 'text=Проверить ответ')
+    await a11y(page, `/admin/resources/Test/records/${testId}/builder`, '[data-testid=test-state]')
+    await a11y(page, `/admin/resources/Test/records/${testId}/preview`, '[data-testid=preview-item]')
+    await a11y(page, `/admin/resources/Review/records/${review}/workspace`, '[data-testid=review-status]')
+    await a11y(page, `/admin/resources/Assignment/records/${assignmentId}/summary`, '[data-testid=assignment-summary]')
+    await a11y(page, '/admin/resources/MediaAsset/actions/new', '#title')
+    await a11y(page, '/admin/resources/Test/actions/new', '#title')
+  })
+
+  test('AT-ITEM-005.5 drawer списка банка показывает предпросмотр и историю версий', async ({ page }) => {
+    await login(page, ADMIN.email, ADMIN.password)
+    await page.goto('/admin/resources/Item/actions/list')
+    const row = page.locator('tbody tr', { hasText: 'Кто автор картины «Грачи прилетели»?' }).first()
+    await row.waitFor()
+    // действие записи из меню строки списка
+    await row.locator('td').last().locator('*').first().click()
+    await page.getByText('Быстрый просмотр').first().click()
+    const card = page.getByTestId('item-card')
+    await expect(card).toBeVisible()
+    await expect(card).toContainText('Кто автор картины «Грачи прилетели»?')
+    await expect(page.getByTestId('item-card-versions')).toContainText('v1 —')
+    await expect(page.getByTestId('item-card-versions')).toContainText('v2 — Утверждено')
+    await a11y(page, null, '[data-testid=item-card]')
   })
 })

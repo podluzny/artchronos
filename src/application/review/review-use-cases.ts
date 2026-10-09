@@ -457,12 +457,15 @@ export function createReviewUseCases(deps: ReviewDeps) {
         await uow.transaction(async (tx) => {
           if (rv.subjectType === 'TEST_VERSION') {
             const v = (await tx.tests.findVersion(rv.testVersionId!))!
-            await tx.tests.setVersionState(v.id, { state: transition(v.state, 'startReview', 'test') })
+            await tx.tests.setVersionState(v.id, { from: v.state, state: transition(v.state, 'startReview', 'test') })
             for (const p of pkg.filter((x) => x.inPackage))
-              await tx.items.setVersionState(p.itemVersionId, { state: transition(p.state, 'startReview', 'item') })
+              await tx.items.setVersionState(p.itemVersionId, {
+                from: p.state,
+                state: transition(p.state, 'startReview', 'item'),
+              })
           } else {
             const v = (await tx.items.findVersion(rv.itemVersionId!))!
-            await tx.items.setVersionState(v.id, { state: transition(v.state, 'startReview', 'item') })
+            await tx.items.setVersionState(v.id, { from: v.state, state: transition(v.state, 'startReview', 'item') })
           }
           await tx.reviews.setStatus(rv.id, { status: 'IN_PROGRESS' }, rv.revision)
           await tx.audit.record(actor, { action: 'review.started', resourceType: 'review', resourceId: rv.id }, ctx)
@@ -655,12 +658,21 @@ export function createReviewUseCases(deps: ReviewDeps) {
         await uow.transaction(async (tx) => {
           if (rv.subjectType === 'TEST_VERSION') {
             const v = (await tx.tests.findVersion(rv.testVersionId!))!
-            await tx.tests.setVersionState(v.id, { state: transition(v.state, 'requestChanges', 'test') })
+            await tx.tests.setVersionState(v.id, {
+              from: v.state,
+              state: transition(v.state, 'requestChanges', 'test'),
+            })
             for (const p of pkg.filter((x) => x.inPackage && x.state === 'IN_REVIEW'))
-              await tx.items.setVersionState(p.itemVersionId, { state: transition(p.state, 'requestChanges', 'item') })
+              await tx.items.setVersionState(p.itemVersionId, {
+                from: p.state,
+                state: transition(p.state, 'requestChanges', 'item'),
+              })
           } else {
             const v = (await tx.items.findVersion(rv.itemVersionId!))!
-            await tx.items.setVersionState(v.id, { state: transition(v.state, 'requestChanges', 'item') })
+            await tx.items.setVersionState(v.id, {
+              from: v.state,
+              state: transition(v.state, 'requestChanges', 'item'),
+            })
           }
           await tx.reviews.setStatus(
             rv.id,
@@ -758,6 +770,7 @@ export function createReviewUseCases(deps: ReviewDeps) {
         await uow.transaction(async (tx) => {
           const approveItem = async (versionId: string, itemId: string, state: VersionState) => {
             await tx.items.setVersionState(versionId, {
+              from: state,
               state: transition(state, 'approve', 'item'),
               approvedAt: now,
               approvedBy: actor.userId,
@@ -781,6 +794,7 @@ export function createReviewUseCases(deps: ReviewDeps) {
             for (const p of pools) await tx.tests.insertPoolEntries(p.ruleId, p.versionIds)
             const v = (await tx.tests.findVersion(rv.testVersionId!))!
             await tx.tests.setVersionState(v.id, {
+              from: v.state,
               state: transition(v.state, 'approve', 'test'),
               approvedAt: now,
               approvedBy: actor.userId,

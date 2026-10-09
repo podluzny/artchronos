@@ -188,6 +188,28 @@ export function itemResources(uc: ItemUseCases, media: MediaUseCases): ResourceW
               ctx,
             ),
           }
+        case 'card': {
+          // быстрый просмотр (SPEC-ITEM-005, drawer списка): предпросмотр + история версий
+          const d = await uc.getItem.run(actor, { id: p.itemId }, ctx)
+          const preview = await uc.previewItem.run(actor, { itemId: p.itemId, versionId: d.version.id, seed: 1 }, ctx)
+          return {
+            ok: true,
+            preview,
+            versions: d.versions.map((v) => ({
+              versionNo: v.versionNo,
+              state: v.state,
+              label: VERSION_STATE_LABEL[v.state],
+              createdAt: v.createdAt,
+              approvedAt: v.approvedAt,
+            })),
+            meta: {
+              owner: d.item.ownerName,
+              course: d.item.courseName,
+              assignment: d.item.assignmentTitle,
+              issues: d.issues.filter((i) => i.severity === 'ERROR').length,
+            },
+          }
+        }
         case 'evaluate':
           return {
             ok: true,
@@ -315,6 +337,14 @@ export function itemResources(uc: ItemUseCases, media: MediaUseCases): ResourceW
             icon: 'Plus',
             component: Components.ItemEditor,
             isAccessible: visibleIf((a) => a.has('item.create')),
+            handler: editorHandler,
+          },
+          card: {
+            actionType: 'record',
+            icon: 'Sidebar',
+            component: Components.ItemCard,
+            showInDrawer: true,
+            isAccessible: visibleIf((a) => a.has('item.read')),
             handler: editorHandler,
           },
           editDraft: {

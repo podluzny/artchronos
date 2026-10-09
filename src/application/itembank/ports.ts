@@ -158,6 +158,8 @@ export interface ItemRepository {
     versionId: string,
     d: {
       state: VersionState
+      /** Ожидаемое текущее состояние (условный переход). */
+      from?: VersionState
       submittedAt?: Date | null
       approvedAt?: Date | null
       approvedBy?: string | null

@@ -161,6 +161,8 @@ export interface TestRepository {
     versionId: string,
     d: {
       state: VersionState
+      /** Ожидаемое текущее состояние (условный переход). */
+      from?: VersionState
       submittedAt?: Date | null
       contentHash?: string | null
       everSubmitted?: boolean

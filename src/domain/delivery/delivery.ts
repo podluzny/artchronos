@@ -1,5 +1,6 @@
 import { seededShuffle, type ItemDocument } from '../itembank/interaction.js'
 import { DomainError } from '../shared/errors.js'
+import { sanitizeRichText } from '../shared/rich-text.js'
 import type { VersionState } from '../versioning/state-machine.js'
 
 /**
@@ -76,7 +77,7 @@ export function deliveryView(doc: ItemDocument, item: DeliveredItem) {
   return {
     itemVersionId: item.itemVersionId,
     points: item.points,
-    stem: doc.stem,
+    stem: sanitizeRichText(doc.stem),
     content: Object.fromEntries(Object.entries(doc.content).filter(([k]) => k !== 'rubric')),
     media: doc.media.map((m) => ({ mediaAssetId: m.mediaAssetId, role: m.role, altText: m.altTextOverride })),
     options: item.optionOrder.map((k) => {

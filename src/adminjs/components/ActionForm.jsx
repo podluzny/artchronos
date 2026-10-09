@@ -96,7 +96,7 @@ const ActionForm = (props) => {
 
   if (result) {
     return (
-      <Box variant="container">
+      <Box data-a11y="component" variant="container">
         <MessageBox variant="success" message={result.title || 'Готово'} />
         {result.text ? <Text mt="lg">{result.text}</Text> : null}
         {result.link ? (
@@ -131,7 +131,7 @@ const ActionForm = (props) => {
     }
     if (f.type === 'select') {
       const selected = opts.find((o) => o.value === values[f.name]) || null
-      return <Select value={selected} options={opts} onChange={(o) => set(f.name, o ? o.value : '')} />
+      return <Select inputId={f.name} value={selected} options={opts} onChange={(o) => set(f.name, o ? o.value : '')} />
     }
     if (f.type === 'checkboxes') {
       const groups = []
@@ -178,7 +178,7 @@ const ActionForm = (props) => {
   }
 
   return (
-    <Box variant="container" as="form" onSubmit={submit}>
+    <Box data-a11y="component" variant="container" as="form" onSubmit={submit}>
       {custom.description ? <Text mb="xl">{custom.description}</Text> : null}
       {fields.map((f) => (
         <FormGroup key={f.name} error={!!fieldErrors[f.name]}>

@@ -346,11 +346,15 @@ export class KyselyTestRepository implements TestRepository {
     if (d.publishedAt !== undefined) values.published_at = d.publishedAt
     if (d.publishedBy !== undefined) values.published_by = d.publishedBy
     if (d.archivedAt !== undefined) values.archived_at = d.archivedAt
-    await this.db
+    let q = this.db
       .updateTable('test_versions')
       .set(values as any)
       .where('id', '=', versionId)
-      .execute()
+    // условный переход: конкурентное изменение состояния → CONFLICT (NFR-DATA-003)
+    if (d.from !== undefined) q = q.where('state', '=', d.from as any)
+    const r = await q.executeTakeFirst()
+    if (d.from !== undefined && Number(r.numUpdatedRows) === 0)
+      throw DomainError.conflict('Состояние версии уже изменено другим действием — обновите страницу')
   }
 
   async setTestPointers(

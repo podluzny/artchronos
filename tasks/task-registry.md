@@ -197,12 +197,23 @@ SC-E2E-001 шаг 3 автоматизирован. Таблица `question_typ
 
 | ID | Title | Type | Spec / NFR | Depends on | Status |
 |---|---|---|---|---|---|
-| T-079 | Authorization & privilege escalation suite (полная AT-PERM-MATRIX, подмена id/полей) | security, test | NFR-SEC-001, NFR-SEC-010, SPEC-AUTH-003 | T-078 | planned |
-| T-080 | Concurrent edits, конкурентные решения review/публикации | test | NFR-DATA-003, NFR-DATA-004 | T-078 | planned |
-| T-081 | Security review: upload, XSS, CSRF, headers, secrets, answerKey exposure | security | NFR-SEC-004, -006, -007, -008, -009 | T-078 | planned |
-| T-082 | Accessibility audit кастомных компонентов | test | NFR-A11Y-001…003 | T-078 | planned |
-| T-083 | Performance tests на seed 50k вопросов / 10k медиа | test | NFR-PERF-001…005 | T-078 | planned |
-| T-084 | Backup/restore drill (БД + storage) | infra | NFR-DATA-006 | T-078 | planned |
-| T-085 | Observability: логи, метрики, health | infra | NFR-OBS-001…004 | T-031 | ready |
-| T-086 | Archive/restore и media rights regression | test | SPEC-AUDIT-002, SPEC-MEDIA-002 | T-078 | planned |
-| T-087 | Финальная acceptance: acceptance-matrix 100%, traceability без пробелов | test, doc | validation/* | T-079…T-086 | planned |
+| T-079 | Authorization & privilege escalation suite (полная AT-PERM-MATRIX, подмена id/полей) | security, test | NFR-SEC-001, NFR-SEC-010, SPEC-AUTH-003 | T-078 | done |
+| T-080 | Concurrent edits, конкурентные решения review/публикации | test | NFR-DATA-003, NFR-DATA-004 | T-078 | done |
+| T-081 | Security review: upload, XSS, CSRF, headers, secrets, answerKey exposure | security | NFR-SEC-004, -006, -007, -008, -009 | T-078 | done |
+| T-082 | Accessibility audit кастомных компонентов | test | NFR-A11Y-001…003 | T-078 | done |
+| T-083 | Performance tests на seed 50k вопросов / 10k медиа | test | NFR-PERF-001…005 | T-078 | done |
+| T-084 | Backup/restore drill (БД + storage) | infra | NFR-DATA-006 | T-078 | done |
+| T-085 | Observability: логи, метрики, health | infra | NFR-OBS-001…004 | T-031 | done |
+| T-086 | Archive/restore и media rights regression | test | SPEC-AUDIT-002, SPEC-MEDIA-002 | T-078 | done |
+| T-087 | Финальная acceptance: acceptance-matrix 100%, traceability без пробелов | test, doc | validation/* | T-079…T-086 | done |
+
+Примечания M6:
+- T-079: `tests/acceptance/security.test.ts` (mass assignment, подмена id, HTTP-обход UI) + матрицы прав §4.1–4.6.
+- T-080: `tests/integration/concurrency.test.ts`; условные переходы состояний и перевод нарушений ограничений БД в CONFLICT / INVALID_STATE.
+- T-081: `docs/security-review.md` — CSP и заголовки, override TinyMCE 7.9.3, санитизация при выводе, сканер секретов и аудит зависимостей (high) в CI.
+- T-082: axe-core (WCAG 2.1 AA) для всех собственных компонентов в E2E — 0 нарушений после исправления подписей полей и контраста.
+- T-083: `npm run test:perf`, `docs/performance-report.md` — 50 000 вопросов / 10 000 медиа; отключен JIT PostgreSQL, упрощен подсчет списка.
+- T-084: `scripts/backup-drill.ts`, `docs/runbook-backup.md`, необязательный workflow `Backup` (включается секретами репозитория).
+- T-085: JSON-логи с requestId/userId и маскированием, `/health/ready`, метрики `/admin/metrics`, журнал отказов авторизации.
+- T-086: `tests/integration/regression-archive.test.ts` — архив/восстановление и права на опубликованном контенте.
+- T-087: acceptance-matrix — все AT в статусе ✓ (unit/integration/acceptance, E2E, perf); трассировка без ошибок.

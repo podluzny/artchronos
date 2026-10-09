@@ -231,18 +231,18 @@
 | FR-QTYPE-002 | SC-QTYPE-001 | AT-QTYPE-001.* | ✓ |
 | FR-QTYPE-003 | SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
 | FR-QTYPE-004 | SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
-| NFR-EXT-001 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ◐ |
+| NFR-EXT-001 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ✓ |
 | BR-021 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
 | BR-022 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
-| BR-023 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ◐ |
+| BR-023 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-001.*, AT-QTYPE-002.* | ✓ |
 | BR-035 | SC-QTYPE-001, SC-QTYPE-002 | AT-QTYPE-001.* | ✓ |
-| FR-QTYPE-005 | SC-ITEM-001 | AT-QTYPE-002.* | ◐ |
-| FR-QTYPE-006 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
-| FR-DELIV-002 | SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
-| NFR-EXT-002 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
-| NFR-SEC-007 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
-| BR-020 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
-| INV-015 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ◐ |
+| FR-QTYPE-005 | SC-ITEM-001 | AT-QTYPE-002.* | ✓ |
+| FR-QTYPE-006 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
+| FR-DELIV-002 | SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
+| NFR-EXT-002 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
+| NFR-SEC-007 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
+| BR-020 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
+| INV-015 | SC-ITEM-001, SC-ITEM-002, SC-ITEM-004 | AT-QTYPE-002.* | ✓ |
 
 ### Acceptance tests
 
@@ -258,7 +258,7 @@
 | AT-QTYPE-002.2 | Регистрация плагина-фикстуры добавляет тип без миграции БД | extensibility | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.3 | Отсутствующий плагин для существующего типа → ошибка старта | negative | SPEC-QTYPE-002 | ✓ |
 | AT-QTYPE-002.4 | Evaluators MVP вычисляют ожидаемые баллы на эталонном наборе ответов | positive | SPEC-QTYPE-002 | ✓ |
-| AT-QTYPE-002.5 | Компоненты плагинов проходят axe-core без нарушений уровня AA | a11y | SPEC-QTYPE-002 | ⏳ |
+| AT-QTYPE-002.5 | Компоненты плагинов проходят axe-core без нарушений уровня AA | a11y | SPEC-QTYPE-002 | ✓ |
 
 ## BL-07
 
@@ -276,7 +276,7 @@
 | BR-021 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.* | ✓ |
 | BR-024 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
 | BR-025 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.* | ✓ |
-| BR-039 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-005.* | ◐ |
+| BR-039 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-005.* | ✓ |
 | BR-004 | SC-E2E-001, SC-ITEM-001, SC-ITEM-002 | AT-ITEM-001.*, AT-ITEM-002.*, AT-ITEM-004.* | ✓ |
 | FR-ITEM-003 | SC-ITEM-003 | AT-ITEM-002.* | ✓ |
 | FR-ITEM-004 | SC-VERSION-002 | AT-ITEM-002.* | ✓ |
@@ -297,12 +297,12 @@
 | NFR-SEC-008 | SC-ITEM-004 | AT-ITEM-003.* | ✓ |
 | FR-ITEM-011 | SC-ITEM-005 | AT-ITEM-004.* | ✓ |
 | FR-PERM-002 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
-| FR-PERM-003 | SC-ITEM-005 | AT-ITEM-004.*, AT-ITEM-005.* | ◐ |
+| FR-PERM-003 | SC-ITEM-005 | AT-ITEM-004.*, AT-ITEM-005.* | ✓ |
 | NFR-SEC-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
 | BR-001 | SC-E2E-001, SC-ITEM-005 | AT-ITEM-004.* | ✓ |
-| FR-ITEM-007 | SC-ITEM-005 | AT-ITEM-005.* | ◐ |
-| NFR-PERF-001 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ◐ |
-| NFR-PERF-003 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ◐ |
+| FR-ITEM-007 | SC-ITEM-005 | AT-ITEM-005.* | ✓ |
+| NFR-PERF-001 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ✓ |
+| NFR-PERF-003 | SC-ITEM-005, SC-TEST-002 | AT-ITEM-005.* | ✓ |
 
 ### Acceptance tests
 
@@ -340,8 +340,8 @@
 | AT-ITEM-005.1 | Фильтр по теме включает подтемы | positive | SPEC-ITEM-005 | ✓ |
 | AT-ITEM-005.2 | Комбинация фильтров возвращает корректное пересечение | positive | SPEC-ITEM-005 | ✓ |
 | AT-ITEM-005.3 | Архивированные скрыты по умолчанию | positive | SPEC-ITEM-005 | ✓ |
-| AT-ITEM-005.4 | Список на 50 000 вопросов открывается ≤ 1.5 с p95 | performance | SPEC-ITEM-005 | ⏳ |
-| AT-ITEM-005.5 | Drawer показывает preview и историю версий | UI | SPEC-ITEM-005 | ⏳ |
+| AT-ITEM-005.4 | Список на 50 000 вопросов открывается ≤ 1.5 с p95 | performance | SPEC-ITEM-005 | ✓ |
+| AT-ITEM-005.5 | Drawer показывает preview и историю версий | UI | SPEC-ITEM-005 | ✓ |
 
 ## BL-08
 
@@ -582,7 +582,7 @@
 | Acceptance criteria / AT | 192 |
 | FR (Must) с AT | 79 / 79 |
 | BR с AT | 46 / 46 |
-| Проходящих AT | 189 / 192 |
+| Проходящих AT | 192 / 192 |
 | Падающих AT | 0 |
 | Требований (FR/NFR/BR) с ≥1 проходящим AT | 157 / 157 (100%) |
 | Ошибок целостности ссылок | 0 |

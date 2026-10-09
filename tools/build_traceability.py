@@ -248,16 +248,18 @@ def load_results():
                 continue
             status[key] = "pass" if ok else "fail"
 
-    p = ROOT / "validation/test-results.json"
-    if p.exists():
-        import json
+    import json
+    # vitest: основной прогон и нагрузочные тесты (npm run test:perf)
+    for name in ("validation/test-results.json", "validation/perf-results.json"):
+        p = ROOT / name
+        if not p.exists():
+            continue
         data = json.loads(p.read_text(encoding="utf-8"))
         for f in data.get("testResults", []):
             for t in f.get("assertionResults", []):
                 mark(" ".join(t.get("ancestorTitles", []) + [t.get("title", "")]), t.get("status") == "passed")
     p = ROOT / "validation/e2e-results.json"
     if p.exists():
-        import json
 
         def walk(suite, prefix):
             title = " ".join(x for x in [prefix, suite.get("title", "")] if x)

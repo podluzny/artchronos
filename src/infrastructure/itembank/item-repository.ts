@@ -142,7 +142,11 @@ export class KyselyItemRepository implements ItemRepository {
       await sql<any>`select * from (${inner}) x ${vwhere} order by ${sortCol} ${dir}, x.id limit ${q.limit} offset ${q.offset}`.execute(
         this.db,
       )
-    const total = await sql<{ n: string }>`select count(*) as n from (${inner}) x ${vwhere}`.execute(this.db)
+    // подсчет без присоединения справочников и тем: только вопросы и (при фильтрах версии) отображаемая версия
+    const countInner = vconds.length
+      ? sql`select v.id as version_id, v.state, v.stem, v.difficulty from items i join item_versions v on v.id = (${display}) ${where}`
+      : sql`select 1 from items i ${where}`
+    const total = await sql<{ n: string }>`select count(*) as n from (${countInner}) x ${vwhere}`.execute(this.db)
     return {
       records: rows.rows.map((r): ItemListRow => ({
         ...toItem(r),
@@ -399,11 +403,15 @@ export class KyselyItemRepository implements ItemRepository {
     if (d.contentHash !== undefined) values.content_hash = d.contentHash
     if (d.everSubmitted !== undefined) values.ever_submitted = d.everSubmitted
     if (d.archiveReason !== undefined) values.archive_reason = d.archiveReason
-    await this.db
+    let q = this.db
       .updateTable('item_versions')
       .set(values as any)
       .where('id', '=', versionId)
-      .execute()
+    // условный переход: конкурентное изменение состояния → CONFLICT (NFR-DATA-003)
+    if (d.from !== undefined) q = q.where('state', '=', d.from as any)
+    const r = await q.executeTakeFirst()
+    if (d.from !== undefined && Number(r.numUpdatedRows) === 0)
+      throw DomainError.conflict('Состояние версии уже изменено другим действием — обновите страницу')
   }
 
   async setItemPointers(

@@ -137,8 +137,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 240 }}>
-          <Label>Навигация</Label>
+          <Label htmlFor="set-nav">Навигация</Label>
           <Select
+            inputId="set-nav"
             isDisabled={disabled}
             value={NAV.find((x) => x.value === v.navigation)}
             options={NAV}
@@ -146,8 +147,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 280 }}>
-          <Label>Показ правильных ответов</Label>
+          <Label htmlFor="set-feedback">Показ правильных ответов</Label>
           <Select
+            inputId="set-feedback"
             isDisabled={disabled}
             value={FEEDBACK.find((x) => x.value === v.feedbackMode)}
             options={FEEDBACK}
@@ -207,12 +209,12 @@ const RuleForm = ({ ctx, call, testId, sectionId, onAdd }) => {
       </Box>
       <Box flex alignItems="flex-end" style={{ gap: 10 }} mt="sm">
         <Box style={{ width: 110 }}>
-          <Label>Сложн. от</Label>
-          <Input width={1} value={min} onChange={(e) => setMin(e.target.value)} />
+          <Label htmlFor={`rule-min-${sectionId}`}>Сложн. от</Label>
+          <Input id={`rule-min-${sectionId}`} width={1} value={min} onChange={(e) => setMin(e.target.value)} />
         </Box>
         <Box style={{ width: 110 }}>
-          <Label>до</Label>
-          <Input width={1} value={max} onChange={(e) => setMax(e.target.value)} />
+          <Label htmlFor={`rule-max-${sectionId}`}>до</Label>
+          <Input id={`rule-max-${sectionId}`} width={1} value={max} onChange={(e) => setMax(e.target.value)} />
         </Box>
         <Box style={{ width: 110 }}>
           <Label>Вопросов</Label>
@@ -224,8 +226,8 @@ const RuleForm = ({ ctx, call, testId, sectionId, onAdd }) => {
           />
         </Box>
         <Box style={{ width: 110 }}>
-          <Label>Баллов за вопрос</Label>
-          <Input width={1} value={pts} onChange={(e) => setPts(e.target.value)} />
+          <Label htmlFor={`rule-pts-${sectionId}`}>Баллов за вопрос</Label>
+          <Input id={`rule-pts-${sectionId}`} width={1} value={pts} onChange={(e) => setPts(e.target.value)} />
         </Box>
         <Text mb="sm" data-testid="pool-size">
           В пуле: {pool === null ? '…' : pool}
@@ -295,7 +297,7 @@ const TestBuilder = (props) => {
   const sectionOptions = d.sections.map((s) => ({ value: s.id, label: s.title }))
 
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       <Box flex justifyContent="space-between" alignItems="center" mb="lg">
         <H3 mb={0}>
           {d.version.title} · v{d.version.versionNo}{' '}
@@ -487,6 +489,7 @@ const TestBuilder = (props) => {
         <Box flex alignItems="center" mb="xl" style={{ gap: 8 }}>
           <Input
             value={newSection}
+            aria-label="Название нового раздела"
             placeholder="Название нового раздела"
             onChange={(e) => setNewSection(e.target.value)}
           />
@@ -510,6 +513,7 @@ const TestBuilder = (props) => {
             <Text>В раздел:</Text>
             <Box style={{ width: 260 }}>
               <Select
+                aria-label="Раздел для добавления вопросов"
                 value={sectionOptions.find((x) => x.value === target) || null}
                 options={sectionOptions}
                 onChange={(x) => setTarget(x.value)}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Box,
   Button,
@@ -51,6 +51,12 @@ const MediaUpload = (props) => {
   const [error, setError] = useState(null)
   const [errors, setErrors] = useState({})
   const [busy, setBusy] = useState(false)
+  const dropRef = useRef(null)
+  // Поле файла внутри DropZone дизайн-системы не принимает атрибуты — связываем подпись после монтирования (WCAG 1.3.1)
+  useEffect(() => {
+    const input = dropRef.current && dropRef.current.querySelector('input[type=file]')
+    if (input) input.setAttribute('id', 'media-file')
+  }, [])
   const sendNotice = useNotice()
   const set = (k, v) => setValues({ ...values, [k]: v })
 
@@ -83,16 +89,22 @@ const MediaUpload = (props) => {
   }
 
   return (
-    <Box variant="container" as="form" onSubmit={submit}>
+    <Box data-a11y="component" variant="container" as="form" onSubmit={submit}>
       <FormGroup>
-        <Label required>Файл</Label>
-        <DropZone
-          onChange={(files) => setFile(files[0] || null)}
-          validate={{
-            maxSize: 50 * 1024 * 1024,
-            mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'video/mp4', 'video/webm'],
-          }}
-        />
+        <Label required htmlFor="media-file">
+          Файл
+        </Label>
+        {/* текст DropZone по умолчанию светло-серый — повышаем контраст до AA */}
+        <style>{'.media-drop [color="grey60"]{color:#4d4d4d !important}'}</style>
+        <div className="media-drop" ref={dropRef}>
+          <DropZone
+            onChange={(files) => setFile(files[0] || null)}
+            validate={{
+              maxSize: 50 * 1024 * 1024,
+              mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/tiff', 'video/mp4', 'video/webm'],
+            }}
+          />
+        </div>
         <Text variant="sm" mt="sm">
           JPEG, PNG, WebP, TIFF до 50 МБ; MP4, WebM. Формат проверяется по содержимому файла.
         </Text>
@@ -115,8 +127,9 @@ const MediaUpload = (props) => {
         </FormGroup>
       ))}
       <FormGroup>
-        <Label>Лицензия</Label>
+        <Label htmlFor="license">Лицензия</Label>
         <Select
+          inputId="license"
           value={LICENSES.find((l) => l.value === values.license)}
           options={LICENSES}
           onChange={(o) => set('license', o ? o.value : 'UNKNOWN')}

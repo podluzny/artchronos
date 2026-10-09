@@ -8,3 +8,4 @@ package-lock.json
 validation/test-results.json
 test-results
 validation/e2e-results.json
+validation/perf-results.json

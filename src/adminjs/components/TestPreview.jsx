@@ -53,7 +53,7 @@ const TestPreview = (props) => {
   if (!p) return <Loader />
   let n = 0
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       <H3>
         {p.title} · v{p.versionNo} — предпросмотр
       </H3>

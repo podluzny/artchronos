@@ -163,11 +163,14 @@ const ReviewWorkspace = (props) => {
   let n = 0
 
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       <Box flex justifyContent="space-between" alignItems="center" mb="lg">
         <H3 mb={0}>
           {rv.subjectType === 'TEST_VERSION' ? 'Тест' : 'Вопрос'}: {rv.subjectTitle.replace(/<[^>]*>/g, '')} · v
-          {rv.versionNo} <Badge data-testid="review-status">{STATUS[rv.status]}</Badge>
+          {rv.versionNo}{' '}
+          <Badge variant="primary" data-testid="review-status">
+            {STATUS[rv.status]}
+          </Badge>
         </H3>
         <Text>
           Автор: {rv.ownerName}
@@ -250,7 +253,7 @@ const ReviewWorkspace = (props) => {
                 data-testid="issue"
               >
                 <Text>
-                  <Badge variant={i.severity === 'BLOCKING' ? 'danger' : 'default'}>{SEVERITY[i.severity]}</Badge>{' '}
+                  <Badge variant={i.severity === 'BLOCKING' ? 'danger' : 'primary'}>{SEVERITY[i.severity]}</Badge>{' '}
                   {i.body}
                 </Text>
                 <Text variant="sm">
@@ -337,6 +340,7 @@ const ReviewWorkspace = (props) => {
                 {x.canRaiseIssue ? (
                   <Box mt="sm">
                     <Select
+                      aria-label="Тип записи: комментарий или замечание"
                       value={SEV_OPTIONS.find((o) => o.value === severity)}
                       options={SEV_OPTIONS}
                       onChange={(o) => setSeverity(o ? o.value : '')}

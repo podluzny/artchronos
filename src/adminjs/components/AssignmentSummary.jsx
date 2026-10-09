@@ -48,7 +48,7 @@ const AssignmentSummary = (props) => {
   if (error) return <MessageBox variant="danger" message={error} />
   if (!rows) return <Loader />
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       <H3>Сводка: {record.params.title}</H3>
       {rows.length === 0 ? <Text>Адресатов нет</Text> : null}
       <Table data-testid="assignment-summary">

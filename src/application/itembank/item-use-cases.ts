@@ -13,6 +13,7 @@ import {
 } from '../../domain/itembank/interaction.js'
 import { assertMediaSelectable, mediaIssuesForSubmit } from '../../domain/media/media-rules.js'
 import { DomainError, type FieldError } from '../../domain/shared/errors.js'
+import { sanitizeRichText } from '../../domain/shared/rich-text.js'
 import { assertEditable, canBranch, transition, type VersionState } from '../../domain/versioning/state-machine.js'
 import type { AssignmentRecord } from '../education/ports.js'
 import type { Clock, RequestContext } from '../shared/context.js'
@@ -110,17 +111,7 @@ function zParse<T>(schema: z.ZodType<T>, input: unknown, prefix = ''): T {
   return r.data
 }
 
-/** Санитизация rich text формулировки (NFR-SEC-007): разрешен минимальный набор тегов без атрибутов. */
-export function sanitizeRichText(html: string): string {
-  const allowed = new Set(['b', 'strong', 'i', 'em', 'u', 'p', 'br', 'ul', 'ol', 'li', 'sub', 'sup'])
-  return html
-    .replace(/<\s*(script|style|iframe|object|embed)[^>]*>[\s\S]*?<\s*\/\s*\1\s*>/gi, '')
-    .replace(/<\/?([a-zA-Z0-9]+)(\s[^>]*)?>/g, (m, tag: string) => {
-      const t = tag.toLowerCase()
-      if (!allowed.has(t)) return ''
-      return m.startsWith('</') ? `</${t}>` : `<${t}>`
-    })
-}
+export { sanitizeRichText }
 
 export function contentHashOf(doc: ItemDocument, meta: ItemMeta, qtvId: string): string {
   const norm = {
@@ -405,7 +396,8 @@ export function createItemUseCases(deps: ItemDeps) {
       interactionKey: item.interactionKey,
       typeName: item.questionTypeName,
       config: qtv.interactionConfig,
-      stem: doc.stem,
+      // повторная санитизация при выводе (NFR-SEC-007): защита и для данных, сохраненных до правил
+      stem: sanitizeRichText(doc.stem),
       content: doc.content,
       options,
       media: doc.media,
@@ -744,6 +736,7 @@ export function createItemUseCases(deps: ItemDeps) {
         }
         await uow.transaction(async (tx) => {
           await tx.items.setVersionState(v.id, {
+            from: v.state,
             state,
             submittedAt: clock.now(),
             everSubmitted: true,
@@ -782,7 +775,7 @@ export function createItemUseCases(deps: ItemDeps) {
           throw new DomainError('INVALID_STATE', 'Вопрос отправлен в составе теста — отзовите отправку теста')
         const state = transition(v.state, 'recall', 'item')
         await uow.transaction(async (tx) => {
-          await tx.items.setVersionState(v.id, { state })
+          await tx.items.setVersionState(v.id, { from: v.state, state })
           await tx.items.setItemPointers(item.id, { currentDraftVersionId: v.id })
           await tx.audit.record(
             actor,
@@ -830,6 +823,7 @@ export function createItemUseCases(deps: ItemDeps) {
             return { deleted: 'version' as const }
           }
           await tx.items.setVersionState(v.id, {
+            from: v.state,
             state: transition(v.state, 'discard', 'item'),
             archiveReason: 'DISCARDED',
           })

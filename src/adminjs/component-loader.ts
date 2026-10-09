@@ -16,6 +16,7 @@ export const Components = {
   MediaThumb: componentLoader.add('MediaThumb', path.join(dir, 'MediaThumb')),
   MediaUpload: componentLoader.add('MediaUpload', path.join(dir, 'MediaUpload')),
   ItemEditor: componentLoader.add('ItemEditor', path.join(dir, 'ItemEditor')),
+  ItemCard: componentLoader.add('ItemCard', path.join(dir, 'ItemCard')),
   ItemPreview: componentLoader.add('ItemPreview', path.join(dir, 'ItemPreview')),
   JsonView: componentLoader.add('JsonView', path.join(dir, 'JsonView')),
   TestBuilder: componentLoader.add('TestBuilder', path.join(dir, 'TestBuilder')),

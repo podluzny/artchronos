@@ -1098,6 +1098,7 @@ export function createTestUseCases(deps: TestDeps) {
         await uow.transaction(async (tx) => {
           for (const f of cascade) {
             await tx.items.setVersionState(f.itemVersionId, {
+              from: f.versionState,
               state: transition(f.versionState, 'submit', 'item'),
               submittedAt: now,
               everSubmitted: true,
@@ -1116,8 +1117,9 @@ export function createTestUseCases(deps: TestDeps) {
             )
           }
           // пакет фиксируется, пока версия еще DRAFT (триггер запрещает менять его после заморозки)
-          await tx.tests.setVersionState(v.id, { state: 'DRAFT', packageItemVersionIds: packageIds })
+          await tx.tests.setVersionState(v.id, { from: 'DRAFT', state: 'DRAFT', packageItemVersionIds: packageIds })
           await tx.tests.setVersionState(v.id, {
+            from: 'DRAFT',
             state,
             submittedAt: now,
             everSubmitted: true,
@@ -1157,12 +1159,12 @@ export function createTestUseCases(deps: TestDeps) {
         const state = transition(last.state, 'recall', 'test')
         const v = (await r().tests.findVersion(last.id))!
         await uow.transaction(async (tx) => {
-          await tx.tests.setVersionState(v.id, { state })
+          await tx.tests.setVersionState(v.id, { from: v.state, state })
           await tx.tests.setVersionState(v.id, { state, packageItemVersionIds: [] })
           for (const ivId of v.packageItemVersionIds) {
             const iv = await tx.items.findVersion(ivId)
             if (!iv || iv.state !== 'READY_FOR_REVIEW') continue
-            await tx.items.setVersionState(ivId, { state: transition(iv.state, 'recall', 'item') })
+            await tx.items.setVersionState(ivId, { from: iv.state, state: transition(iv.state, 'recall', 'item') })
             await tx.items.setItemPointers(iv.itemId, { currentDraftVersionId: ivId })
           }
           await tx.tests.setTestPointers(test.id, { currentDraftVersionId: v.id })
@@ -1385,6 +1387,7 @@ export function createTestUseCases(deps: TestDeps) {
         await uow.transaction(async (tx) => {
           if (prev) {
             await tx.tests.setVersionState(prev.id, {
+              from: prev.state,
               state: transition(prev.state, 'supersede', 'test'),
               archiveReason: 'SUPERSEDED',
               archivedAt: now,
@@ -1401,6 +1404,7 @@ export function createTestUseCases(deps: TestDeps) {
             )
           }
           await tx.tests.setVersionState(target.id, {
+            from: target.state,
             state: transition(target.state, 'publish', 'test'),
             publishedAt: now,
             publishedBy: actor.userId,
@@ -1434,6 +1438,7 @@ export function createTestUseCases(deps: TestDeps) {
         if (!pub) throw new DomainError('INVALID_STATE', 'У теста нет опубликованной версии')
         await uow.transaction(async (tx) => {
           await tx.tests.setVersionState(pub.id, {
+            from: pub.state,
             state: transition(pub.state, 'withdraw', 'test'),
             archiveReason: 'WITHDRAWN',
             archivedAt: clock.now(),
@@ -1470,6 +1475,7 @@ export function createTestUseCases(deps: TestDeps) {
         await uow.transaction(async (tx) => {
           if (test.currentDraftVersionId) {
             await tx.tests.setVersionState(test.currentDraftVersionId, {
+              from: 'DRAFT',
               state: transition('DRAFT', 'discard', 'test'),
               archiveReason: 'CONTAINER_ARCHIVED',
               archivedAt: clock.now(),

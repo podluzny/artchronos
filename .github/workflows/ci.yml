@@ -38,7 +38,9 @@ jobs:
         run: npm test
       - name: Traceability integrity
         run: python3 tools/build_traceability.py --check
+      - name: Secret scanning (NFR-SEC-009)
+        run: python3 tools/check_secrets.py
       - name: Dependency audit (NFR-SEC-011)
-        run: npm audit --omit=dev --audit-level=critical
+        run: npm audit --omit=dev --audit-level=high
       - name: E2E (SC-E2E-001)
         run: npx playwright install --with-deps chromium && npm run test:e2e

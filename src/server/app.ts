@@ -11,6 +11,7 @@ import { ADMIN_ROOT, buildAdmin } from '../adminjs/admin.js'
 import { requestStore } from '../adminjs/context.js'
 import type { Db } from '../infrastructure/db/kysely.js'
 import type { AppConfig } from './config.js'
+import { installUseCaseObserver, log, requestLogging, snapshot } from '../infrastructure/observability/index.js'
 import { createServices } from './container.js'
 import { passwordForm, page } from './pages.js'
 import { PgSessionStore } from './session-store.js'
@@ -25,6 +26,20 @@ declare module 'express-session' {
 
 const COOKIE_NAME = 'artchronos.sid'
 
+const CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob:",
+  "media-src 'self' blob:",
+  "connect-src 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+].join('; ')
+
 export async function createApp(db: Db, config: AppConfig) {
   const services = createServices(db)
   // AC-QTYPE-002.3: отсутствующий плагин для существующего типа — ошибка старта
@@ -34,18 +49,26 @@ export async function createApp(db: Db, config: AppConfig) {
   // Сборка фронтенда AdminJS: локально — при старте; на Vercel и в тестах — заранее/не нужна (ADR-009).
   if (process.env.ADMIN_JS_SKIP_BUNDLE !== 'true') await admin.initialize()
 
+  installUseCaseObserver()
   const app = express()
   app.disable('x-powered-by')
+  app.use(requestLogging((req) => req.session?.adminUser?.id ?? null))
   if (config.production) app.set('trust proxy', 1)
 
   // Заголовки безопасности (NFR-SEC-006/007).
-  app.use((_req, res, next) => {
+  app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff')
     res.setHeader('X-Frame-Options', 'DENY')
     res.setHeader('Referrer-Policy', 'same-origin')
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+    if (config.production) res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+    // CSP для приложения (NFR-SEC-007). Встроенные скрипты шаблонов AdminJS требуют 'unsafe-inline';
+    // внешние скрипты, объекты, встраивание во фреймы и отправка форм на чужие адреса запрещены.
+    if (!req.path.startsWith('/sdd')) res.setHeader('Content-Security-Policy', CSP)
     next()
   })
 
+  // NFR-OBS-002: liveness (БД) и readiness (БД + хранилище медиа)
   app.get('/health', async (_req, res) => {
     try {
       await sql`select 1`.execute(db)
@@ -53,6 +76,26 @@ export async function createApp(db: Db, config: AppConfig) {
     } catch {
       res.status(503).json({ status: 'db_unavailable' })
     }
+  })
+  app.get('/health/ready', async (_req, res) => {
+    const checks: Record<string, 'ok' | 'fail'> = { db: 'ok', storage: 'ok' }
+    try {
+      await sql`select 1`.execute(db)
+    } catch {
+      checks.db = 'fail'
+    }
+    try {
+      const key = `__health/${randomUUID()}`
+      await services.storage.put(key, Buffer.from('ok'), 'text/plain')
+      const back = await services.storage.get(key)
+      await services.storage.delete(key)
+      if (back?.toString() !== 'ok') checks.storage = 'fail'
+    } catch {
+      checks.storage = 'fail'
+    }
+    const ok = Object.values(checks).every((x) => x === 'ok')
+    if (!ok) log('error', 'health.not_ready', checks)
+    res.status(ok ? 200 : 503).json({ status: ok ? 'ready' : 'not_ready', checks })
   })
 
   // SDD-документация (ADR-009 п.4) — статика, собранная tools/build_site.sh.
@@ -299,10 +342,27 @@ export async function createApp(db: Db, config: AppConfig) {
       next(e)
     }
   })
+  // NFR-OBS-003: метрики процесса и очередь превью — для администратора (audit.read)
+  app.get(`${ADMIN_ROOT}/metrics`, async (_req, res) => {
+    const actor = requestStore.getStore()?.actor
+    if (!actor) return res.status(401).end()
+    if (!actor.has('audit.read')) return res.status(404).end()
+    const previews = await sql<{ status: string; n: string }>`
+      select derivatives_status as status, count(*) as n from media_assets group by derivatives_status`.execute(db)
+    res.json({
+      ...snapshot(),
+      previews: Object.fromEntries(previews.rows.map((r) => [r.status, Number(r.n)])),
+      uptimeSec: Math.round(process.uptime()),
+    })
+  })
   app.use(ADMIN_ROOT, AdminJSExpress.buildRouter(admin))
 
   app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
-    console.error(err)
+    if (!isDomainError(err))
+      log('error', 'http.unhandled', {
+        error: err instanceof Error ? `${err.name}: ${err.message}` : String(err),
+        stack: err instanceof Error ? err.stack?.split('\n').slice(0, 6).join(' | ') : undefined,
+      })
     if (isDomainError(err)) {
       res.status(err.httpStatus).json({ message: err.message, ruleId: err.ruleId })
       return

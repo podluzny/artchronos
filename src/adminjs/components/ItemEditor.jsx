@@ -68,6 +68,7 @@ const MediaPicker = ({ call, onPick, onClose }) => {
           <Input
             width={1}
             placeholder="Поиск: название, художник, произведение"
+            aria-label="Поиск изображения в медиатеке"
             value={text}
             onChange={(e) => setText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), search(text))}
@@ -344,6 +345,7 @@ const ItemEditor = (props) => {
               ml="default"
               style={{ flex: 1 }}
               placeholder="Alt-текст (если отличается от медиатеки)"
+              aria-label="Alt-текст изображения варианта"
               value={o.altTextOverride || ''}
               onChange={(e) => setOption(o.key, { altTextOverride: e.target.value })}
             />
@@ -363,6 +365,7 @@ const ItemEditor = (props) => {
           style={{ flex: 1 }}
           value={o.text || ''}
           placeholder="Текст"
+          aria-label={`Вариант ${idx + 1}: текст`}
           onChange={(e) => setOption(o.key, { text: e.target.value })}
           disabled={!!type.config.fixedOptions}
         />
@@ -505,6 +508,7 @@ const ItemEditor = (props) => {
               premises,
               <Box style={{ width: 260 }} mr="default">
                 <Select
+                  aria-label={`Соответствие для элемента ${i + 1}`}
                   placeholder="Соответствие…"
                   value={respOpts.find((x) => x.value === (pairs.find(([p]) => p === o.key) || [])[1]) || null}
                   options={respOpts}
@@ -546,8 +550,11 @@ const ItemEditor = (props) => {
     },
     text_entry: () => (
       <FormGroup>
-        <Label required>Допустимые ответы — по одному на строку</Label>
+        <Label required htmlFor="f-accepted">
+          Допустимые ответы — по одному на строку
+        </Label>
         <TextArea
+          id="f-accepted"
           width={1}
           rows={4}
           value={(doc.answerKey.accepted || []).join('\n')}
@@ -561,8 +568,11 @@ const ItemEditor = (props) => {
     extended_text: () => (
       <Box>
         <FormGroup>
-          <Label required>Критерии оценивания</Label>
+          <Label required htmlFor="f-rubric">
+            Критерии оценивания
+          </Label>
           <TextArea
+            id="f-rubric"
             width={1}
             rows={4}
             value={doc.content.rubric || ''}
@@ -571,8 +581,9 @@ const ItemEditor = (props) => {
         </FormGroup>
         <Box flex>
           <FormGroup mr="xl">
-            <Label>Минимум слов</Label>
+            <Label htmlFor="f-min-words">Минимум слов</Label>
             <Input
+              id="f-min-words"
               type="number"
               value={doc.content.minWords ?? ''}
               onChange={(e) =>
@@ -583,8 +594,9 @@ const ItemEditor = (props) => {
             />
           </FormGroup>
           <FormGroup>
-            <Label>Максимум слов</Label>
+            <Label htmlFor="f-max-words">Максимум слов</Label>
             <Input
+              id="f-max-words"
               type="number"
               value={doc.content.maxWords ?? ''}
               onChange={(e) =>
@@ -596,8 +608,9 @@ const ItemEditor = (props) => {
           </FormGroup>
         </Box>
         <FormGroup>
-          <Label>Образец ответа (для эксперта)</Label>
+          <Label htmlFor="f-model">Образец ответа (для эксперта)</Label>
           <TextArea
+            id="f-model"
             width={1}
             rows={3}
             value={doc.answerKey.modelAnswer || ''}
@@ -626,12 +639,13 @@ const ItemEditor = (props) => {
     const assignments = ctx.assignments
     const courses = ctx.courses
     return (
-      <Box variant="container">
+      <Box data-a11y="component" variant="container">
         <H3>Новый вопрос</H3>
         {assignments.length ? (
           <FormGroup>
-            <Label>Задание</Label>
+            <Label htmlFor="item-assignment">Задание</Label>
             <Select
+              inputId="item-assignment"
               placeholder="Выберите задание…"
               options={assignments}
               onChange={(o) => o && chooseScope({ assignmentId: o.value, courseId: '' })}
@@ -643,8 +657,9 @@ const ItemEditor = (props) => {
         ) : null}
         {courses.length ? (
           <FormGroup>
-            <Label>или курс (вопрос для банка)</Label>
+            <Label htmlFor="item-course">или курс (вопрос для банка)</Label>
             <Select
+              inputId="item-course"
               placeholder="Выберите курс…"
               options={courses}
               onChange={(o) => o && chooseScope({ courseId: o.value, assignmentId: '' })}
@@ -662,7 +677,7 @@ const ItemEditor = (props) => {
 
   if (phase === 'type') {
     return (
-      <Box variant="container">
+      <Box data-a11y="component" variant="container">
         <H3>Тип вопроса</H3>
         {ctx.assignment ? (
           <Text mb="lg">Задание: {ctx.assignment.title} — доступны только разрешенные заданием типы (BR-018).</Text>
@@ -689,7 +704,7 @@ const ItemEditor = (props) => {
 
   const renderEditor = editors[type.interactionKey]
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       {picker ? <MediaPicker call={call} onPick={pickMedia} onClose={() => setPicker(null)} /> : null}
       <H3>
         {itemId ? 'Черновик вопроса' : 'Новый вопрос'} · {type.name}
@@ -746,16 +761,18 @@ const ItemEditor = (props) => {
       ) : null}
       <Box flex>
         <FormGroup mr="xl" style={{ width: 220 }}>
-          <Label>Сложность</Label>
+          <Label htmlFor="item-difficulty">Сложность</Label>
           <Select
+            inputId="item-difficulty"
             value={DIFFICULTY.find((d) => d.value === meta.difficulty)}
             options={DIFFICULTY}
             onChange={(o) => setMeta({ ...meta, difficulty: o ? o.value : 3 })}
           />
         </FormGroup>
         <FormGroup mr="xl">
-          <Label>Баллы по умолчанию</Label>
+          <Label htmlFor="f-points">Баллы по умолчанию</Label>
           <Input
+            id="f-points"
             type="number"
             min="0.5"
             step="0.5"
@@ -764,8 +781,9 @@ const ItemEditor = (props) => {
           />
         </FormGroup>
         <FormGroup style={{ flex: 1 }}>
-          <Label>Теги (через запятую)</Label>
+          <Label htmlFor="f-tags">Теги (через запятую)</Label>
           <Input
+            id="f-tags"
             width={1}
             value={Array.isArray(meta.tags) ? meta.tags.join(', ') : meta.tags}
             onChange={(e) => setMeta({ ...meta, tags: e.target.value })}
@@ -773,8 +791,9 @@ const ItemEditor = (props) => {
         </FormGroup>
       </Box>
       <FormGroup>
-        <Label>Пояснение после ответа (feedback)</Label>
+        <Label htmlFor="f-feedback">Пояснение после ответа (feedback)</Label>
         <TextArea
+          id="f-feedback"
           width={1}
           rows={2}
           value={meta.feedback || ''}

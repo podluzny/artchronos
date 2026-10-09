@@ -106,6 +106,7 @@ const ItemPreview = (props) => {
             <Box style={{ flex: 1 }}>{label(o)}</Box>
             <Box style={{ width: 280 }}>
               <Select
+                aria-label={`Ответ: ${o.text || 'изображение'}`}
                 value={opts.find((x) => x.value === (answer.pairs.find(([pk]) => pk === o.key) || [])[1]) || null}
                 options={opts}
                 onChange={(v) =>
@@ -166,7 +167,7 @@ const ItemPreview = (props) => {
   }
 
   return (
-    <Box variant="container">
+    <Box data-a11y="component" variant="container">
       <H3>
         Предпросмотр · {p.typeName} · v{p.versionNo}
       </H3>
