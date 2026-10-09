@@ -18,6 +18,15 @@ try {
       skipped: 'Администраторов нет: задайте ADMIN_EMAIL и ADMIN_PASSWORD и повторите',
     }[r],
   )
+} catch (e) {
+  // причина — последней строкой лога сборки, без значений секретов
+  const msg = e instanceof Error ? e.message : String(e)
+  console.error(`\nSEED: ошибка — ${msg.replace(/postgres(ql)?:\/\/\S+/gi, '[url]')}`)
+  if (/ADMIN_PASSWORD/.test(msg))
+    console.error(
+      'SEED: задайте в Vercel ADMIN_PASSWORD по политике (≥ 12 символов, не простой, не равен email) и сделайте Redeploy',
+    )
+  process.exitCode = 1
 } finally {
   await db.destroy()
 }
