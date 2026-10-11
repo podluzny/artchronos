@@ -94,12 +94,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4397,
+                      "duration": 4812,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:06.493Z",
+                      "startTime": "2026-10-11T09:51:22.370Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -128,12 +128,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5082,
+                      "duration": 4839,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:11.626Z",
+                      "startTime": "2026-10-11T09:51:27.948Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -143,7 +143,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-fd128134a4d30af0bd74",
               "file": "sc-e2e-001.spec.ts",
-              "line": 41,
+              "line": 46,
               "column": 3
             },
             {
@@ -162,12 +162,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2059,
+                      "duration": 2744,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:16.734Z",
+                      "startTime": "2026-10-11T09:51:32.805Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -177,7 +177,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-9c896f4bf1f0dfe0062b",
               "file": "sc-e2e-001.spec.ts",
-              "line": 57,
+              "line": 62,
               "column": 3
             },
             {
@@ -196,12 +196,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4133,
+                      "duration": 4011,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:18.811Z",
+                      "startTime": "2026-10-11T09:51:35.562Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -211,7 +211,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-fe0d5ea361144aa63c8e",
               "file": "sc-e2e-001.spec.ts",
-              "line": 69,
+              "line": 80,
               "column": 3
             },
             {
@@ -230,12 +230,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 6397,
+                      "duration": 5987,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:22.958Z",
+                      "startTime": "2026-10-11T09:51:39.585Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -245,7 +245,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-1a2e76e68fc6f0d1c349",
               "file": "sc-e2e-001.spec.ts",
-              "line": 90,
+              "line": 101,
               "column": 3
             },
             {
@@ -264,12 +264,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3334,
+                      "duration": 3319,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:29.368Z",
+                      "startTime": "2026-10-11T09:51:45.584Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -279,7 +279,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-5db208302ad6ad993186",
               "file": "sc-e2e-001.spec.ts",
-              "line": 136,
+              "line": 147,
               "column": 3
             },
             {
@@ -298,12 +298,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 2165,
+                      "duration": 1912,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:32.717Z",
+                      "startTime": "2026-10-11T09:51:48.914Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -313,7 +313,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-24588e96ab749261a4da",
               "file": "sc-e2e-001.spec.ts",
-              "line": 154,
+              "line": 165,
               "column": 3
             },
             {
@@ -332,12 +332,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3205,
+                      "duration": 3232,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:34.896Z",
+                      "startTime": "2026-10-11T09:51:50.841Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -347,7 +347,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-dc44d27a811af7f0f570",
               "file": "sc-e2e-001.spec.ts",
-              "line": 160,
+              "line": 171,
               "column": 3
             },
             {
@@ -366,12 +366,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4939,
+                      "duration": 4694,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:38.115Z",
+                      "startTime": "2026-10-11T09:51:54.107Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -381,7 +381,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-3309a0ccda285e9870e6",
               "file": "sc-e2e-001.spec.ts",
-              "line": 183,
+              "line": 194,
               "column": 3
             },
             {
@@ -400,12 +400,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1925,
+                      "duration": 1624,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:43.072Z",
+                      "startTime": "2026-10-11T09:51:58.816Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -415,7 +415,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-2b7d34af2aba7f4f167d",
               "file": "sc-e2e-001.spec.ts",
-              "line": 224,
+              "line": 235,
               "column": 3
             },
             {
@@ -434,12 +434,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3320,
+                      "duration": 3052,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:45.012Z",
+                      "startTime": "2026-10-11T09:52:00.455Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -449,7 +449,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-937daf1bec8d16018a25",
               "file": "sc-e2e-001.spec.ts",
-              "line": 251,
+              "line": 262,
               "column": 3
             },
             {
@@ -468,12 +468,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3990,
+                      "duration": 3835,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:48.345Z",
+                      "startTime": "2026-10-11T09:52:03.520Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -483,7 +483,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-c6a601738aadbe37b4e6",
               "file": "sc-e2e-001.spec.ts",
-              "line": 271,
+              "line": 282,
               "column": 3
             },
             {
@@ -502,12 +502,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3049,
+                      "duration": 3069,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:52.347Z",
+                      "startTime": "2026-10-11T09:52:07.366Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -517,7 +517,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-0b0c2df58db206b80188",
               "file": "sc-e2e-001.spec.ts",
-              "line": 282,
+              "line": 293,
               "column": 3
             },
             {
@@ -536,12 +536,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1474,
+                      "duration": 1622,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:55.411Z",
+                      "startTime": "2026-10-11T09:52:10.445Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -551,7 +551,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-c9f72e7a2fbd38166646",
               "file": "sc-e2e-001.spec.ts",
-              "line": 293,
+              "line": 304,
               "column": 3
             },
             {
@@ -570,12 +570,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1929,
+                      "duration": 2091,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:56.899Z",
+                      "startTime": "2026-10-11T09:52:12.078Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -585,7 +585,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-d380abba111555045ca7",
               "file": "sc-e2e-001.spec.ts",
-              "line": 306,
+              "line": 317,
               "column": 3
             },
             {
@@ -604,12 +604,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3179,
+                      "duration": 3095,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:26:58.841Z",
+                      "startTime": "2026-10-11T09:52:14.193Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -619,7 +619,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-06fcad0aadb58f6e8ae4",
               "file": "sc-e2e-001.spec.ts",
-              "line": 313,
+              "line": 324,
               "column": 3
             },
             {
@@ -638,12 +638,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 5613,
+                      "duration": 5781,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:02.031Z",
+                      "startTime": "2026-10-11T09:52:17.301Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -653,7 +653,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-586a9c707820338403ce",
               "file": "sc-e2e-001.spec.ts",
-              "line": 338,
+              "line": 349,
               "column": 3
             },
             {
@@ -672,12 +672,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 4314,
+                      "duration": 3595,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:07.654Z",
+                      "startTime": "2026-10-11T09:52:23.092Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -687,7 +687,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-29cd92ab530b5f3277d0",
               "file": "sc-e2e-001.spec.ts",
-              "line": 366,
+              "line": 377,
               "column": 3
             },
             {
@@ -706,12 +706,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 1643,
+                      "duration": 1566,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:11.982Z",
+                      "startTime": "2026-10-11T09:52:26.698Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -721,7 +721,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-d009bda8553826c83786",
               "file": "sc-e2e-001.spec.ts",
-              "line": 391,
+              "line": 402,
               "column": 3
             },
             {
@@ -740,12 +740,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3213,
+                      "duration": 2934,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:13.640Z",
+                      "startTime": "2026-10-11T09:52:28.276Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -755,7 +755,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-acb3d6db20b30e3d3291",
               "file": "sc-e2e-001.spec.ts",
-              "line": 409,
+              "line": 420,
               "column": 3
             },
             {
@@ -774,12 +774,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 10114,
+                      "duration": 9672,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:16.865Z",
+                      "startTime": "2026-10-11T09:52:31.225Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -789,7 +789,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-76f3272693096e69366c",
               "file": "sc-e2e-001.spec.ts",
-              "line": 448,
+              "line": 459,
               "column": 3
             },
             {
@@ -808,12 +808,12 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
-                      "duration": 3200,
+                      "duration": 2951,
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
-                      "startTime": "2026-10-11T09:27:26.992Z",
+                      "startTime": "2026-10-11T09:52:40.908Z",
                       "annotations": [],
                       "attachments": []
                     }
@@ -823,7 +823,7 @@
               ],
               "id": "2c4c9f41c60536eab07f-a1d112ecb2f53c9739e2",
               "file": "sc-e2e-001.spec.ts",
-              "line": 476,
+              "line": 487,
               "column": 3
             }
           ]
@@ -833,8 +833,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-11T09:25:58.199Z",
-    "duration": 92120.49500000001,
+    "startTime": "2026-10-11T09:51:13.826Z",
+    "duration": 90195.415,
     "expected": 22,
     "skipped": 0,
     "unexpected": 0,

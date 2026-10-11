@@ -14,8 +14,8 @@ const Dashboard = () => {
         </Text>
       ) : null}
       <Text mt="lg">
-        Документация проекта (SDD): <a href="/sdd/">/sdd/</a> · Смена пароля:{' '}
-        <a href="/account/password">/account/password</a>
+        Справочник пользователя: <a href="/guide/">/guide/</a> · Документация проекта (SDD): <a href="/sdd/">/sdd/</a> ·
+        Смена пароля: <a href="/account/password">/account/password</a>
       </Text>
     </Box>
   )

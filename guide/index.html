@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ArtChronos — Справочник</title>
+    <meta name="description" content="Справочник пользователя административной части ArtChronos" />
+    <link rel="stylesheet" href="/sdd/assets/docsify/vue.css" />
+    <style>
+      .markdown-section {
+        max-width: 1100px;
+      }
+      .markdown-section table {
+        display: block;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">Загрузка…</div>
+    <script>
+      window.$docsify = {
+        name: 'ArtChronos — Справочник',
+        nameLink: '/guide/',
+        homepage: 'home.md',
+        loadSidebar: 'sidebar.md',
+        alias: { '/.*/sidebar.md': '/sidebar.md' },
+        subMaxLevel: 2,
+        relativePath: true,
+        auto2top: true,
+        notFoundPage: true,
+        search: { placeholder: 'Поиск', noData: 'Ничего не найдено', depth: 3 },
+      }
+    </script>
+    <script src="/sdd/assets/docsify/docsify.min.js"></script>
+    <script src="/sdd/assets/docsify/search.min.js"></script>
+  </body>
+</html>

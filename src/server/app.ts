@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises'
 import { randomUUID } from 'node:crypto'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -64,7 +65,7 @@ export async function createApp(db: Db, config: AppConfig) {
     if (config.production) res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
     // CSP для приложения (NFR-SEC-007). Встроенные скрипты шаблонов AdminJS требуют 'unsafe-inline';
     // внешние скрипты, объекты, встраивание во фреймы и отправка форм на чужие адреса запрещены.
-    if (!req.path.startsWith('/sdd')) res.setHeader('Content-Security-Policy', CSP)
+    if (!req.path.startsWith('/sdd') && !req.path.startsWith('/guide')) res.setHeader('Content-Security-Policy', CSP)
     next()
   })
 
@@ -203,6 +204,35 @@ export async function createApp(db: Db, config: AppConfig) {
     }
     return actor
   }
+
+  // ---- Справочник пользователя (/guide/): общие страницы открыты, раздел «Администрирование» — только ADMIN ----
+  const guideDir = path.resolve(here, '..', '..', 'guide')
+  const isGuideAdmin = async (req: Request) => (await authenticate(req))?.roleCodes.includes('ADMIN') ?? false
+  const markdown = (res: Response) => res.set('Cache-Control', 'no-store').type('text/markdown; charset=utf-8')
+  app.get(/^\/guide$/, (_req, res) => res.redirect(301, '/guide/'))
+  app.get('/guide/sidebar.md', async (req, res, next) => {
+    try {
+      const md = await readFile(path.join(guideDir, '_sidebar.md'), 'utf8')
+      markdown(res).send(
+        (await isGuideAdmin(req))
+          ? md.replace(/^<!-- admin:(start|end) -->\n/gm, '')
+          : md.replace(/^<!-- admin:start -->\n[\s\S]*?^<!-- admin:end -->\n/m, ''),
+      )
+    } catch (e) {
+      next(e)
+    }
+  })
+  app.get('/guide/_sidebar.md', (_req, res) => res.redirect('/guide/sidebar.md'))
+  app.use('/guide/admin', async (req, res, next) => {
+    if (await isGuideAdmin(req)) {
+      res.set('Cache-Control', 'no-store')
+      return next()
+    }
+    markdown(res)
+      .status(403)
+      .send('# Доступ ограничен\n\nРаздел доступен только администраторам после входа в систему.\n')
+  })
+  app.use('/guide', express.static(guideDir, { index: 'index.html' }))
 
   const wantsJson = (req: Request) =>
     req.path.startsWith('/api/') || (req.get('accept') ?? '').includes('application/json')

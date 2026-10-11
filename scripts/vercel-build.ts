@@ -57,6 +57,8 @@ for (const dir of [
 }
 // Исходники React-компонентов: ComponentLoader проверяет их наличие при старте (ассеты уже собраны).
 cpSync('src/adminjs/components', path.join(FUNC, 'src/adminjs/components'), { recursive: true })
+// Справочник пользователя (/guide/) отдается функцией: раздел администрирования проверяет роль (не статика).
+cpSync('guide', path.join(FUNC, 'guide'), { recursive: true })
 writeFileSync(
   `${FUNC}/.vc-config.json`,
   JSON.stringify(

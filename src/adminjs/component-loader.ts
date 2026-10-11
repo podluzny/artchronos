@@ -24,3 +24,6 @@ export const Components = {
   ReviewWorkspace: componentLoader.add('ReviewWorkspace', path.join(dir, 'ReviewWorkspace')),
   AssignmentSummary: componentLoader.add('AssignmentSummary', path.join(dir, 'AssignmentSummary')),
 }
+
+// Верхнее меню со ссылкой на справочник пользователя (/guide/).
+componentLoader.override('LoggedIn', path.join(dir, 'LoggedIn'))

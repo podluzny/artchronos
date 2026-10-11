@@ -36,6 +36,11 @@ test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
   test('шаг 1: Admin входит', async ({ page }) => {
     await login(page, ADMIN.email, ADMIN.password)
     await expect(page.getByText('Административная система подготовки')).toBeVisible()
+    // справочник: ссылка в верхнем меню; администратору доступен раздел «Администрирование»
+    await expect(page.getByTestId('guide-link')).toHaveAttribute('href', '/guide/')
+    await page.goto('/guide/#/admin/users')
+    await expect(page.locator('.sidebar').getByText('Администрирование')).toBeVisible()
+    await expect(page.locator('.markdown-section h1')).toHaveText('Пользователи')
   })
 
   test('шаг 2: Admin создает преподавателя и студента; они активируют учетные записи', async ({ page }) => {
@@ -60,6 +65,12 @@ test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
     await expect(page.getByText(teacher.email)).toHaveCount(0)
     await page.goto('/admin/resources/AuditLog/actions/list')
     await expect(page.locator('tbody tr')).toHaveCount(0)
+    // справочник: общие страницы видны, раздел «Администрирование» — нет
+    await page.goto('/guide/#/materials')
+    await expect(page.locator('.markdown-section h1')).toHaveText('Материалы')
+    await expect(page.locator('.sidebar').getByText('Администрирование')).toHaveCount(0)
+    await page.goto('/guide/#/admin/users')
+    await expect(page.locator('.markdown-section h1')).toHaveText('Страница недоступна')
   })
 
   const stamp = Date.now() % 100000
