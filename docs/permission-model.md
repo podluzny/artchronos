@@ -47,6 +47,8 @@ decision = can(actor, permissionKey, resource?)
 | `role.manage` | Создание ролей, изменение состава permissions | ANY |
 | `taxonomy.read` | Чтение предметов/курсов/тем/целей | COURSE, ANY |
 | `taxonomy.manage` | Ведение предметов/курсов/тем/целей | COURSE (темы/цели), ANY |
+| `knowledge.read` | Чтение справочников базы знаний | ANY |
+| `knowledge.manage` | Ведение справочников базы знаний | ANY |
 | `group.read` / `group.manage` | Группы студентов | COURSE, ANY |
 | `assignment.read` | Чтение заданий | ASSIGNED, COURSE, ANY |
 | `assignment.create` | Создание задания | COURSE, ANY |
@@ -161,6 +163,15 @@ decision = can(actor, permissionKey, resource?)
 | Review / perform (checklist, issues, decision) | — | assigned | assigned | assigned |
 | Review / comment, reply, mark addressed | own (по своему контенту) | own, assigned | assigned | assigned |
 | Checklist template / manage | — | — | — | any |
+
+### 4.7 Knowledge Base (BL-13)
+
+| Resource / Action | Student | Teacher | Expert | Admin |
+|---|---|---|---|---|
+| KnowledgeEntry / read | any | any | any | any |
+| KnowledgeEntry / manage | — | any | — | any |
+
+Ссылка якорем на объект не требует `knowledge.*`: она проверяется правами на источник (SPEC-KB-002).
 
 ## 5. Acceptance-проверки блока BL-02 (из плана)
 

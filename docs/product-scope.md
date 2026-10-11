@@ -21,6 +21,7 @@
 | BL-10 | Publishing & Lifecycle | BL-09 | M5 | SPEC-PUB-001, -002 |
 | BL-11 | Audit & Governance | BL-01, BL-02 (подключается ко всем) | M1 (+ каждый следующий) | SPEC-AUDIT-001, -002 |
 | BL-12 | Assessment Delivery Preparation | BL-08, BL-10 | M5 (только модель) | SPEC-DELIV-001 |
+| BL-13 | Knowledge Base («Материалы») | BL-02, BL-05, BL-07 | M7 | SPEC-KB-001, -002 |
 
 ### Граф зависимостей
 
@@ -63,6 +64,7 @@ BL-11 подключается ко всем блокам
 | **M4** Test Authoring | BL-08 | Test, TestVersion, sections, fixed/random, settings | AT BL-08 |
 | **M5** Expert Review | BL-09, BL-10, BL-12 (модель) | review queue, checklist, comments, decisions, lifecycle, публикация | E2E reference scenario SC-E2E-001 зеленый |
 | **M6** Hardening | все | приемка: authz, audit, immutability, state transitions, concurrency, archive/restore, escalation, media rights, security, a11y, performance | Все NFR верифицированы, acceptance matrix 100% |
+| **M7** Knowledge Base | BL-13 | справочники «Материалы», связи, якоря в тексте, медиа ↔ произведение (`docs/knowledge-base-plan.md`) | AT-KB-001.*, AT-KB-002.* зеленые; trace:check без ошибок |
 
 ## 3. Первый вертикальный slice
 

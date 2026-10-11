@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ID_RE = re.compile(r"\b(FR|NFR|BR|SC|SPEC|AC|INV|T)-[A-Z0-9]+(?:-[A-Z0-9]+)*(?:\.\d+)?\b")
 FULL_ID = re.compile(r"(?:FR|NFR|SC|SPEC|AC)-[A-Z0-9]+-\d{3}(?:\.\d+)?|(?:BR|INV)-\d{3}")
 # Упоминаются в тексте намеренно, но не определены: следующий свободный номер BR.
-ALLOWED_UNDEFINED = {"BR-047"}
+ALLOWED_UNDEFINED = {"BR-052"}
 PREFIXED = re.compile(r"((?:FR|NFR|SC|SPEC|AC)-[A-Z0-9]+-)(\d{3})(\.\d+)?")
 
 

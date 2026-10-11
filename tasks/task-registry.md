@@ -217,3 +217,23 @@ SC-E2E-001 шаг 3 автоматизирован. Таблица `question_typ
 - T-085: JSON-логи с requestId/userId и маскированием, `/health/ready`, метрики `/admin/metrics`, журнал отказов авторизации.
 - T-086: `tests/integration/regression-archive.test.ts` — архив/восстановление и права на опубликованном контенте.
 - T-087: acceptance-matrix — все AT в статусе ✓ (unit/integration/acceptance, E2E, perf); трассировка без ошибок.
+
+### M7 — Knowledge Base (BL-13)
+
+План — `docs/knowledge-base-plan.md`.
+
+| ID | Title | Type | Spec / NFR | Depends on | Status |
+|---|---|---|---|---|---|
+| T-088 | План, ADR-010, SPEC-KB-001/002, FR-KB, BR-047…BR-051, SC-KB | doc | SPEC-KB-001, SPEC-KB-002 | T-087 | done |
+| T-089 | Миграция 0006: knowledge_entries, knowledge_links, content_references, media.artwork_id; permissions knowledge.* | infra | SPEC-KB-001 | T-088 | done |
+| T-090 | Домен: виды, slug, парсер, нормализация и рендер якорей | domain | SPEC-KB-002 | T-088 | done |
+| T-091 | Use cases справочников: CRUD, связи, архив, удаление, поиск, «где используется» | app | SPEC-KB-001 | T-089, T-090 | done |
+| T-092 | Якоря в контенте: вопросы, тесты, задания, медиа, справочники; рендер и delivery | app | SPEC-KB-002 | T-091 | done |
+| T-093 | Медиа ↔ произведение, автозаполнение полей | app | SPEC-KB-001 | T-091 | done |
+| T-094 | AdminJS: группа «Материалы», 7 ресурсов, «Где используется», подсказки | ui | SPEC-KB-001, SPEC-KB-002 | T-091 | done |
+| T-095 | Тесты AT-KB-001.*, AT-KB-002.*, регрессия и E2E | test | SPEC-KB-001, SPEC-KB-002 | T-092…T-094 | done |
+| T-096 | Документация: domain-model, permission-model, ручной чек-лист | doc | SPEC-KB-001 | T-095 | done |
+
+Примечания M7:
+- FR-KB-010 (автодополнение `@`, «Объекты знания» у вопроса, фильтр отбора, помощник миграции) — F, следующая итерация.
+- Права системных ролей TEACHER, STUDENT, EXPERT добавляются миграцией 0006: seed обновляет состав только у ADMIN.

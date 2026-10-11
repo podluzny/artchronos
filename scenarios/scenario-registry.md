@@ -57,6 +57,9 @@ Actor · Preconditions · Trigger · Main flow · Alternative flows · Business 
 | SC-AUDIT-001 | Администратор расследует изменения по журналу | Admin | BL-11 | FR-AUDIT-001, -002 | SPEC-AUDIT-001 |
 | SC-AUDIT-002 | Пользователь смотрит историю объекта | Любой с правом чтения | BL-11 | FR-AUDIT-003 | SPEC-AUDIT-002 |
 | SC-AUDIT-003 | Архивирование и восстановление объекта с журналированием | Owner, Admin | BL-11 | FR-AUDIT-004 | SPEC-AUDIT-002 |
+| SC-KB-001 | Преподаватель ведет справочник базы знаний | Teacher, Admin | BL-13 | FR-KB-001…FR-KB-005, FR-KB-009 | SPEC-KB-001 |
+| SC-KB-002 | Автор контента ссылается на объект из текста | Student, Teacher | BL-13 | FR-KB-006, FR-KB-007 | SPEC-KB-002 |
+| SC-KB-003 | Медиа связывается с произведением | Teacher, Student | BL-13 | FR-KB-008 | SPEC-KB-001 |
 | **SC-E2E-001** | **E2E reference scenario** | Admin, Teacher, Student | все | см. ниже | все |
 
 ---
