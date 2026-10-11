@@ -5,6 +5,7 @@ import type { EducationRepository } from '../education/ports.js'
 import type { MediaRepository } from '../media/ports.js'
 import type { AuditWriter } from '../shared/audit.js'
 import type { ListQuery } from '../shared/query.js'
+import type { KnowledgeRepository } from '../knowledge/ports.js'
 
 export interface QuestionTypeVersionRecord {
   id: string
@@ -190,6 +191,7 @@ export interface ItemRepository {
 }
 
 export interface ItemBankTx {
+  knowledge: KnowledgeRepository
   items: ItemRepository
   qtypes: QuestionTypeRepository
   media: MediaRepository

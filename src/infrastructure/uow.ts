@@ -5,6 +5,7 @@ import type { AuditTx } from '../application/audit/use-cases.js'
 import type { EducationTx } from '../application/education/ports.js'
 import type { IdentityTx } from '../application/identity/ports.js'
 import type { ItemBankTx } from '../application/itembank/ports.js'
+import type { KnowledgeTx } from '../application/knowledge/ports.js'
 import type { MediaTx } from '../application/media/ports.js'
 import type { UnitOfWork } from '../application/shared/uow.js'
 import { DomainError } from '../domain/shared/errors.js'
@@ -17,13 +18,22 @@ import type { Db } from './db/kysely.js'
 import { KyselyEducationRepository } from './education/education-repository.js'
 import { KyselyItemRepository } from './itembank/item-repository.js'
 import { KyselyQuestionTypeRepository } from './itembank/qtype-repository.js'
+import { KyselyKnowledgeRepository } from './knowledge/knowledge-repository.js'
 import { KyselyMediaRepository } from './media/media-repository.js'
 import { KyselyRoleRepository } from './identity/role-repository.js'
 import { KyselyPasswordTokenRepository, KyselySessionRepository } from './identity/token-repositories.js'
 import { KyselyUserRepository } from './identity/user-repository.js'
 
 /** Полный набор репозиториев приложения, привязанный к соединению или транзакции. */
-export type AppTx = IdentityTx & AuditTx & EducationTx & MediaTx & ItemBankTx & AssessmentTx & ReviewTx & DeliveryTx
+export type AppTx = IdentityTx &
+  AuditTx &
+  EducationTx &
+  MediaTx &
+  ItemBankTx &
+  AssessmentTx &
+  ReviewTx &
+  DeliveryTx &
+  KnowledgeTx
 
 export function bindRepositories(db: Db): AppTx {
   return {
@@ -40,6 +50,7 @@ export function bindRepositories(db: Db): AppTx {
     tests: new KyselyTestRepository(db),
     reviews: new KyselyReviewRepository(db),
     delivery: new KyselyDeliveryRepository(db),
+    knowledge: new KyselyKnowledgeRepository(db),
   }
 }
 

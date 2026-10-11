@@ -14,6 +14,8 @@ import {
 import { assertMediaSelectable, mediaIssuesForSubmit } from '../../domain/media/media-rules.js'
 import { DomainError, type FieldError } from '../../domain/shared/errors.js'
 import { sanitizeRichText } from '../../domain/shared/rich-text.js'
+import { renderAnchorsHtml, stripAnchors } from '../../domain/knowledge/anchors.js'
+import { normalizeTexts } from '../knowledge/references.js'
 import { assertEditable, canBranch, transition, type VersionState } from '../../domain/versioning/state-machine.js'
 import type { AssignmentRecord } from '../education/ports.js'
 import type { Clock, RequestContext } from '../shared/context.js'
@@ -324,6 +326,20 @@ export function createItemUseCases(deps: ItemDeps) {
     return issues
   }
 
+  /** SPEC-KB-002: якоря в формулировке, вариантах и пояснении; возвращает ссылки версии. */
+  function anchorTexts(doc: ItemDocument, meta: ItemMeta): Record<string, string | null> {
+    const texts: Record<string, string | null> = { 'document.stem': doc.stem, 'meta.feedback': meta.feedback }
+    doc.options.forEach((o, i) => (texts[`document.options.${i}.text`] = o.text))
+    return texts
+  }
+  async function applyAnchors(doc: ItemDocument, meta: ItemMeta, allow: ReadonlySet<string> = new Set()) {
+    const n = await normalizeTexts(r().knowledge, anchorTexts(doc, meta), allow)
+    doc.stem = n.texts['document.stem'] ?? ''
+    meta.feedback = n.texts['meta.feedback'] ?? null
+    doc.options.forEach((o, i) => (o.text = n.texts[`document.options.${i}.text`] ?? null))
+    return n.refs
+  }
+
   function normalizeInput(
     raw: { document?: unknown; meta?: unknown },
     fallbackDoc: ItemDocument,
@@ -397,12 +413,12 @@ export function createItemUseCases(deps: ItemDeps) {
       typeName: item.questionTypeName,
       config: qtv.interactionConfig,
       // повторная санитизация при выводе (NFR-SEC-007): защита и для данных, сохраненных до правил
-      stem: sanitizeRichText(doc.stem),
+      stem: renderAnchorsHtml(sanitizeRichText(doc.stem)),
       content: doc.content,
-      options,
+      options: options.map((o) => ({ ...o, text: stripAnchors(o.text) })),
       media: doc.media,
       answerKey: doc.answerKey,
-      feedback: version.meta.feedback,
+      feedback: stripAnchors(version.meta.feedback),
       errors: issues.filter((i) => i.severity === 'ERROR'),
       versionNo: version.versionNo,
       state: version.state,
@@ -546,6 +562,7 @@ export function createItemUseCases(deps: ItemDeps) {
           tags: [],
         }
         const { doc, meta } = normalizeInput(input, plugin.emptyDocument(qtv.interactionConfig), defaultMeta)
+        const refs = await applyAnchors(doc, meta)
         await checkStructure({ doc, meta, plugin, qtv, courseId: c.courseId, assignment: c.assignment, previous: null })
         const ids = await uow.transaction(async (tx) => {
           const itemId = await tx.items.insertItem({
@@ -564,6 +581,7 @@ export function createItemUseCases(deps: ItemDeps) {
             authorIds: [actor.userId],
           })
           await tx.items.setItemPointers(itemId, { currentDraftVersionId: versionId })
+          await tx.knowledge.replaceRefs('ITEM_VERSION', versionId, refs)
           await tx.audit.record(
             actor,
             {
@@ -598,6 +616,7 @@ export function createItemUseCases(deps: ItemDeps) {
         const qtv = await typeVersionFor(v.questionTypeVersionId)
         const plugin = pluginFor(item.interactionKey)
         const { doc, meta } = normalizeInput(input, v.document, v.meta)
+        const refs = await applyAnchors(doc, meta, new Set(await r().knowledge.refsOf('ITEM_VERSION', v.id)))
         const assignment = item.assignmentId ? await r().education.findAssignment(item.assignmentId) : null
         await checkStructure({
           doc,
@@ -610,6 +629,7 @@ export function createItemUseCases(deps: ItemDeps) {
         })
         await uow.transaction(async (tx) => {
           await tx.items.replaceDraftContent(v.id, doc, meta, Number(input.revision))
+          await tx.knowledge.replaceRefs('ITEM_VERSION', v.id, refs)
           await tx.audit.record(
             actor,
             {
@@ -674,6 +694,7 @@ export function createItemUseCases(deps: ItemDeps) {
             authorIds: authors,
           })
           await tx.items.setItemPointers(item.id, { currentDraftVersionId: id })
+          await tx.knowledge.copyRefs('ITEM_VERSION', src.id, id)
           // auto-rebind (versioning-model §4 п.4): черновики тестов автора переходят на новую версию
           const rebound =
             src.state === 'CHANGES_REQUESTED' ? await tx.items.rebindDraftTests(src.id, id, actor.userId) : []

@@ -13,6 +13,8 @@ import { ru } from './locale-ru.js'
 import { educationResources } from './resources/education.js'
 import { identityResources } from './resources/identity.js'
 import { itemResources } from './resources/items.js'
+import type { KnowledgeUseCases } from '../application/knowledge/use-cases.js'
+import { knowledgeResources } from './resources/knowledge.js'
 import { mediaResources } from './resources/media.js'
 import { qtypeResources } from './resources/qtypes.js'
 import { reviewResources } from './resources/reviews.js'
@@ -23,6 +25,7 @@ export interface AdminServices {
   audit: AuditUseCases
   education: EducationUseCases
   media: MediaUseCases
+  knowledge: KnowledgeUseCases
   qtypes: QtypeUseCases
   items: ItemUseCases
   tests: TestUseCases
@@ -56,6 +59,48 @@ function withHints(resources: ResourceWithOptions[]): ResourceWithOptions[] {
   return resources
 }
 
+/** Подписи полей справочников «Материалы» (SPEC-KB-001). */
+function knowledgeTranslations() {
+  const common = {
+    name: 'Название',
+    slug: 'Slug (ключ ссылки)',
+    anchor: 'Ссылка в тексте',
+    altNames: 'Варианты написания',
+    yearFrom: 'Год (от)',
+    yearTo: 'Год (до)',
+    description: 'Описание',
+    usageCount: 'Ссылок',
+    usages: 'Где используется',
+    status: 'Статус',
+    archiveReason: 'Причина архивации',
+    'attrs.birthText': 'Годы жизни: рождение',
+    'attrs.deathText': 'Годы жизни: смерть',
+    'attrs.country': 'Страна',
+    'attrs.workKind': 'Вид произведения',
+    'attrs.dateText': 'Датировка',
+    'attrs.dimensions': 'Размеры',
+    'attrs.inventoryNo': 'Инв. номер',
+    'attrs.location': 'Местонахождение (архитектура)',
+    'attrs.city': 'Город',
+    'attrs.url': 'Сайт',
+    'attrs.creditLineTemplate': 'Шаблон строки атрибуции',
+    'attrs.forms': 'Словоформы',
+    'links.AUTHOR': 'Авторы',
+    'links.COLLECTION': 'Собрание',
+    'links.TECHNIQUE': 'Техники',
+    'links.MOVEMENT': 'Направления',
+    'links.PERIOD': 'Периоды',
+    'links.PARENT': 'Входит в',
+    'links.SEE_ALSO': 'См. также',
+  }
+  return Object.fromEntries(
+    ['Person', 'Artwork', 'Collection', 'Movement', 'Period', 'Technique', 'Term'].map((r) => [
+      r,
+      { properties: common },
+    ]),
+  )
+}
+
 export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: string } = {}): AdminJSOptions {
   return {
     rootPath: ADMIN_ROOT,
@@ -69,6 +114,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
       ...itemResources(services.items, services.media),
       ...qtypeResources(services.qtypes),
       ...mediaResources(services.media),
+      ...knowledgeResources(services.knowledge),
       ...educationResources(services.education, { summary: assignmentSummaryAction(services.tests) }),
       ...identityResources(services),
     ]),
@@ -86,6 +132,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
         ru: {
           ...ru,
           resources: {
+            ...knowledgeTranslations(),
             Subject: {
               properties: {
                 code: 'Код',
@@ -250,7 +297,8 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
                 transcript: 'Расшифровка (видео)',
                 depictsArtwork: 'Изображено произведение',
                 artist: 'Автор произведения',
-                workTitle: 'Произведение',
+                artworkId: 'Произведение (справочник)',
+                workTitle: 'Название произведения',
                 dateText: 'Датировка',
                 technique: 'Техника',
                 collection: 'Собрание',
@@ -380,6 +428,14 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
             Review: 'Экспертизы',
             ChecklistTemplate: 'Шаблоны checklist',
             MediaAsset: 'Медиатека',
+            Person: 'Авторы',
+            Artwork: 'Произведения',
+            Collection: 'Собрания и музеи',
+            Movement: 'Направления и стили',
+            Period: 'Периоды',
+            Technique: 'Техники и материалы',
+            Term: 'Термины',
+            Материалы: 'Материалы',
             Assignment: 'Задания',
             Администрирование: 'Администрирование',
           },

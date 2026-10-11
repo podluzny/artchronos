@@ -7,6 +7,7 @@ import { createEducationUseCases } from '../application/education/use-cases.js'
 import { createIdentityUseCases } from '../application/identity/use-cases.js'
 import { createItemUseCases } from '../application/itembank/item-use-cases.js'
 import { createQtypeUseCases } from '../application/itembank/qtype-use-cases.js'
+import { createKnowledgeUseCases } from '../application/knowledge/use-cases.js'
 import { createMediaUseCases } from '../application/media/use-cases.js'
 import type { MediaStorage } from '../application/media/ports.js'
 import type { Db } from '../infrastructure/db/kysely.js'
@@ -23,6 +24,7 @@ export function createServices(db: Db, opts: { clock?: Clock; storage?: MediaSto
   const identity = createIdentityUseCases({ uow, hasher: new Argon2Hasher(), tokens: new RandomTokenService(), clock })
   const audit = createAuditUseCases({ uow })
   const education = createEducationUseCases({ uow, clock })
+  const knowledge = createKnowledgeUseCases({ uow })
   const registry = createInteractionRegistry()
   const storage = opts.storage ?? createStorage(db)
   const media = createMediaUseCases({ uow, storage, processor: new SharpMediaProcessor(), clock })
@@ -47,7 +49,21 @@ export function createServices(db: Db, opts: { clock?: Clock; storage?: MediaSto
   const reviews = createReviewUseCases({ uow, clock, items })
   /** Прототип модели прохождения (BL-12): только для тестов, в UI не подключается. */
   const delivery = createDeliveryService({ uow, registry, clock })
-  return { uow, identity, audit, education, media, qtypes, items, tests, reviews, delivery, registry, storage }
+  return {
+    uow,
+    identity,
+    audit,
+    education,
+    knowledge,
+    media,
+    qtypes,
+    items,
+    tests,
+    reviews,
+    delivery,
+    registry,
+    storage,
+  }
 }
 
 export type Services = ReturnType<typeof createServices>

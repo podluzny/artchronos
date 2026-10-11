@@ -133,6 +133,24 @@ test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
     await expect(page.getByText('Активно').first()).toBeVisible()
   })
 
+  test('M7 SC-KB-001/002: Teacher ведет справочники «Материалы» и ссылается на объект из текста', async ({ page }) => {
+    await login(page, teacher.email, teacher.password)
+    await page.goto('/admin/resources/Person/actions/new')
+    await expect(page.getByText('Материалы').first()).toBeVisible()
+    await page.fill('#name', 'Архип Куинджи')
+    await page.fill('#slug', `kuindzhi-${stamp}`)
+    await page.fill('#altNames', 'Kuindzhi, А. И. Куинджи')
+    await submitAndWait(page)
+    await page.goto('/admin/resources/Term/actions/new')
+    await page.fill('#name', `Тональная живопись ${stamp}`)
+    await page.fill('#description', `Прием, характерный для [Куинджи](@kuindzhi-${stamp})`)
+    await submitAndWait(page)
+    await openRecord(page, 'Term', `Тональная живопись ${stamp}`)
+    await expect(page.getByText(`[Куинджи](@person:kuindzhi-${stamp})`)).toBeVisible()
+    await openRecord(page, 'Person', 'Архип Куинджи')
+    await expect(page.getByText(`объект (описание): Тональная живопись ${stamp}`)).toBeVisible()
+  })
+
   test('шаг 3: студент видит активное задание', async ({ page }) => {
     await login(page, student.email, student.password)
     await page.goto('/admin/resources/Assignment/actions/list')

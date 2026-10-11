@@ -24,6 +24,7 @@
 | | `caption` | нет |
 | | `transcript` (видео) | нет (NFR-A11Y-003) |
 | Произведение | `artwork.artist`, `artwork.workTitle`, `artwork.dateText`, `artwork.technique`, `artwork.collection`, `artwork.inventoryNo` | `artist` и `workTitle` — если медиа изображает произведение (флаг `depictsArtwork`) |
+| | `artworkId` (M7) | нет; при выборе произведения из базы знаний поля группы «Произведение» заполняются из него (BR-051, SPEC-KB-001) |
 | Источник | `source.url`, `source.description` | одно из двух — обязательно для `CLEARED` |
 | Права | `license` | при загрузке (по умолчанию `UNKNOWN`) |
 | | `rightsHolder`, `creditLine` | обязательны для `CLEARED`, кроме `PUBLIC_DOMAIN`/`CC0` (creditLine рекомендуется) |

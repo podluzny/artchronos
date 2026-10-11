@@ -56,7 +56,12 @@
 | BR-016 | Нельзя заблокировать, архивировать или лишить роли ADMIN последнего активного администрато… | FR-USER-003, FR-USER-004 | SC-PERM-001, SC-USER-001, SC-USER-002, SC-USER-003 | SPEC-USER-001, SPEC-USER-002 | T-032, T-035, T-039, T-040 | 15 AT (AT-USER-001.*, AT-USER-002.*) |
 | BR-046 | Системные роли (isSystem) нельзя удалить; набор их permissions меняет только Admin, и изме… | FR-PERM-001 | SC-PERM-001, SC-USER-002 | SPEC-USER-002 | T-032, T-035, T-040 | 7 AT (AT-USER-002.*) |
 | BR-034 | AuditLog append-only: никто, включая Admin, не может изменить или удалить запись через при… | FR-AUDIT-001 | SC-AUDIT-001, SC-E2E-001 | SPEC-AUDIT-001 | T-033, T-041 | 6 AT (AT-AUDIT-001.*) |
-| BR-035 | Каждое изменение governed-ресурса, переход состояния, решение review, изменение ролей/perm… | FR-AUDIT-001 | SC-ASSIGN-002, SC-ASSIGN-003, SC-AUDIT-001, SC-AUDIT-003, SC-AUTH-001, SC-AUTH-003 … | SPEC-ASSIGN-002, SPEC-AUDIT-001, SPEC-AUTH-001, SPEC-AUTH-004, SPEC-EDU-001, SPEC-EDU-002, SPEC-MEDIA-001, SPEC-MEDIA-002, SPEC-QTYPE-001, SPEC-REVIEW-001, SPEC-USER-001, SPEC-USER-002 | T-032, T-033, T-035, T-037, T-038, T-039, T-040, T-041, T-042, T-044, T-045, T-047, T-049, T-050, T-051, T-052, T-057, T-072, T-086 | 74 AT (AT-ASSIGN-002.*, AT-AUDIT-001.*, AT-AUTH-001.*, AT-AUTH-004.* …) |
+| BR-035 | Каждое изменение governed-ресурса, переход состояния, решение review, изменение ролей/perm… | FR-AUDIT-001 | SC-ASSIGN-002, SC-ASSIGN-003, SC-AUDIT-001, SC-AUDIT-003, SC-AUTH-001, SC-AUTH-003 … | SPEC-ASSIGN-002, SPEC-AUDIT-001, SPEC-AUTH-001, SPEC-AUTH-004, SPEC-EDU-001, SPEC-EDU-002, SPEC-KB-001, SPEC-MEDIA-001, SPEC-MEDIA-002, SPEC-QTYPE-001, SPEC-REVIEW-001, SPEC-USER-001, SPEC-USER-002 | T-032, T-033, T-035, T-037, T-038, T-039, T-040, T-041, T-042, T-044, T-045, T-047, T-049, T-050, T-051, T-052, T-057, T-072, T-086, T-088, T-089, T-091, T-093, T-094, T-095, T-096 | 83 AT (AT-ASSIGN-002.*, AT-AUDIT-001.*, AT-AUTH-001.*, AT-AUTH-004.* …) |
+| BR-047 | Объект базы знаний, на который ссылаются контент (якоря), медиа или другие объекты, не уда… | FR-KB-004, FR-KB-005 | SC-KB-001, SC-KB-002, SC-KB-003 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | 9 AT (AT-KB-001.*) |
+| BR-048 | Slug объекта уникален в пределах вида (DB) и не меняется, пока на объект есть ссылки (A). | FR-KB-001 | SC-KB-001, SC-KB-002, SC-KB-003 | SPEC-KB-001, SPEC-KB-002 | T-088, T-089, T-090, T-091, T-092, T-093, T-094, T-095, T-096 | 18 AT (AT-KB-001.*, AT-KB-002.*) |
+| BR-049 | Архивный объект нельзя выбрать в новых связях и новых якорях; существующие ссылки сохраняю… | FR-KB-002, FR-KB-006 | SC-KB-001, SC-KB-002, SC-KB-003 | SPEC-KB-001, SPEC-KB-002 | T-088, T-089, T-090, T-091, T-092, T-093, T-094, T-095, T-096 | 18 AT (AT-KB-001.*, AT-KB-002.*) |
+| BR-050 | Якорь хранится в каноническом виде [подпись](@kind:slug) с зафиксированной подписью; студе… | FR-KB-006, FR-KB-007 | SC-KB-002 | SPEC-KB-002 | T-088, T-090, T-092, T-094, T-095 | 9 AT (AT-KB-002.*) |
+| BR-051 | Медиа, связанное с произведением, получает автора, название, датировку, технику, собрание … | FR-KB-008 | SC-KB-001, SC-KB-003 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | 9 AT (AT-KB-001.*) |
 
 ## 2. Functional requirements
 
@@ -149,6 +154,16 @@
 | FR-DELIV-002 | M | SC-ITEM-004 | SPEC-QTYPE-002, SPEC-ITEM-003, SPEC-DELIV-001 | T-053, T-054, T-055, T-056, T-062, T-077 | AT-DELIV-001.*, AT-ITEM-003.*, AT-QTYPE-002.* |
 | FR-DELIV-003 | F | — | — | — | — |
 | FR-DELIV-004 | F | — | — | — | — |
+| FR-KB-001 | M | SC-KB-001 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-002 | M | SC-KB-001 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-003 | M | SC-KB-001 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-004 | M | SC-KB-001 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-005 | M | SC-KB-001, SC-KB-002 | SPEC-KB-001, SPEC-KB-002 | T-088, T-089, T-090, T-091, T-092, T-093, T-094, T-095, T-096 | AT-KB-001.*, AT-KB-002.* |
+| FR-KB-006 | M | SC-KB-002 | SPEC-KB-002 | T-088, T-090, T-092, T-094, T-095 | AT-KB-002.* |
+| FR-KB-007 | M | SC-KB-002 | SPEC-KB-002 | T-088, T-090, T-092, T-094, T-095 | AT-KB-002.* |
+| FR-KB-008 | M | SC-KB-003 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-009 | M | SC-KB-001 | SPEC-KB-001 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | AT-KB-001.* |
+| FR-KB-010 | F | — | — | — | — |
 
 ## 3. Non-functional requirements
 
@@ -221,6 +236,8 @@
 | [SPEC-ITEM-003](../specs/items/SPEC-ITEM-003-item-preview.md) | Предпросмотр вопроса | BL-07 | FR-ITEM-006, FR-DELIV-002, NFR-SEC-008 | SC-ITEM-004 | — | T-062 | 4 |
 | [SPEC-ITEM-004](../specs/items/SPEC-ITEM-004-item-permissions.md) | Ownership policy и доступ к вопросам | BL-07 | FR-ITEM-011, FR-PERM-002, FR-PERM-003, NFR-SEC-001 | SC-ITEM-005, SC-E2E-001 | BR-001, BR-004, BR-006, BR-007 | T-059 | 6 |
 | [SPEC-ITEM-005](../specs/items/SPEC-ITEM-005-item-filtering.md) | Банк вопросов: список, фильтрация, drawer | BL-07 | FR-ITEM-007, FR-PERM-003, NFR-PERF-001, NFR-PERF-003 | SC-ITEM-005, SC-TEST-002 | BR-039 | T-063 | 5 |
+| [SPEC-KB-001](../specs/knowledge/SPEC-KB-001-reference-entries.md) | Справочники базы знаний | BL-13 | FR-KB-001, FR-KB-002, FR-KB-003, FR-KB-004, FR-KB-005, FR-KB-008, FR-KB-009 | SC-KB-001, SC-KB-003 | BR-047, BR-048, BR-049, BR-051, BR-035 | T-088, T-089, T-091, T-093, T-094, T-095, T-096 | 9 |
+| [SPEC-KB-002](../specs/knowledge/SPEC-KB-002-content-anchors.md) | Якоря на объекты базы знаний в тексте | BL-13 | FR-KB-006, FR-KB-007, FR-KB-005 | SC-KB-002 | BR-048, BR-049, BR-050 | T-088, T-090, T-092, T-094, T-095 | 9 |
 | [SPEC-MEDIA-001](../specs/media/SPEC-MEDIA-001-upload-metadata.md) | Загрузка медиа и метаданные | BL-05 | FR-MEDIA-001, FR-MEDIA-002, FR-MEDIA-004, FR-MEDIA-005, FR-MEDIA-008, NFR-SEC-006, NFR-PERF-004 | SC-MEDIA-001, SC-MEDIA-003 | BR-025, BR-045, BR-035 | T-049, T-050, T-051 | 7 |
 | [SPEC-MEDIA-002](../specs/media/SPEC-MEDIA-002-rights-usage.md) | Права, использование, архивирование медиа | BL-05 | FR-MEDIA-003, FR-MEDIA-006, FR-MEDIA-007 | SC-MEDIA-002, SC-AUDIT-003 | BR-005, BR-024, BR-026, BR-039, BR-045, BR-035 | T-052, T-086 | 7 |
 | [SPEC-PUB-001](../specs/publishing/SPEC-PUB-001-lifecycle.md) | Жизненный цикл версий | BL-10 | FR-PUB-001, NFR-DATA-001, NFR-DATA-004 | — | BR-002, BR-006, BR-007, BR-008, BR-013, BR-041 | T-058, T-064, T-075 | 5 |

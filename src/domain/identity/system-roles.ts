@@ -15,6 +15,7 @@ const g = (key: PermissionKey, ...scopes: Scope[]): RoleGrant => ({ key, scopes 
 const STUDENT: RoleGrant[] = [
   g('user.update', 'OWN'),
   g('taxonomy.read', 'COURSE'),
+  g('knowledge.read', 'ANY'),
   g('assignment.read', 'ASSIGNED'),
   g('media.read', 'ANY'),
   g('media.upload', 'ANY'),
@@ -40,6 +41,8 @@ const TEACHER: RoleGrant[] = [
   g('user.update', 'OWN'),
   g('taxonomy.read', 'COURSE'),
   g('taxonomy.manage', 'COURSE'),
+  g('knowledge.read', 'ANY'),
+  g('knowledge.manage', 'ANY'),
   g('group.read', 'COURSE'),
   g('group.manage', 'COURSE'),
   g('assignment.read', 'COURSE'),
@@ -71,6 +74,7 @@ const TEACHER: RoleGrant[] = [
 const EXPERT: RoleGrant[] = [
   g('user.update', 'OWN'),
   g('taxonomy.read', 'ANY'),
+  g('knowledge.read', 'ANY'),
   g('media.read', 'ANY'),
   g('qtype.read', 'ANY'),
   g('item.read', 'ASSIGNED'),

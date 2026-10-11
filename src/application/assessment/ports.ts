@@ -6,6 +6,7 @@ import type { ItemRepository, QuestionTypeRepository } from '../itembank/ports.j
 import type { MediaRepository } from '../media/ports.js'
 import type { AuditWriter } from '../shared/audit.js'
 import type { ListQuery } from '../shared/query.js'
+import type { KnowledgeRepository } from '../knowledge/ports.js'
 
 export interface TestRecord {
   id: string
@@ -210,6 +211,7 @@ export interface TestRepository {
 }
 
 export interface AssessmentTx {
+  knowledge: KnowledgeRepository
   tests: TestRepository
   items: ItemRepository
   qtypes: QuestionTypeRepository

@@ -21,6 +21,8 @@ export const PERMISSIONS = [
   { key: 'role.manage', description: 'Управление ролями и составом permissions', scopes: ['ANY'] },
   { key: 'taxonomy.read', description: 'Чтение предметов, курсов, тем, целей', scopes: ['COURSE', 'ANY'] },
   { key: 'taxonomy.manage', description: 'Ведение предметов, курсов, тем, целей', scopes: ['COURSE', 'ANY'] },
+  { key: 'knowledge.read', description: 'Чтение справочников базы знаний', scopes: ['ANY'] },
+  { key: 'knowledge.manage', description: 'Ведение справочников базы знаний', scopes: ['ANY'] },
   { key: 'group.read', description: 'Просмотр групп студентов', scopes: ['COURSE', 'ANY'] },
   { key: 'group.manage', description: 'Ведение групп студентов', scopes: ['COURSE', 'ANY'] },
   { key: 'assignment.read', description: 'Чтение заданий', scopes: ['ASSIGNED', 'COURSE', 'ANY'] },

@@ -1,5 +1,6 @@
 import { seededShuffle, type ItemDocument } from '../itembank/interaction.js'
 import { DomainError } from '../shared/errors.js'
+import { stripAnchors } from '../knowledge/anchors.js'
 import { sanitizeRichText } from '../shared/rich-text.js'
 import type { VersionState } from '../versioning/state-machine.js'
 
@@ -77,12 +78,18 @@ export function deliveryView(doc: ItemDocument, item: DeliveredItem) {
   return {
     itemVersionId: item.itemVersionId,
     points: item.points,
-    stem: sanitizeRichText(doc.stem),
+    stem: stripAnchors(sanitizeRichText(doc.stem)),
     content: Object.fromEntries(Object.entries(doc.content).filter(([k]) => k !== 'rubric')),
     media: doc.media.map((m) => ({ mediaAssetId: m.mediaAssetId, role: m.role, altText: m.altTextOverride })),
     options: item.optionOrder.map((k) => {
       const o = byKey.get(k)!
-      return { key: o.key, role: o.role, text: o.text, mediaAssetId: o.mediaAssetId, altText: o.altTextOverride }
+      return {
+        key: o.key,
+        role: o.role,
+        text: stripAnchors(o.text),
+        mediaAssetId: o.mediaAssetId,
+        altText: o.altTextOverride,
+      }
     }),
   }
 }

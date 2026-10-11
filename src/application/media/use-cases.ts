@@ -9,6 +9,7 @@ import { diff } from '../shared/audit.js'
 import type { Clock, RequestContext } from '../shared/context.js'
 import type { ListQuery } from '../shared/query.js'
 import type { UnitOfWork } from '../shared/uow.js'
+import { normalizeTexts } from '../knowledge/references.js'
 import { useCase } from '../shared/use-case.js'
 import type { AffectedTest, MediaMetadata, MediaProcessor, MediaRecord, MediaStorage, MediaTx } from './ports.js'
 
@@ -48,6 +49,7 @@ const metadataSchema = z.object({
   rightsHolder: text(300),
   creditLine: text(500),
   rightsNote: text(2000),
+  artworkId: text(100),
 })
 
 const RIGHTS_FIELDS = ['license', 'sourceUrl', 'sourceDescription', 'rightsHolder', 'creditLine', 'rightsNote'] as const
@@ -78,6 +80,7 @@ function metaOf(m: MediaRecord): MediaMetadata {
     rightsHolder,
     creditLine,
     rightsNote,
+    artworkId,
   } = m
   return {
     title,
@@ -97,12 +100,45 @@ function metaOf(m: MediaRecord): MediaMetadata {
     rightsHolder,
     creditLine,
     rightsNote,
+    artworkId,
   }
 }
 
 export function createMediaUseCases(deps: MediaDeps) {
   const { uow, storage, processor, clock } = deps
   const repo = () => uow.read.media
+
+  /**
+   * BR-051: атрибутивные поля из произведения; SPEC-KB-002: якоря в подписи.
+   * previous — прежнее состояние (архивное произведение и старые ссылки остаются допустимыми).
+   */
+  async function applyKnowledge(meta: MediaMetadata, previous: MediaRecord | null) {
+    if (meta.artworkId) {
+      const a = await uow.read.knowledge.findById(meta.artworkId)
+      if (!a || a.kind !== 'ARTWORK')
+        throw DomainError.validation([{ field: 'artworkId', message: 'Выберите произведение из справочника' }])
+      if (a.status === 'ARCHIVED' && previous?.artworkId !== a.id)
+        throw DomainError.rule('BR-049', `Произведение «${a.name}» в архиве`, 'artworkId')
+      const names = (rel: 'AUTHOR' | 'TECHNIQUE' | 'COLLECTION') => (a.links[rel] ?? []).map((x) => x.name).join(', ')
+      const years =
+        a.yearFrom === null
+          ? null
+          : a.yearTo && a.yearTo !== a.yearFrom
+            ? `${a.yearFrom}–${a.yearTo}`
+            : String(a.yearFrom)
+      meta.depictsArtwork = true
+      meta.workTitle = a.name
+      meta.artist = names('AUTHOR') || null
+      meta.technique = names('TECHNIQUE') || null
+      meta.collection = names('COLLECTION') || null
+      meta.dateText = (a.attrs.dateText as string | undefined) ?? years
+      meta.inventoryNo = (a.attrs.inventoryNo as string | undefined) ?? null
+    }
+    const allow = new Set(previous ? await uow.read.knowledge.refsOf('MEDIA', previous.id) : [])
+    const n = await normalizeTexts(uow.read.knowledge, { caption: meta.caption }, allow)
+    meta.caption = n.texts.caption ?? null
+    return n.refs
+  }
 
   const ownRel = (actor: Actor, m: MediaRecord): Set<Scope> =>
     m.ownerId === actor.userId ? new Set<Scope>(['OWN']) : new Set<Scope>()
@@ -124,7 +160,8 @@ export function createMediaUseCases(deps: MediaDeps) {
       async run(actor, input, ctx) {
         if (!Buffer.isBuffer(input.data) || input.data.length === 0)
           throw DomainError.validation([{ field: 'file', message: 'Выберите файл' }])
-        const meta = parse(metadataSchema, input.metadata)
+        const meta = parse(metadataSchema, input.metadata) as MediaMetadata
+        const refs = await applyKnowledge(meta, null)
         const inspected = await processor.inspect(input.data)
         const kind = acceptFormat(inspected?.mime, input.data.length)
         const file = { ...inspected!, kind }
@@ -167,6 +204,7 @@ export function createMediaUseCases(deps: MediaDeps) {
               height: d.height,
             })),
           )
+          await tx.knowledge.replaceRefs('MEDIA', mid, refs)
           if (input.tags?.length) await tx.media.setTags(mid, input.tags)
           if (input.topicIds?.length) await tx.media.setTopics(mid, input.topicIds)
           await tx.audit.record(
@@ -208,6 +246,7 @@ export function createMediaUseCases(deps: MediaDeps) {
         const m = await load(input.id)
         requireScope(actor, 'media.update', ownRel(actor, m))
         const meta = parse(metadataSchema, { ...metaOf(m), ...input.metadata }) as MediaMetadata
+        const refs = await applyKnowledge(meta, m)
         const rightsChanged = RIGHTS_FIELDS.some((f) => (meta[f] ?? null) !== (m[f] ?? null))
         const canRights = actor.has('media.rights.manage')
         const patch: Parameters<MediaTx['media']['updateMetadata']>[1] = { ...meta }
@@ -218,6 +257,7 @@ export function createMediaUseCases(deps: MediaDeps) {
         }
         await uow.transaction(async (tx) => {
           await tx.media.updateMetadata(m.id, patch, Number(input.revision))
+          await tx.knowledge.replaceRefs('MEDIA', m.id, refs)
           if (input.tags) await tx.media.setTags(m.id, input.tags)
           if (input.topicIds) await tx.media.setTopics(m.id, input.topicIds)
           await tx.audit.record(

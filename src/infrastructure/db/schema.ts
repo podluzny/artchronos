@@ -243,6 +243,7 @@ export interface MediaAssetsTable extends Archivable {
   rights_verified_at: Date | null
   owner_id: string
   derivatives_status: Generated<'PENDING' | 'READY' | 'FAILED' | 'SKIPPED'>
+  artwork_id: ColumnType<string | null, string | null | undefined, string | null>
 }
 
 export interface MediaDerivativesTable {
@@ -424,6 +425,33 @@ export interface SelectionPoolEntriesTable {
   item_version_id: string
 }
 
+export interface KnowledgeEntriesTable extends Archivable {
+  id: Generated<string>
+  kind: 'PERSON' | 'ARTWORK' | 'COLLECTION' | 'MOVEMENT' | 'PERIOD' | 'TECHNIQUE' | 'TERM'
+  slug: string
+  name: string
+  alt_names: ColumnType<string[], string[] | undefined, string[]>
+  description: string | null
+  year_from: number | null
+  year_to: number | null
+  attrs: Json<Record<string, unknown>>
+  created_by: string | null
+}
+
+export interface KnowledgeLinksTable {
+  from_id: string
+  to_id: string
+  relation: string
+  ordinal: Generated<number>
+}
+
+export interface ContentReferencesTable {
+  source_type: 'ITEM_VERSION' | 'TEST_VERSION' | 'ASSIGNMENT' | 'MEDIA' | 'KNOWLEDGE'
+  source_id: string
+  field: string
+  entry_id: string
+}
+
 export interface Database {
   users: UsersTable
   roles: RolesTable
@@ -467,6 +495,9 @@ export interface Database {
   test_section_items: TestSectionItemsTable
   selection_rules: SelectionRulesTable
   selection_pool_entries: SelectionPoolEntriesTable
+  knowledge_entries: KnowledgeEntriesTable
+  knowledge_links: KnowledgeLinksTable
+  content_references: ContentReferencesTable
 }
 
 export type UserRow = Selectable<UsersTable>

@@ -3,6 +3,7 @@ import type { ArchiveStatus } from '../../domain/shared/archivable.js'
 import type { AssignmentStatus } from '../../domain/education/assignment.js'
 import type { AuditWriter } from '../shared/audit.js'
 import type { ListQuery } from '../shared/query.js'
+import type { KnowledgeRepository } from '../knowledge/ports.js'
 
 export interface ArchiveInfo {
   status: ArchiveStatus
@@ -225,6 +226,7 @@ export interface EducationRepository {
 }
 
 export interface EducationTx {
+  knowledge: KnowledgeRepository
   education: EducationRepository
   audit: AuditWriter
 }

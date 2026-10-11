@@ -17,6 +17,7 @@ import { DomainError } from '../../domain/shared/errors.js'
 import { canBranch, transition, type VersionState } from '../../domain/versioning/state-machine.js'
 import type { AssignmentRecord } from '../education/ports.js'
 import { sanitizeRichText, type ItemUseCases, type PreviewData } from '../itembank/item-use-cases.js'
+import { normalizeTexts } from '../knowledge/references.js'
 import type { Clock, RequestContext } from '../shared/context.js'
 import type { ListQuery } from '../shared/query.js'
 import type { UnitOfWork } from '../shared/uow.js'
@@ -572,6 +573,7 @@ export function createTestUseCases(deps: TestDeps) {
         const description = input.description ? sanitizeRichText(String(input.description)).slice(0, 5000) : null
         const instructions = input.instructions ? sanitizeRichText(String(input.instructions)).slice(0, 5000) : null
         const c = await creationContext(actor, input.assignmentId || null, input.courseId || null)
+        const anchors = await normalizeTexts(r().knowledge, { description, instructions })
         return uow.transaction(async (tx) => {
           const testId = await tx.tests.insertTest({
             title,
@@ -584,8 +586,8 @@ export function createTestUseCases(deps: TestDeps) {
             versionNo: 1,
             basedOnVersionId: null,
             title,
-            description,
-            instructions,
+            description: anchors.texts.description,
+            instructions: anchors.texts.instructions,
             settings: DEFAULT_TEST_SETTINGS,
             authorIds: [actor.userId],
           })
@@ -598,6 +600,7 @@ export function createTestUseCases(deps: TestDeps) {
             shuffleItems: null,
           })
           await tx.tests.setTestPointers(testId, { currentDraftVersionId: versionId })
+          await tx.knowledge.replaceRefs('TEST_VERSION', versionId, anchors.refs)
           await tx.audit.record(
             actor,
             {
@@ -659,8 +662,20 @@ export function createTestUseCases(deps: TestDeps) {
           if (e.length) throw DomainError.validation(e, 'Настройки не сохранены')
           patch.settings = next
         }
+        const textsChanged = patch.description !== undefined || patch.instructions !== undefined
+        const anchors = await normalizeTexts(
+          r().knowledge,
+          {
+            description: patch.description !== undefined ? patch.description : version.description,
+            instructions: patch.instructions !== undefined ? patch.instructions : version.instructions,
+          },
+          new Set(await r().knowledge.refsOf('TEST_VERSION', version.id)),
+        )
+        if (patch.description !== undefined) patch.description = anchors.texts.description ?? null
+        if (patch.instructions !== undefined) patch.instructions = anchors.texts.instructions ?? null
         await uow.transaction(async (tx) => {
           await tx.tests.updateDraft(version.id, patch, Number(input.revision))
+          if (textsChanged) await tx.knowledge.replaceRefs('TEST_VERSION', version.id, anchors.refs)
           if (patch.title && patch.title !== test.title) await tx.tests.updateTestTitle(test.id, patch.title)
           await tx.audit.record(
             actor,
@@ -1225,6 +1240,7 @@ export function createTestUseCases(deps: TestDeps) {
             settings: src.settings,
             authorIds: [...new Set([...src.authorIds, actor.userId])],
           })
+          await tx.knowledge.copyRefs('TEST_VERSION', src.id, versionId)
           const sectionMap = new Map<string, string>()
           for (const sec of s.sections) {
             sectionMap.set(
@@ -1260,6 +1276,7 @@ export function createTestUseCases(deps: TestDeps) {
                   authorIds: [...new Set([...iv.authorIds, actor.userId])],
                 })
                 await tx.items.setItemPointers(item.id, { currentDraftVersionId: ivId })
+                await tx.knowledge.copyRefs('ITEM_VERSION', iv.id, ivId)
                 if (deps.onNewVersion) await deps.onNewVersion(tx, actor, 'item', item.id, ivId, ctx)
                 await tx.audit.record(
                   actor,

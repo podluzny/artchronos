@@ -17,6 +17,7 @@ import {
   type AssignmentStatus,
 } from '../../domain/education/assignment.js'
 import { validateTopicParent } from '../../domain/education/topics.js'
+import { normalizeTexts } from '../knowledge/references.js'
 import { diff } from '../shared/audit.js'
 import type { Clock } from '../shared/context.js'
 import type { ListQuery } from '../shared/query.js'
@@ -966,8 +967,11 @@ export function createEducationUseCases(deps: EducationDeps) {
         assertSelectable(course.status, 'Курс', 'courseId')
         const errs = validateLimits(d.minItems, d.maxItems, d.maxTestsPerStudent)
         if (errs.length) throw DomainError.validation(errs)
+        const anchors = await normalizeTexts(uow.read.knowledge, { instructions: d.instructions })
+        d.instructions = anchors.texts.instructions ?? null
         return uow.transaction(async (tx) => {
           const id = await tx.education.insertAssignment({ ...d, ownerId: actor.userId })
+          await tx.knowledge.replaceRefs('ASSIGNMENT', id, anchors.refs)
           await tx.education.updateAssignment(id, { defaultReviewerId: actor.userId })
           await tx.audit.record(
             actor,
@@ -1023,9 +1027,16 @@ export function createEducationUseCases(deps: EducationDeps) {
             { field: 'deadlineAt', message: 'Дедлайн активного задания должен быть в будущем' },
           ])
         }
+        const anchors = await normalizeTexts(
+          uow.read.knowledge,
+          { instructions: d.instructions },
+          new Set(await uow.read.knowledge.refsOf('ASSIGNMENT', a.id)),
+        )
+        d.instructions = anchors.texts.instructions ?? null
         await uow.transaction(async (tx) => {
           const { id, revision, ...patch } = d
           await tx.education.updateAssignment(id, patch, revision)
+          await tx.knowledge.replaceRefs('ASSIGNMENT', id, anchors.refs)
           await tx.audit.record(
             actor,
             {

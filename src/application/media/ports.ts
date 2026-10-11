@@ -2,6 +2,7 @@ import type { ScopeFilter } from '../../domain/authorization/actor.js'
 import type { License, MediaKind, RightsStatus } from '../../domain/media/media-rules.js'
 import type { AuditWriter } from '../shared/audit.js'
 import type { ListQuery } from '../shared/query.js'
+import type { KnowledgeRepository } from '../knowledge/ports.js'
 
 /** Хранилище байтов (ADR-007). Драйверы: local (fs), db (PostgreSQL, тестовый стенд), s3 (production). */
 export interface MediaStorage {
@@ -55,6 +56,8 @@ export interface MediaMetadata {
   rightsHolder: string | null
   creditLine: string | null
   rightsNote: string | null
+  /** Произведение из базы знаний (BR-051). */
+  artworkId: string | null
 }
 
 export interface MediaRecord extends MediaMetadata {
@@ -138,6 +141,7 @@ export interface MediaRepository {
 }
 
 export interface MediaTx {
+  knowledge: KnowledgeRepository
   media: MediaRepository
   audit: AuditWriter
 }

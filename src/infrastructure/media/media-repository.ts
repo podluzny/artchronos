@@ -25,6 +25,7 @@ const COLS: Record<keyof MediaMetadata, string> = {
   rightsHolder: 'rights_holder',
   creditLine: 'credit_line',
   rightsNote: 'rights_note',
+  artworkId: 'artwork_id',
 }
 
 export class KyselyMediaRepository implements MediaRepository {

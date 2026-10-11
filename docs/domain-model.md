@@ -105,6 +105,16 @@
 | `ResponseEvaluation` | Оценка ответа | id, responseId, method (`AUTO`, `MANUAL`), score, maxScore, evaluatorId?, evaluatedAt, details |
 | `Result` | Итог попытки | id, attemptId, score, maxScore, passed?, sectionScores, computedAt |
 
+### 2.9 Knowledge Base (BL-13, M7)
+
+| Сущность | Назначение | Ключевые атрибуты |
+|---|---|---|
+| `KnowledgeEntry` | Объект базы знаний: автор, произведение, собрание, направление, период, техника, термин | id, kind, slug (уникален в виде, BR-048), name, altNames, description (с якорями), yearFrom, yearTo, attrs (по виду), status |
+| `KnowledgeLink` | Связь объектов | fromId, toId, relation (`AUTHOR`, `COLLECTION`, `TECHNIQUE`, `MOVEMENT`, `PERIOD`, `PARENT`, `SEE_ALSO`); допустимые пары видов — SPEC-KB-001 |
+| `ContentReference` | Ссылка якорем из текста на объект | sourceType (`ITEM_VERSION`, `TEST_VERSION`, `ASSIGNMENT`, `MEDIA`, `KNOWLEDGE`), sourceId, field, entryId |
+
+`MediaAsset.artworkId` → `KnowledgeEntry` (ARTWORK): атрибутивные поля медиа берутся из произведения (BR-051). Якорь хранится в тексте в каноническом виде `[подпись](@kind:slug)` (BR-050, ADR-010).
+
 ### 2.8 Analytics (зарезервировано, вне MVP)
 
 | Сущность | Назначение |

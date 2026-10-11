@@ -4,6 +4,7 @@ import * as m0002 from './0002_education.js'
 import * as m0003 from './0003_question_platform.js'
 import * as m0004 from './0004_test_authoring.js'
 import * as m0005 from './0005_review_publish_delivery.js'
+import * as m0006 from './0006_knowledge_base.js'
 
 /**
  * Статический список миграций: без чтения файловой системы, чтобы работать в serverless-бандле (ADR-009).
@@ -15,4 +16,5 @@ export const migrations: Record<string, Migration> = {
   '0003_question_platform': m0003,
   '0004_test_authoring': m0004,
   '0005_review_publish_delivery': m0005,
+  '0006_knowledge_base': m0006,
 }
