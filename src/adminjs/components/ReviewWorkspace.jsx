@@ -13,6 +13,7 @@ import {
   Text,
   TextArea,
 } from '@adminjs/design-system'
+import HelpHint from './HelpHint'
 import { ApiClient, useNotice } from 'adminjs'
 
 const api = new ApiClient()
@@ -113,6 +114,7 @@ const ItemCard = ({ n, it, comments, onAnchor, selected }) => (
 /** Рабочее место экспертизы (SPEC-REVIEW-002/003): объект, checklist, замечания, обсуждение, решение. */
 const ReviewWorkspace = (props) => {
   const { record, resource, action } = props
+  const H = (action && action.custom && action.custom.hints) || {}
   const sendNotice = useNotice()
   const [d, setD] = useState(null)
   const [error, setError] = useState(null)
@@ -329,6 +331,7 @@ const ReviewWorkspace = (props) => {
               <Box mt="default">
                 <Label htmlFor="review-comment">
                   {anchor ? 'Комментарий к выбранному вопросу' : 'Комментарий к тесту'}
+                  <HelpHint text={H.comment} />
                 </Label>
                 <TextArea
                   id="review-comment"
@@ -380,7 +383,10 @@ const ReviewWorkspace = (props) => {
                   message={`Для принятия: ${x.missingChecklist.length ? `не отмечено пунктов checklist — ${x.missingChecklist.length}` : ''}${x.missingChecklist.length && x.openBlocking ? '; ' : ''}${x.openBlocking ? `открыто блокирующих замечаний — ${x.openBlocking}` : ''} (BR-028)`}
                 />
               ) : null}
-              <Label htmlFor="review-summary">Итоговый комментарий</Label>
+              <Label htmlFor="review-summary">
+                Итоговый комментарий
+                <HelpHint text={H.summary} />
+              </Label>
               <TextArea
                 id="review-summary"
                 width={1}

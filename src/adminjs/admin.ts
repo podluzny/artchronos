@@ -1,4 +1,4 @@
-import AdminJS, { type AdminJSOptions } from 'adminjs'
+import AdminJS, { type AdminJSOptions, type ResourceWithOptions } from 'adminjs'
 import type { TestUseCases } from '../application/assessment/test-use-cases.js'
 import type { ReviewUseCases } from '../application/review/review-use-cases.js'
 import type { AuditUseCases } from '../application/audit/use-cases.js'
@@ -8,6 +8,7 @@ import type { ItemUseCases } from '../application/itembank/item-use-cases.js'
 import type { QtypeUseCases } from '../application/itembank/qtype-use-cases.js'
 import type { MediaUseCases } from '../application/media/use-cases.js'
 import { componentLoader, Components } from './component-loader.js'
+import { actionHints, propertyHints } from './hints.js'
 import { ru } from './locale-ru.js'
 import { educationResources } from './resources/education.js'
 import { identityResources } from './resources/identity.js'
@@ -30,6 +31,31 @@ export interface AdminServices {
 
 export const ADMIN_ROOT = '/admin'
 
+/**
+ * Подсказки из hints.ts: стандартные поля — `description` свойства (иконка «?» с тултипом AdminJS),
+ * формы действий и собственные компоненты — `custom.hints` и `field.hint`.
+ */
+function withHints(resources: ResourceWithOptions[]): ResourceWithOptions[] {
+  for (const r of resources) {
+    const options = r.options as Record<string, any>
+    const id = String(options.id)
+    options.properties ??= {}
+    for (const [path, text] of Object.entries(propertyHints(id)))
+      options.properties[path] = { ...(options.properties[path] ?? {}), description: text }
+    for (const [name, action] of Object.entries((options.actions ?? {}) as Record<string, any>)) {
+      if (!action || typeof action !== 'object') continue
+      const hints = { ...propertyHints(id), ...actionHints(id, 'new'), ...actionHints(id, name) }
+      const own = actionHints(id, name)
+      action.custom = { ...(action.custom ?? {}), hints }
+      if (Array.isArray(action.custom.fields))
+        action.custom.fields = action.custom.fields.map((f: { name: string }) =>
+          own[f.name] ? { ...f, hint: own[f.name] } : f,
+        )
+    }
+  }
+  return resources
+}
+
 export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: string } = {}): AdminJSOptions {
   return {
     rootPath: ADMIN_ROOT,
@@ -37,7 +63,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
     logoutPath: `${ADMIN_ROOT}/logout`,
     componentLoader,
     ...(opts.assetsCDN ? { assetsCDN: opts.assetsCDN } : {}),
-    resources: [
+    resources: withHints([
       ...reviewResources(services.reviews, services.tests, services.items),
       ...testResources(services.tests, services.items, services.education),
       ...itemResources(services.items, services.media),
@@ -45,7 +71,7 @@ export function buildAdminOptions(services: AdminServices, opts: { assetsCDN?: s
       ...mediaResources(services.media),
       ...educationResources(services.education, { summary: assignmentSummaryAction(services.tests) }),
       ...identityResources(services),
-    ],
+    ]),
     dashboard: { component: Components.Dashboard },
     branding: {
       companyName: 'ArtChronos',

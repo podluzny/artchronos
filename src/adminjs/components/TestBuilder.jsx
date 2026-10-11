@@ -14,6 +14,7 @@ import {
   Text,
 } from '@adminjs/design-system'
 import { ApiClient, useNotice } from 'adminjs'
+import HelpHint from './HelpHint'
 
 const api = new ApiClient()
 const card = { border: '1px solid rgba(127,127,127,0.3)', borderRadius: 6, padding: 12, marginBottom: 12 }
@@ -53,7 +54,7 @@ const plain = (html, max = 120) => {
 }
 
 /** Настройки версии (SPEC-TEST-003). Время вводится в минутах. */
-const SettingsForm = ({ d, disabled, onSave }) => {
+const SettingsForm = ({ d, disabled, onSave, H = {} }) => {
   const s = d.version.settings
   const [v, setV] = useState({
     title: d.version.title,
@@ -87,6 +88,7 @@ const SettingsForm = ({ d, disabled, onSave }) => {
       <Label inline htmlFor={`set-${k}`} ml="default" mb={0}>
         {label}
       </Label>
+      <HelpHint text={H.shuffle} />
     </Box>
   )
   return (
@@ -94,7 +96,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
       <H5>Настройки</H5>
       <Box flex flexWrap="wrap" style={{ gap: 16 }}>
         <Box style={{ minWidth: 260, flex: 2 }}>
-          <Label htmlFor="test-title">Название</Label>
+          <Label htmlFor="test-title">
+            Название <HelpHint text={H.title} />
+          </Label>
           <Input
             id="test-title"
             width={1}
@@ -104,7 +108,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 170 }}>
-          <Label htmlFor="set-time">Лимит времени, мин</Label>
+          <Label htmlFor="set-time">
+            Лимит времени, мин <HelpHint text={H.timeLimit} />
+          </Label>
           <Input
             id="set-time"
             width={1}
@@ -115,7 +121,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 150 }}>
-          <Label htmlFor="set-attempts">Попыток</Label>
+          <Label htmlFor="set-attempts">
+            Попыток <HelpHint text={H.maxAttempts} />
+          </Label>
           <Input
             id="set-attempts"
             width={1}
@@ -126,7 +134,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 150 }}>
-          <Label htmlFor="set-pass">Проходной балл</Label>
+          <Label htmlFor="set-pass">
+            Проходной балл <HelpHint text={H.passingScore} />
+          </Label>
           <Input
             id="set-pass"
             width={1}
@@ -137,7 +147,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 240 }}>
-          <Label htmlFor="set-nav">Навигация</Label>
+          <Label htmlFor="set-nav">
+            Навигация <HelpHint text={H.navigation} />
+          </Label>
           <Select
             inputId="set-nav"
             isDisabled={disabled}
@@ -147,7 +159,9 @@ const SettingsForm = ({ d, disabled, onSave }) => {
           />
         </Box>
         <Box style={{ width: 280 }}>
-          <Label htmlFor="set-feedback">Показ правильных ответов</Label>
+          <Label htmlFor="set-feedback">
+            Показ правильных ответов <HelpHint text={H.feedbackMode} />
+          </Label>
           <Select
             inputId="set-feedback"
             isDisabled={disabled}
@@ -172,7 +186,7 @@ const SettingsForm = ({ d, disabled, onSave }) => {
 }
 
 /** Форма правила случайного отбора (только Teacher/Admin, BR-012). */
-const RuleForm = ({ ctx, call, testId, sectionId, onAdd }) => {
+const RuleForm = ({ ctx, call, testId, sectionId, onAdd, H = {} }) => {
   const [topicIds, setTopicIds] = useState([])
   const [min, setMin] = useState('')
   const [max, setMax] = useState('')
@@ -190,7 +204,9 @@ const RuleForm = ({ ctx, call, testId, sectionId, onAdd }) => {
   }, [topicIds.join(), min, max])
   return (
     <Box mt="default" p="default" style={{ background: 'rgba(127,127,127,0.07)', borderRadius: 6 }}>
-      <Text mb="sm">Правило случайного отбора: темы</Text>
+      <Text mb="sm">
+        Правило случайного отбора: темы <HelpHint text={H.rule} />
+      </Text>
       <Box flex flexWrap="wrap">
         {ctx.topics.map((t) => (
           <Box key={t.value} flex alignItems="center" mr="lg" mb="sm">
@@ -243,6 +259,7 @@ const RuleForm = ({ ctx, call, testId, sectionId, onAdd }) => {
 /** Конструктор теста (SPEC-TEST-002/003): разделы, фиксированные вопросы, правила, настройки, готовность. */
 const TestBuilder = (props) => {
   const { record, resource, action } = props
+  const H = (action && action.custom && action.custom.hints) || {}
   const sendNotice = useNotice()
   const [d, setD] = useState(null)
   const [ctx, setCtx] = useState(null)
@@ -327,6 +344,7 @@ const TestBuilder = (props) => {
 
       <SettingsForm
         key={d.version.revision}
+        H={H}
         d={d}
         disabled={!edit}
         onSave={(v) => op({ op: 'saveSettings', ...v }, 'Настройки сохранены')}
@@ -468,6 +486,7 @@ const TestBuilder = (props) => {
           {edit && d.canUseRules ? (
             ruleFor === s.id ? (
               <RuleForm
+                H={H}
                 ctx={ctx}
                 call={call}
                 testId={record.id}

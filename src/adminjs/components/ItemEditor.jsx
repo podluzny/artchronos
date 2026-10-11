@@ -14,6 +14,7 @@ import {
   Text,
   TextArea,
 } from '@adminjs/design-system'
+import HelpHint from './HelpHint'
 import { ApiClient, useNotice } from 'adminjs'
 
 const api = new ApiClient()
@@ -116,6 +117,7 @@ const MediaPicker = ({ call, onPick, onClose }) => {
  */
 const ItemEditor = (props) => {
   const { record, resource, action } = props
+  const H = (action && action.custom && action.custom.hints) || {}
   const sendNotice = useNotice()
   const [phase, setPhase] = useState('loading')
   const [ctx, setCtx] = useState(null)
@@ -447,6 +449,7 @@ const ItemEditor = (props) => {
           ) : null}
           <Label required>
             Варианты ответа · {type.config.cardinality === 'single' ? 'отметьте один верный' : 'отметьте все верные'}
+            <HelpHint text={H.options} />
           </Label>
           {list.map((o, i) =>
             optionRow(
@@ -643,7 +646,10 @@ const ItemEditor = (props) => {
         <H3>Новый вопрос</H3>
         {assignments.length ? (
           <FormGroup>
-            <Label htmlFor="item-assignment">Задание</Label>
+            <Label htmlFor="item-assignment">
+              Задание
+              <HelpHint text={H.assignment} />
+            </Label>
             <Select
               inputId="item-assignment"
               placeholder="Выберите задание…"
@@ -657,7 +663,10 @@ const ItemEditor = (props) => {
         ) : null}
         {courses.length ? (
           <FormGroup>
-            <Label htmlFor="item-course">или курс (вопрос для банка)</Label>
+            <Label htmlFor="item-course">
+              или курс (вопрос для банка)
+              <HelpHint text={H.course} />
+            </Label>
             <Select
               inputId="item-course"
               placeholder="Выберите курс…"
@@ -714,6 +723,7 @@ const ItemEditor = (props) => {
       <FormGroup error={!!errors['document.stem']}>
         <Label required htmlFor="stem">
           Формулировка
+          <HelpHint text={H.stem} />
         </Label>
         <TextArea id="stem" width={1} rows={3} value={doc.stem} onChange={(e) => patchDoc({ stem: e.target.value })} />
       </FormGroup>
@@ -726,7 +736,10 @@ const ItemEditor = (props) => {
 
       <H5 mt="xl">Классификация</H5>
       <FormGroup>
-        <Label required>Темы</Label>
+        <Label required>
+          Темы
+          <HelpHint text={H.topics} />
+        </Label>
         <Box flex flexWrap="wrap">
           {ctx.topics.map((t) => (
             <Box key={t.value} mr="xl" mb="sm" flex alignItems="center">
@@ -744,7 +757,10 @@ const ItemEditor = (props) => {
       </FormGroup>
       {objectivesForTopics.length ? (
         <FormGroup>
-          <Label>Учебные цели</Label>
+          <Label>
+            Учебные цели
+            <HelpHint text={H.objectives} />
+          </Label>
           {objectivesForTopics.map((o) => (
             <Box key={o.value} mb="sm" flex alignItems="center">
               <CheckBox
@@ -761,7 +777,10 @@ const ItemEditor = (props) => {
       ) : null}
       <Box flex>
         <FormGroup mr="xl" style={{ width: 220 }}>
-          <Label htmlFor="item-difficulty">Сложность</Label>
+          <Label htmlFor="item-difficulty">
+            Сложность
+            <HelpHint text={H.difficulty} />
+          </Label>
           <Select
             inputId="item-difficulty"
             value={DIFFICULTY.find((d) => d.value === meta.difficulty)}
@@ -770,7 +789,10 @@ const ItemEditor = (props) => {
           />
         </FormGroup>
         <FormGroup mr="xl">
-          <Label htmlFor="f-points">Баллы по умолчанию</Label>
+          <Label htmlFor="f-points">
+            Баллы по умолчанию
+            <HelpHint text={H.points} />
+          </Label>
           <Input
             id="f-points"
             type="number"
@@ -781,7 +803,10 @@ const ItemEditor = (props) => {
           />
         </FormGroup>
         <FormGroup style={{ flex: 1 }}>
-          <Label htmlFor="f-tags">Теги (через запятую)</Label>
+          <Label htmlFor="f-tags">
+            Теги (через запятую)
+            <HelpHint text={H.tags} />
+          </Label>
           <Input
             id="f-tags"
             width={1}
@@ -791,7 +816,10 @@ const ItemEditor = (props) => {
         </FormGroup>
       </Box>
       <FormGroup>
-        <Label htmlFor="f-feedback">Пояснение после ответа (feedback)</Label>
+        <Label htmlFor="f-feedback">
+          Пояснение после ответа (feedback)
+          <HelpHint text={H.feedback} />
+        </Label>
         <TextArea
           id="f-feedback"
           width={1}

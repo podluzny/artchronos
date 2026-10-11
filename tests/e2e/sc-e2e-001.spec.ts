@@ -68,6 +68,8 @@ test.describe.serial('AT-E2E-001 SC-E2E-001 E2E reference scenario', () => {
 
   test('подготовка (Admin): предмет, курс, преподаватель курса', async ({ page }) => {
     await login(page, ADMIN.email, ADMIN.password)
+    await page.goto('/admin/resources/User/actions/new')
+    await expect(page.getByTestId('help-hint').first()).toBeVisible()
     await page.goto('/admin/resources/Subject/actions/new')
     await page.fill('#code', `HIST${stamp}`)
     await page.fill('#name', `История искусства ${stamp}`)

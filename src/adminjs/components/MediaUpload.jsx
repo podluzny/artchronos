@@ -13,6 +13,7 @@ import {
   Text,
   TextArea,
 } from '@adminjs/design-system'
+import HelpHint from './HelpHint'
 import { ApiClient, useNotice } from 'adminjs'
 
 const api = new ApiClient()
@@ -46,6 +47,7 @@ const TEXT = [
 /** Загрузка медиа (SPEC-MEDIA-001). Формат и права проверяет сервер; статус прав при загрузке всегда «не проверено». */
 const MediaUpload = (props) => {
   const { resource, action } = props
+  const H = (action && action.custom && action.custom.hints) || {}
   const [file, setFile] = useState(null)
   const [values, setValues] = useState({ depictsArtwork: true, license: 'UNKNOWN' })
   const [error, setError] = useState(null)
@@ -93,6 +95,7 @@ const MediaUpload = (props) => {
       <FormGroup>
         <Label required htmlFor="media-file">
           Файл
+          <HelpHint text={H.file} />
         </Label>
         {/* текст DropZone по умолчанию светло-серый — повышаем контраст до AA */}
         <style>{'.media-drop [color="grey60"]{color:#4d4d4d !important}'}</style>
@@ -113,6 +116,7 @@ const MediaUpload = (props) => {
         <FormGroup key={k} error={!!errors[k]}>
           <Label required={!!req} htmlFor={k}>
             {label}
+            <HelpHint text={H[k]} />
           </Label>
           {k === 'altText' ? (
             <TextArea id={k} width={1} rows={2} value={values[k] || ''} onChange={(e) => set(k, e.target.value)} />
@@ -127,7 +131,10 @@ const MediaUpload = (props) => {
         </FormGroup>
       ))}
       <FormGroup>
-        <Label htmlFor="license">Лицензия</Label>
+        <Label htmlFor="license">
+          Лицензия
+          <HelpHint text={H.license} />
+        </Label>
         <Select
           inputId="license"
           value={LICENSES.find((l) => l.value === values.license)}

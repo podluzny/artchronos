@@ -14,6 +14,7 @@ import {
   TextArea,
 } from '@adminjs/design-system'
 import { ApiClient, useNotice } from 'adminjs'
+import HelpHint from './HelpHint'
 
 const api = new ApiClient()
 
@@ -184,6 +185,7 @@ const ActionForm = (props) => {
         <FormGroup key={f.name} error={!!fieldErrors[f.name]}>
           <Label required={!!f.required} htmlFor={f.name}>
             {f.label}
+            <HelpHint text={f.hint} />
           </Label>
           {renderField(f)}
           {f.help ? (
